@@ -1,659 +1,1487 @@
 <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dwi Rianto — Fullstack Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-        <!--=============== FAVICON ===============-->
-        <link rel="shortcut icon" href="assets/img/wave.png" type="image/x-icon">
+    :root {
+      --bg:       #090b10;
+      --bg2:      #0d1018;
+      --surface:  #141720;
+      --surface2: #1b1f2e;
+      --border:   rgba(255,255,255,0.06);
+      --border2:  rgba(255,255,255,0.11);
+      --accent:   #c9a96e;
+      --accent2:  #b8934f;
+      --accent-dim:  rgba(201,169,110,0.10);
+      --accent-dim2: rgba(201,169,110,0.05);
+      --text:     #eceef4;
+      --text2:    #7e8499;
+      --text3:    #444960;
+      --green:    #3ecf8e;
+      --blue:     #5b9cf6;
+      --font-serif: 'Instrument Serif', Georgia, serif;
+      --font-sans:  'Inter', system-ui, sans-serif;
+    }
 
-        <!--=============== BOXICONS ===============-->
-        <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    html { scroll-behavior: smooth; }
 
-        <!--=============== SWIPER CSS ===============-->
-        <link rel="stylesheet" href="assets/css/swiper-bundle.min.css">
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
 
-        <!--=============== CSS ===============-->
-        <link rel="stylesheet" href="assets/css/styles.css">
+    /* subtle grain */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+    }
 
-        <title> Dwi Rianto </title>
-    </head>
-    <body>
-        <!--=============== HEADER ===============-->
-        <header class="header" id="header">
-            <nav class="nav container">
-                <a href="" class="nav__logo">Ntoo</a>
+    /* ── NAV ── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.1rem 3rem;
+      background: rgba(9,11,16,0.82);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: 0.01em;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--accent) !important;
+      color: #090b10 !important;
+      padding: 0.4rem 1rem;
+      border-radius: 5px;
+      font-weight: 600 !important;
+      letter-spacing: 0.04em !important;
+    }
+    .nav-cta:hover { background: var(--accent2) !important; }
 
-                <div class="nav__menu">
-                    <ul class="nav__list">
-                        <li class="nav__item">
-                            <a href="#home" class="nav__link active-link">
-                                <i class="bx bx-home-alt"></i>
-                            </a>
-                        </li>
-                        <li class="nav__item">
-                            <a href="#about" class="nav__link">
-                                <i class="bx bx-user"></i>
-                            </a>
-                        </li>
-                        <li class="nav__item">
-                            <a href="#skills" class="nav__link">
-                                <i class="bx bx-book"></i>
-                            </a>
-                        </li>
-                        <li class="nav__item">
-                            <a href="#work" class="nav__link">
-                                <i class="bx bx-briefcase-alt-2"></i>
-                            </a>
-                        </li>
-                        <li class="nav__item">
-                            <a href="#contact" class="nav__link">
-                                <i class="bx bx-message-square-detail"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+    /* ── UTILS ── */
+    section { position: relative; z-index: 1; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
 
-                <!-- Theme change button -->
-                <i class="bx bx-moon change-theme" id="theme-button"></i>
-            </nav>
-        </header>
+    .section-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.65rem;
+    }
+    .section-eyebrow::before {
+      content: '';
+      display: block;
+      width: 18px; height: 1px;
+      background: var(--accent);
+    }
 
-        <!--=============== MAIN ===============-->
-        <main class="main">
-            <!--=============== HOME ===============-->
-            <section class="home section" id="home">
-                <div class="home__container container grid">
-                    <div class="home__data">
-                        <span class="home__greeting">Hello, I'm</span>
-                        <h1 class="home__name">Dwi Rianto</h1>
-                        <h3 class="home__education">Fullstack Developer, UI/UX Design, and IT Support</h3>
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      color: var(--text);
+    }
 
-                        <div class="home__buttons">
-                            <a download="" href="./assets/pdf/CV_DWIRIANTO.pdf" class="button button--ghost">Download CV</a>
-                            <a href="#about" class="button">About Me</a>
-                        </div>
-                    </div>
+    /* ── BTN ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.7rem 1.6rem;
+      border-radius: 6px;
+      font-weight: 500;
+      font-size: 0.85rem;
+      letter-spacing: 0.01em;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+      font-family: var(--font-sans);
+    }
+    .btn-primary { background: var(--accent); color: #090b10; }
+    .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text2);
+      border: 1px solid var(--border2);
+    }
+    .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
 
-                    <div class="home__handle">
-                        <img src="assets/img/ntoo.png" alt="" class="home_img">
-                    </div>
+    /* ── SOCIAL LINK ── */
+    .social-link {
+      width: 38px; height: 38px;
+      border-radius: 7px;
+      border: 1px solid var(--border2);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: all 0.2s;
+    }
+    .social-link:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
 
-                    <div class="home__social">
-                        <a href="https://www.linkedin.com/in/dwirianto" class="home__social-link">
-                            <i class="bx bxl-linkedin-square"></i>
-                        </a>
-                        <a href="https://www.github.com/Rianto69" class="home__social-link">
-                            <i class="bx bxl-github"></i>
-                        </a>
-                        <a href="https://dribbble.com/Ntoo" class="home__social-link">
-                            <i class="bx bxl-dribbble"></i>
-                        </a>
-                        <a href="https://10fastfingers.com/user/2742745/" class="home__social-link">
-                            <i class="bx bx-equalizer"></i>
-                        </a>
-                        <a href="https://monkeytype.com/profile/Amemiya" class="home__social-link">
-                            <i class="bx bx-diamond"></i>
-                        </a>
-                    </div>
+    /* ── FADE UP ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: none; }
 
-                    <a href="#contact" class="home__scroll">
-                        <i class="bx bx-mouse home__scroll-icon"></i>
-                        <span class="home__scroll-name">Scroll Down</span>
-                    </a>
-                </div>
-            </section>
-            
-            <!--=============== ABOUT ===============-->
-            <section class="about section" id="about">
-                <span class="section__subtitle ">
-                    My Intro
-                </span>
-                <h2 class="section__title">About Me</h2>
+    /* ═══════════════════════════════
+       HERO
+    ═══════════════════════════════ */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 8rem 0 5rem;
+    }
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 5rem;
+      align-items: center;
+    }
 
-                <div class="about__container container grid">
-                    <img src="assets/img/ntobout.jpg" alt="" class="about__img">
+    .hero-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 2rem;
+    }
+    .status-dot {
+      width: 7px; height: 7px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: blink 2.2s infinite;
+    }
+    @keyframes blink {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(62,207,142,0.35); }
+      50%       { box-shadow: 0 0 0 5px rgba(62,207,142,0); }
+    }
+    .status-label {
+      font-size: 0.78rem;
+      color: var(--green);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
 
-                    <div class="about__data">
-                        <div class="about__info">
-                            <div class="about__box">
-                                <i class="bx bx-award about__icon"></i>
-                                <h3 class="about__title">Academic</h3>
-                                <span class="about__subtitle">S1 Graduate</span>
-                            </div>
+    .hero h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(3.5rem, 7vw, 6rem);
+      font-weight: 400;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 0.15em;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
 
-                            <div class="about__box">
-                                <i class="bx bx-briefcase-alt about__icon"></i>
-                                <h3 class="about__title">Completed</h3>
-                                <span class="about__subtitle">5+ Projects</span>
-                            </div>
+    .hero-sub {
+      font-size: 0.9rem;
+      color: var(--text2);
+      font-weight: 400;
+      margin: 1.5rem 0 0.5rem;
+      line-height: 1.7;
+      max-width: 420px;
+    }
+    .hero-univ {
+      font-size: 0.82rem;
+      color: var(--text3);
+      margin-bottom: 1.75rem;
+      letter-spacing: 0.01em;
+    }
+    .hero-univ span { color: var(--text2); }
 
-                            <div class="about__box">
-                                <i class="bx bx-support about__icon"></i>
-                                <h3 class="about__title">Support</h3>
-                                <span class="about__subtitle">Online 24/7</span>
-                            </div>
-                        </div>
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 2rem;
+    }
+    .tag {
+      font-size: 0.72rem;
+      font-weight: 500;
+      padding: 0.25rem 0.7rem;
+      border-radius: 100px;
+      border: 1px solid var(--border2);
+      color: var(--text2);
+      letter-spacing: 0.03em;
+    }
+    .tag.hi { border-color: rgba(201,169,110,0.35); color: var(--accent); }
 
-                        <p class="about__description">
-                            Frontend Developer, I created with Vue.js, Next.js, and React.js.<br><br>
-                            Backend developer, I created with Laravel Models, Views, and Controller.<br><br>
-                            UI/UX Designer, I created with Figma and Adobe Photoshop.<br><br>
-                            IT Support, Mostly expert in Hardware and Software Computer and also Networking.<br><br>
-                            Average WPM 10fastfingers : 96<br><br>
-                            Average WPM Monkeytype : 95
-                        </p>
+    .hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
 
-                        <a href="#contact" class="button">Contact Me</a>
-                    </div>
-                </div>
-            </section>
+    .hero-social { display: flex; gap: 0.6rem; align-items: center; }
+    .wakatime-badge img {
+      height: 22px;
+      border-radius: 4px;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+      vertical-align: middle;
+    }
+    .wakatime-badge:hover img { opacity: 1; }
 
-            <!--=============== SKILLS ===============-->
-            <section class="skills section" id="skills">
-                <span class="section__subtitle">
-                    My Abilities
-                </span>
-                <h2 class="section__title">My Experience</h2>
+    /* ── PHOTO FRAME ── */
+    .photo-wrap { position: relative; }
+    .photo-frame {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border2);
+      background: var(--surface);
+      aspect-ratio: 3/4;
+      max-height: 460px;
+    }
+    .photo-frame img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .photo-badge {
+      position: absolute;
+      top: -1.2rem;
+      right: -1.2rem;
+      width: 76px; height: 76px;
+      border-radius: 14px;
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
+    }
+    .photo-badge strong {
+      font-family: var(--font-serif);
+      font-size: 1.6rem;
+      font-style: italic;
+      color: var(--accent);
+      line-height: 1;
+      font-weight: 400;
+    }
+    .photo-badge span {
+      font-size: 0.6rem;
+      color: var(--text3);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
 
-                <div class="skills__container container grid">
-                    
-                    <div class="skills__content">
-                        <h3 class="skills__title">Frontend Developer</h3>
+    /* ── STATS BAR ── */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 5rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .stat-cell {
+      background: var(--surface);
+      padding: 1.4rem 1.5rem;
+      text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .stat-cell:last-child { border-right: none; }
+    .stat-num {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 2rem;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .stat-desc { font-size: 0.78rem; color: var(--text2); margin-top: 0.2rem; letter-spacing: 0.02em; }
 
-                        <div class="skills__box">
-                            <div class="skills__group">
-                                <div class="skills__data">
-                                    <i class="bx bxs-badge-check"></i>
-                                    <div>
-                                        <h3 class="skills__name">HTML</h3>
-                                        <span class="skills__level">Advance</span>
-                                    </div>
-                                </div>
-                                <div class="skills__data">
-                                    <i class="bx bxs-badge-check"></i>
-                                    <div>
-                                        <h3 class="skills__name">Vue.js</h3>
-                                        <span class="skills__level">Advance</span>
-                                    </div>
-                                </div>
-                            </div>
+    /* ═══════════════════════════════
+       ABOUT
+    ═══════════════════════════════ */
+    .about { padding: 7rem 0; }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4.5rem;
+      align-items: start;
+      margin-top: 3rem;
+    }
+    .about-text p {
+      color: var(--text2);
+      font-size: 0.95rem;
+      line-height: 1.9;
+      margin-bottom: 1.1rem;
+      font-weight: 300;
+    }
+    .about-text p strong { color: var(--text); font-weight: 500; }
 
-                            <div class="skills__group">
-                                <div class="skills__data">
-                                    <i class="bx bxs-badge-check"></i>
-                                    <div>
-                                        <h3 class="skills__name">Next.js</h3>
-                                        <span class="skills__level">Advance</span>
-                                    </div>
-                                </div>
-                                <div class="skills__data">
-                                    <i class="bx bxs-badge-check"></i>
-                                    <div>
-                                        <h3 class="skills__name">React.js</h3>
-                                        <span class="skills__level">Advance</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    .callout {
+      background: var(--accent-dim2);
+      border: 1px solid rgba(201,169,110,0.18);
+      border-radius: 10px;
+      padding: 1.1rem 1.4rem;
+      margin-top: 1.5rem;
+      font-size: 0.88rem;
+      color: var(--text2);
+      line-height: 1.7;
+    }
+    .callout strong { color: var(--accent); font-weight: 500; }
 
-                    </div>
+    .about-cards { display: flex; flex-direction: column; gap: 0.85rem; }
+    .info-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: border-color 0.2s;
+    }
+    .info-card:hover { border-color: var(--border2); }
+    .info-icon {
+      width: 38px; height: 38px;
+      border-radius: 8px;
+      background: var(--accent-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .info-card h4 { font-size: 0.85rem; font-weight: 600; color: var(--text); line-height: 1.2; }
+    .info-card p  { font-size: 0.78rem; color: var(--text2); margin: 0; }
 
-                    <div class="skills__content">
-                        <h3 class="skills__title">Developer Developer</h3>
+    /* ═══════════════════════════════
+       SKILLS
+    ═══════════════════════════════ */
+    .skills { padding: 7rem 0; background: var(--bg2); }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.25rem;
+      margin-top: 3rem;
+    }
+    .skill-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.6rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .skill-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+    .skill-head {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 1.4rem;
+    }
+    .skill-ico {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+    .skill-card h3 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: 0.01em;
+    }
+    .skill-list { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+    .skill-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.83rem;
+    }
+    .skill-name {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      color: var(--text2);
+    }
+    .skill-name::before {
+      content: '';
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.6;
+    }
+    .badge {
+      font-size: 0.66rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 100px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background: var(--accent-dim);
+      color: var(--accent);
+    }
 
-                        <div class="skills__box">
-                            <div class="skills__group">
-                                <div class="skills__data">
-                                    <i class="bx bxs-badge-check"></i>
-                                    <div>
-                                        <h3 class="skills__name">PHP</h3>
-                                        <span class="skills__level">Advance</span>
-                                    </div>
-                                </div>
-                                <div class="skills__data">
-                                    <i class="bx bxs-badge-check"></i>
-                                    <div>
-                                        <h3 class="skills__name">Codeigniter3</h3>
-                                        <span class="skills__level">Advance</span>
-                                    </div>
-                                </div>
-                            </div>
+    /* ═══════════════════════════════
+       WORKFLOW
+    ═══════════════════════════════ */
+    .workflow { padding: 7rem 0; }
+    .workflow-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .wf-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem;
+      transition: border-color 0.2s, transform 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .wf-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, var(--accent) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+    .wf-card:hover { border-color: var(--border2); transform: translateY(-3px); }
+    .wf-card:hover::after { opacity: 1; }
+    .wf-card h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.6rem;
+    }
+    .wf-card p {
+      color: var(--text2);
+      font-size: 0.85rem;
+      line-height: 1.75;
+      font-weight: 300;
+    }
+    .tech-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 1rem;
+    }
+    .tech-pill {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 100px;
+      background: var(--bg);
+      border: 1px solid var(--border2);
+      color: var(--text2);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
 
-                            <div class="skills__group">
-                                <div class="skills__data">
-                                    <i class="bx bxs-badge-check"></i>
-                                    <div>
-                                        <h3 class="skills__name">Laravel</h3>
-                                        <span class="skills__level">Advance</span>
-                                    </div>
-                                </div>
-                                <div class="skills__data">
-                                    <i class="bx bxs-badge-check"></i>
-                                    <div>
-                                        <h3 class="skills__name">Codeigniter4</h3>
-                                        <span class="skills__level">Advance</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    /* Dashboard screenshots */
+    .dash-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .dash-grid img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      cursor: zoom-in;
+      transition: opacity 0.2s;
+    }
+    .dash-grid img:hover { opacity: 0.82; }
+    .dash-placeholder {
+      grid-column: 1 / -1;
+      border: 1px dashed var(--border2);
+      border-radius: 8px;
+      padding: 1.25rem;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text3);
+      line-height: 1.8;
+    }
+    .dash-placeholder code {
+      display: block;
+      margin-top: 0.3rem;
+      font-size: 0.71rem;
+      color: var(--accent);
+      opacity: 0.65;
+      font-family: monospace;
+      letter-spacing: 0.02em;
+    }
 
-                    <div class="skills__content">
-                        <h3 class="skills__title">UI/UX Designer</h3>
+    /* ═══════════════════════════════
+       PORTFOLIO
+    ═══════════════════════════════ */
+    .portfolio { padding: 7rem 0; background: var(--bg2); }
+    .port-filters {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin: 1.75rem 0;
+    }
+    .f-btn {
+      padding: 0.35rem 0.9rem;
+      border-radius: 100px;
+      border: 1px solid var(--border2);
+      background: transparent;
+      color: var(--text2);
+      font-size: 0.78rem;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      letter-spacing: 0.03em;
+      transition: all 0.15s;
+    }
+    .f-btn.active, .f-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+    .port-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.1rem;
+    }
+    .work-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.25s;
+    }
+    .work-card:hover { border-color: var(--border2); transform: translateY(-3px); }
+    .work-thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      display: block;
+      background: var(--surface2);
+    }
+    .work-thumb-empty {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: var(--surface2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .work-thumb-empty i { font-size: 1.8rem; color: var(--text3); }
+    .work-body { padding: 1.1rem 1.25rem; }
+    .work-body h3 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+    }
+    .work-body p { font-size: 0.78rem; color: var(--text2); margin-bottom: 0.8rem; line-height: 1.6; }
+    .work-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: gap 0.15s;
+    }
+    .work-link:hover { gap: 0.55rem; }
+    .work-type {
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 0.18rem 0.55rem;
+      border-radius: 4px;
+      float: right;
+    }
+    .t-web    { background: rgba(91,156,246,0.1); color: var(--blue); }
+    .t-design { background: rgba(62,207,142,0.1); color: var(--green); }
+    .t-mobile { background: var(--accent-dim); color: var(--accent); }
 
-                        <div class="skills__box">
-                            <div class="skills__group">
-                                <div class="skills__data">
-                                    <i class="bx bxs-badge-check"></i>
-                                    <div>
-                                        <h3 class="skills__name">Adobe Photoshop</h3>
-                                        <span class="skills__level">Advance</span>
-                                    </div>
-                                </div>
-                                <div class="skills__data">
-                                    <i class="bx bxs-badge-check"></i>
-                                    <div>
-                                        <h3 class="skills__name">Canva</h3>
-                                        <span class="skills__level">Advance</span>
-                                    </div>
-                                </div>
-                                <div class="skills__data">
-                                    <i class="bx bxs-badge-check"></i>
-                                    <div>
-                                        <h3 class="skills__name">Figma</h3>
-                                        <span class="skills__level">Advance</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    /* ═══════════════════════════════
+       CONTACT
+    ═══════════════════════════════ */
+    .contact { padding: 7rem 0; }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      margin-top: 3rem;
+      align-items: start;
+    }
+    .contact-lead {
+      font-size: 0.9rem;
+      color: var(--text2);
+      line-height: 1.9;
+      margin-bottom: 2rem;
+      font-weight: 300;
+    }
+    .contact-cards { display: flex; flex-direction: column; gap: 0.65rem; }
+    .c-card {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.9rem 1.15rem;
+      text-decoration: none;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .c-card:hover { border-color: rgba(201,169,110,0.3); transform: translateX(3px); }
+    .c-ico {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      background: var(--accent-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .c-card h4 { font-size: 0.82rem; font-weight: 600; color: var(--text); }
+    .c-card span { font-size: 0.76rem; color: var(--text2); }
 
-                    <div class="skills__content">
-                        <h3 class="skills__title">IT Support</h3>
+    .cf { display: flex; flex-direction: column; gap: 0.85rem; }
+    .fg { display: flex; flex-direction: column; gap: 0.35rem; }
+    .fg label { font-size: 0.75rem; font-weight: 500; color: var(--text2); letter-spacing: 0.03em; }
+    .fg input, .fg textarea {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 7px;
+      padding: 0.7rem 0.9rem;
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      font-weight: 300;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .fg input:focus, .fg textarea:focus { border-color: rgba(201,169,110,0.4); }
+    .fg input::placeholder, .fg textarea::placeholder { color: var(--text3); }
+    .fg textarea { resize: vertical; min-height: 120px; }
 
-                        <div class="skills__box">
-                            <div class="skills__group">
-                                <div class="skills__data">
-                                    <i class="bx bxs-badge-check"></i>
-                                    <div>
-                                        <h3 class="skills__name">Hardware Support</h3>
-                                        <span class="skills__level">Advance</span>
-                                    </div>
-                                </div>
-                                <div class="skills__data">
-                                    <i class="bx bxs-badge-check"></i>
-                                    <div>
-                                        <h3 class="skills__name">Software Support</h3>
-                                        <span class="skills__level">Advance</span>
-                                    </div>
-                                </div>
-                                <div class="skills__data">
-                                    <i class="bx bxs-badge-check"></i>
-                                    <div>
-                                        <h3 class="skills__name">Networking</h3>
-                                        <span class="skills__level">Advance</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    /* ═══════════════════════════════
+       FOOTER
+    ═══════════════════════════════ */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 1.75rem 0;
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-logo { font-size: 0.9rem; font-weight: 600; color: var(--text2); }
+    .footer-logo span { color: var(--accent); }
+    .footer-copy { font-size: 0.75rem; color: var(--text3); }
+    .footer-social { display: flex; gap: 0.5rem; }
+
+    /* ── AMBIENT GLOW ── */
+    .glow {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(120px);
+      z-index: 0;
+    }
+    .glow-a { width: 480px; height: 480px; background: rgba(201,169,110,0.035); top: -120px; right: -80px; }
+    .glow-b { width: 360px; height: 360px; background: rgba(91,156,246,0.035); bottom: 0; left: -80px; }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+    }
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 10px;
+    }
+
+    /* ── CAROUSEL ── */
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: var(--surface2);
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .carousel-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    .carousel-track {
+      display: flex;
+      transition: transform 0.4s ease-in-out;
+      width: 100%;
+      height: 100%;
+    }
+    .carousel-slide {
+      min-width: 100%;
+      width: 100%;
+      height: 100%;
+      flex-shrink: 0;
+    }
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    .carousel-controls {
+      position: absolute;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 0.5rem;
+      z-index: 10;
+    }
+    .carousel-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      background: rgba(9,11,16,0.7);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+    .carousel-btn:hover {
+      background: rgba(9,11,16,0.9);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .carousel-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .carousel-indicator {
+      position: absolute;
+      top: 0.8rem;
+      right: 0.8rem;
+      background: rgba(9,11,16,0.7);
+      color: var(--text2);
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      border: 1px solid rgba(255,255,255,0.15);
+      z-index: 10;
+    }
+
+    /* Mobile Carousel — Full Height */
+    #mobileCarousel {
+      aspect-ratio: auto;
+      min-height: 600px;
+      max-height: 80vh;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 920px) {
+      .nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero-inner { grid-template-columns: 1fr; }
+      .photo-wrap { display: none; }
+      .about-grid, .workflow-grid, .contact-grid { grid-template-columns: 1fr; }
+      .port-grid { grid-template-columns: repeat(2, 1fr); }
+      .stats-bar { grid-template-columns: 1fr; }
+      .stat-cell { border-right: none; border-bottom: 1px solid var(--border); }
+      .stat-cell:last-child { border-bottom: none; }
+    }
+    @media (max-width: 580px) {
+      .port-grid { grid-template-columns: 1fr; }
+      .dash-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-height: 1920px){
+        .mobile-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="#home" class="nav-logo">ıanocent<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#workflow">Workflow</a></li>
+      <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#contact" class="nav-cta">Hire Me</a></li>
+    </ul>
+  </nav>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero" id="home">
+    <div class="glow glow-a"></div>
+    <div class="glow glow-b"></div>
+    <div class="container">
+      <div class="hero-inner">
+
+        <div>
+          <div class="hero-status">
+            <div class="status-dot"></div>
+            <span class="status-label">Available for full-time opportunities</span>
+          </div>
+
+          <h1>Dwi<br><em>Rianto</em></h1>
+
+          <p class="hero-sub">
+            Fullstack Developer · DevOps CI/CD · QA Manual &amp; Automation · Database Admin
+          </p>
+          <p class="hero-univ">Graduate of <span>Multimedia Nusantara University</span></p>
+
+          <div class="hero-tags">
+            <span class="tag hi">3+ Years Experience</span>
+            <span class="tag">Next.js</span>
+            <span class="tag">React.js</span>
+            <span class="tag">Vue.js</span>
+            <span class="tag">Node.js</span>
+            <span class="tag">PHP</span>
+            <span class="tag">Laravel</span>
+            <span class="tag">Git</span>
+            <span class="tag">GitLab</span>
+            <span class="tag">GitHub</span>
+          </div>
+
+          <div class="hero-actions">
+            <a href="./assets/pdf/CV_DWIRIANTO.pdf" download class="btn btn-primary">
+              <i class="bx bx-download"></i> Download CV
+            </a>
+            <a href="#about" class="btn btn-ghost">About Me</a>
+          </div>
+
+          <div class="hero-social">
+            <a href="https://www.linkedin.com/in/dwirianto" class="social-link" target="_blank"><i class="bx bxl-linkedin"></i></a>
+            <a href="https://www.github.com/ianocent" class="social-link" target="_blank"><i class="bx bxl-github"></i></a>
+            <a href="https://dribbble.com/Ntoo" class="social-link" target="_blank"><i class="bx bxl-dribbble"></i></a>
+            <!-- <a href="https://10fastfingers.com/user/riantoo-" class="social-link" target="_blank"><i class="bx bx-equalizer"></i></a> -->
+            <a href="https://wakatime.com/@018d6394-3140-41c9-8cdb-cbe349d742a3" class="wakatime-badge" target="_blank">
+              <img src="https://wakatime.com/badge/user/018d6394-3140-41c9-8cdb-cbe349d742a3.svg" alt="WakaTime coding stats">
+            </a>
+          </div>
+        </div>
+
+        <!-- Photo — point src to your local asset -->
+        <div class="photo-wrap">
+          <div class="photo-frame">
+            <!-- Set this to your actual photo path, e.g. assets/img/ntoo.png -->
+            <img src="assets/img/noot.jpeg" alt="Dwi Rianto">
+          </div>
+          <div class="photo-badge">
+            <strong>3+</strong>
+            <span>Years</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="stats-bar fade-up" style="transition-delay:.25s">
+        <div class="stat-cell">
+          <div class="stat-num">3+</div>
+          <div class="stat-desc">Years Experience</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num">5+</div>
+          <div class="stat-desc">Projects Completed</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num">95<span style="font-size:1rem;font-style:normal"> wpm</span></div>
+          <div class="stat-desc">Avg Typing Speed</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ ABOUT ═══ -->
+  <section class="about" id="about">
+    <div class="container">
+      <span class="section-eyebrow fade-up">My Intro</span>
+      <h2 class="section-title fade-up">About Me</h2>
+      <div class="about-grid">
+
+        <div class="about-text fade-up">
+          <p>
+            I'm a graduate of <strong>Multimedia Nusantara University</strong> with a strong enthusiasm for learning and embracing new challenges. I bring approximately <strong>three years of experience</strong> in Full Stack Development — including hands-on experience gained during my academic years.
+          </p>
+          <p>
+            Proficient in <strong>HTML, CSS, PHP, Laravel, Vue.js, Next.js, React.js, Tailwind CSS, Bootstrap, Python,</strong> and <strong>MySQL</strong>. Beyond software, I have practical experience as an <strong>IT Support specialist</strong> — hardware and software troubleshooting, networking, and system administration.
+          </p>
+          <p>
+            I also have a keen interest in UI/UX design, regularly creating application prototypes using <strong>Figma</strong> and Adobe Photoshop.
+          </p>
+          <div class="callout">
+            Actively seeking a <strong>full-time opportunity</strong> as a Fullstack Developer and/or IT Support professional where I can grow my skills and contribute meaningfully to the team.
+          </div>
+          <div style="margin-top:1.5rem">
+            <a href="#contact" class="btn btn-primary">Get In Touch</a>
+          </div>
+        </div>
+
+        <div class="about-cards fade-up" style="transition-delay:.12s">
+          <div class="info-card">
+            <div class="info-icon"><i class="bx bx-award"></i></div>
+            <div><h4>Academic</h4><p>S1 Graduate — Multimedia Nusantara University</p></div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon"><i class="bx bx-briefcase-alt"></i></div>
+            <div><h4>Experience</h4><p>~3 Years Fullstack Development</p></div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon"><i class="bx bx-code-alt"></i></div>
+            <div><h4>Projects</h4><p>5+ Completed Projects</p></div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon"><i class="bx bx-wrench"></i></div>
+            <div><h4>IT Support</h4><p>Hardware, Software &amp; Networking</p></div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon"><i class="bx bx-time"></i></div>
+            <div><h4>Typing Speed</h4><p><a href="https://10fastfingers.com/user/riantoo-" style="color: white;">96 WPM (10fastfinger)</a></p></div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon"><i class="bx bx-time"></i></div>
+            <div><h4>Typing Speed</h4><p><a href="https://monkeytype.com/profile/Amemiya" style="color: white;">95 WPM (MonkeyType)</a></p></div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon"><i class="bx bx-check-circle"></i></div>
+            <div><h4>Availability</h4><p>Online 24/7 — Ready for full-time</p></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SKILLS ═══ -->
+  <section class="skills" id="skills">
+    <div class="container">
+      <span class="section-eyebrow fade-up">My Abilities</span>
+      <h2 class="section-title fade-up">Technical Skills</h2>
+      <div class="skills-grid">
+
+        <div class="skill-card fade-up">
+          <div class="skill-head">
+            <div class="skill-ico" style="background:rgba(91,156,246,0.1);color:var(--blue)"><i class="bx bx-code-curly"></i></div>
+            <h3>Frontend</h3>
+          </div>
+          <ul class="skill-list">
+            <li class="skill-row"><span class="skill-name">HTML / CSS</span><span class="badge">Advance</span></li>
+            <li class="skill-row"><span class="skill-name">Tailwind CSS</span><span class="badge">Advance</span></li>
+            <li class="skill-row"><span class="skill-name">Bootstrap</span><span class="badge">Advance</span></li>
+            <li class="skill-row"><span class="skill-name">Vue.js</span><span class="badge">Advance</span></li>
+            <li class="skill-row"><span class="skill-name">Next.js</span><span class="badge">Advance</span></li>
+            <li class="skill-row"><span class="skill-name">React.js</span><span class="badge">Advance</span></li>
+          </ul>
+        </div>
+
+        <div class="skill-card fade-up" style="transition-delay:.08s">
+          <div class="skill-head">
+            <div class="skill-ico" style="background:rgba(62,207,142,0.1);color:var(--green)"><i class="bx bx-server"></i></div>
+            <h3>Backend</h3>
+          </div>
+          <ul class="skill-list">
+            <li class="skill-row"><span class="skill-name">PHP</span><span class="badge">Advance</span></li>
+            <li class="skill-row"><span class="skill-name">Laravel</span><span class="badge">Advance</span></li>
+            <li class="skill-row"><span class="skill-name">Codeigniter</span><span class="badge">Advance</span></li>
+            <li class="skill-row"><span class="skill-name">Python</span><span class="badge">Advance</span></li>
+            <li class="skill-row"><span class="skill-name">MySQL</span><span class="badge">Advance</span></li>
+          </ul>
+        </div>
+
+        <div class="skill-card fade-up" style="transition-delay:.16s">
+          <div class="skill-head">
+            <div class="skill-ico" style="background:var(--accent-dim);color:var(--accent)"><i class="bx bx-palette"></i></div>
+            <h3>UI/UX Design</h3>
+          </div>
+          <ul class="skill-list">
+            <li class="skill-row"><span class="skill-name">Figma</span><span class="badge">Advance</span></li>
+            <li class="skill-row"><span class="skill-name">Photoshop</span><span class="badge">Advance</span></li>
+            <li class="skill-row"><span class="skill-name">Canva</span><span class="badge">Advance</span></li>
+          </ul>
+        </div>
+
+        <div class="skill-card fade-up" style="transition-delay:.24s">
+          <div class="skill-head">
+            <div class="skill-ico" style="background:rgba(62,207,142,0.1);color:var(--green)"><i class="bx bx-terminal"></i></div>
+            <h3>IT Support &amp; Ops</h3>
+          </div>
+          <ul class="skill-list">
+            <li class="skill-row"><span class="skill-name">Hardware Support</span><span class="badge">Advance</span></li>
+            <li class="skill-row"><span class="skill-name">Software Troubleshoot</span><span class="badge">Advance</span></li>
+            <li class="skill-row"><span class="skill-name">Networking / Microtik / FortiGate</span><span class="badge">Advance</span></li>
+            <li class="skill-row"><span class="skill-name">DevOps CI/CD</span><span class="badge">Advance</span></li>
+            <li class="skill-row"><span class="skill-name">QA Manual / Automation</span><span class="badge">Advance</span></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ WORKFLOW ═══ -->
+  <section class="workflow" id="workflow">
+    <div class="container">
+      <span class="section-eyebrow fade-up">Real Work</span>
+      <h2 class="section-title fade-up">Workflow Experience</h2>
+      <div class="workflow-grid">
+
+        <div class="wf-card fade-up">
+          <h3>Hotel / Property Management System</h3>
+          <p>Built and maintained a full Hotel Management System covering room booking, guest management, billing, and reporting dashboards. Collaborated closely with hotel ops staff to map real-world workflows into the platform.</p>
+          <div class="tech-row">
+            <span class="tech-pill">Next.js</span>
+            <span class="tech-pill">PHP</span>
+            <span class="tech-pill">Laravel</span>
+            <span class="tech-pill">MySQL</span>
+            <span class="tech-pill">Tailwind CSS</span>
+            <span class="tech-pill">REST API</span>
+          </div>
+        </div>
+
+        <!-- <div class="wf-card fade-up" style="transition-delay:.08s">
+          <h3>Property Management System</h3>
+          <p>Developed a Property Management System for multi-unit property operations — tenant management, lease tracking, maintenance ticketing, payment records, and owner reporting with an intuitive admin dashboard.</p>
+          <div class="tech-row">
+            <span class="tech-pill">Next.js</span>
+            <span class="tech-pill">PHP</span>
+            <span class="tech-pill">Laravel</span>
+            <span class="tech-pill">MySQL</span>
+            <span class="tech-pill">REST API</span>
+          </div>
+        </div> -->
+        <div class="wf-card fade-up" style="transition-delay:.24s">
+          <h3>DevOps &amp; QA</h3>
+          <p>Implemented CI/CD pipelines for automated deployment. Conducted manual and automated QA testing across both management systems, ensuring production stability and catching regressions early.</p>
+          <div class="tech-row">
+            <span class="tech-pill">CI/CD</span>
+            <span class="tech-pill">QA Manual</span>
+            <span class="tech-pill">QA Automation</span>
+            <span class="tech-pill">Git</span>
+            <span class="tech-pill">Linux</span>
+          </div>
+        </div>
+
+        <div class="wf-card fade-up" style="transition-delay:.16s">
+          <h3>Desktop Dashboard Screenshots</h3>
+          <p>Screenshots from the Hotel &amp; Property Management Systems built above.</p>
+          <div class="dash-grid">            
+              <img src="assets/img/b. Main Dashboard.png"    alt="Hotel Dashboard"    onclick="openLightbox(this.src)">
+              <img src="assets/img/c. Forecast Market Segment Dashboard.png" alt="Property Dashboard" onclick="openLightbox(this.src)">
+              <img src="assets/img/d. Market Segment 2 & 3.png" alt="Property Dashboard" onclick="openLightbox(this.src)">
+              <img src="assets/img/e. Dynamic Chart.png" alt="Property Dashboard" onclick="openLightbox(this.src)">
+              <img src="assets/img/f. Role Based Access Control.png" alt="Property Dashboard" onclick="openLightbox(this.src)">
+              <img src="assets/img/a. Room Availability Tooltip.png" alt="Property Dashboard" onclick="openLightbox(this.src)">
+          </div>
+        </div>
+
+        <div class="wf-card fade-up" style="transition-delay:.16s">
+          <h3>Mobile Dashboard Screenshots</h3>
+          <p>Screenshots from the Hotel &amp; Property Management Systems built above.</p><br>
+          <div class="carousel-container" id="mobileCarousel">
+            <div class="carousel-wrapper" style="scale: 50%;">
+              <div class="carousel-track">
+                <div class="carousel-slide"><img src="assets/img/1. Responsive Choose Property.png" alt="Choose Property"></div>
+                <div class="carousel-slide"><img src="assets/img/2. Responsive Dashboard.png" alt="Dashboard"></div>
+                <div class="carousel-slide"><img src="assets/img/3. Responsive Sidebar Mobile.png" alt="Sidebar"></div>
+                <div class="carousel-slide"><img src="assets/img/4. Responsive User List Page.png" alt="User List"></div>
+                <div class="carousel-slide"><img src="assets/img/5. Responsive User View Page.png" alt="User View"></div>
+                <div class="carousel-slide"><img src="assets/img/6. Responsive User Form Page.png" alt="User Form"></div>
+                <div class="carousel-slide"><img src="assets/img/7. Responsive Role List Page.png" alt="Role List"></div>
+                <div class="carousel-slide"><img src="assets/img/8. Responsive Role View Page.png" alt="Role View"></div>
+                <div class="carousel-slide"><img src="assets/img/9. Responsive Role Form Page.png" alt="Role Form"></div>
+                <div class="carousel-slide"><img src="assets/img/10. Responsive Company Profile Main Form Page.png" alt="Company Profile"></div>
+                <div class="carousel-slide"><img src="assets/img/11. Responsive Guest Profile Main Form Page.png" alt="Guest Profile"></div>
+                <div class="carousel-slide"><img src="assets/img/12. Responsive Housekeeping Room Status.png" alt="Housekeeping Status"></div>
+                <div class="carousel-slide"><img src="assets/img/13. Responsive Housekeeping Room Status History.png" alt="Room History"></div>
+              </div>
             </div>
-            </section>
-
-            <!--=============== SERVICES ===============-->
-            <section class="services section">
-                <span class="section__subtitle">My Service</span>
-                <h2 class="section__title">What I Offer</h2>
-
-                <div class="services__container container grid">
-                    <div class="services__card">
-                        <h3 class="services__title">Fullstack <br> Developer</h3>
-                        <span class="services__button">See More <i class="bx bx-right-arrow-alt services__icon"></i></span>
-
-                        <div class="services__modal">
-                            <div class="services__modal-content">
-                                <i class="bx bx-x services__modal-close" ></i>
-
-                                <h3 class="services__modal-title">Fullstack Developer</h3>
-                                <p class="services__modal-description">By studying and gaining more than 1 year of experience in college, I was able to make some of them:</p>
-
-                                <ul class="services__modal-list">
-                                    <li class="services__modal-item">
-                                        <i class="bx bx-check services__modal-icon"></i>
-                                        <p class="services__modal-info">
-                                            I Develop the user interface
-                                        </p>
-                                    </li>
-
-                                    <li class="services__modal-item">
-                                        <i class="bx bx-check services__modal-icon"></i>
-                                        <p class="services__modal-info">
-                                            I create UX element interact
-                                        </p>
-                                    </li>
-
-                                    <li class="services__modal-item">
-                                        <i class="bx bx-check services__modal-icon"></i>
-                                        <p class="services__modal-info">
-                                            Design and mockups of products
-                                        </p>
-                                    </li>
-
-                                    <li class="services__modal-item">
-                                        <i class="bx bx-check services__modal-icon"></i>
-                                        <p class="services__modal-info">
-                                            I Develop the news website
-                                        </p>
-                                    </li>
-
-                                    <li class="services__modal-item">
-                                        <i class="bx bx-check services__modal-icon"></i>
-                                        <p class="services__modal-info">
-                                            I create booking website
-                                        </p>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="services__card">
-                        <h3 class="services__title">UI/UX <br> Designer</h3>
-                        <span class="services__button">See More <i class="bx bx-right-arrow-alt services__icon"></i></span>
-
-                        <div class="services__modal">
-                            <div class="services__modal-content">
-                                <i class="bx bx-x services__modal-close" ></i>
-
-                                <h3 class="services__modal-title">UI/UX Designer</h3>
-                                <p class="services__modal-description">By studying and gaining more than 1 year of experience in college, I was able to make some of them:</p>
-
-                                <ul class="services__modal-list">
-                                    <li class="services__modal-item">
-                                        <i class="bx bx-check services__modal-icon"></i>
-                                        <p class="services__modal-info">
-                                            Design Whatsapp
-                                        </p>
-                                    </li>
-
-                                    <li class="services__modal-item">
-                                        <i class="bx bx-check services__modal-icon"></i>
-                                        <p class="services__modal-info">
-                                            Redesign Kompas.com
-                                        </p>
-                                    </li>
-                                </ul>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="services__card">
-                        <h3 class="services__title">IT<br>Support</h3>
-                        <span class="services__button">See More <i class="bx bx-right-arrow-alt services__icon"></i></span>
-
-                        <div class="services__modal">
-                            <div class="services__modal-content">
-                                <i class="bx bx-x services__modal-close" ></i>
-
-                                <h3 class="services__modal-title">IT Support</h3>
-                                <p class="services__modal-description">By studying and gaining more than 1 year of experience in college and exploring myself , I was able to make some of them:</p>
-
-                                <ul class="services__modal-list">
-                                    <li class="services__modal-item">
-                                        <i class="bx bx-check services__modal-icon"></i>
-                                        <p class="services__modal-info">
-                                            Repairing Computer / Laptop (Personal Computer)
-                                        </p>
-                                    </li>
-
-                                    <li class="services__modal-item">
-                                        <i class="bx bx-check services__modal-icon"></i>
-                                        <p class="services__modal-info">
-                                            Installing Windows / Linux (Operating System)
-                                        </p>
-                                    </li>
-
-                                    <li class="services__modal-item">
-                                        <i class="bx bx-check services__modal-icon"></i>
-                                        <p class="services__modal-info">
-                                            Partition Concept (Storage)
-                                        </p>
-                                    </li>
-
-                                    <li class="services__modal-item">
-                                        <i class="bx bx-check services__modal-icon"></i>
-                                        <p class="services__modal-info">
-                                            Build / Rebuild Computer
-                                        </p>
-                                    </li>
-
-                                    <li class="services__modal-item">
-                                        <i class="bx bx-check services__modal-icon"></i>
-                                        <p class="services__modal-info">
-                                            Networking, LAN, Access Point, Router, etc
-                                        </p>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                </div>
-            </section>
-
-            <!--=============== WORK ===============-->
-            <section class="work section" id="work">
-                <span class="section__subtitle">My portfolio</span>
-                <h2 class="section__title">Recent Works</h2>
-
-                <div class="work__filters">
-                    <span class="work__item active-work" data-filter="all">All</span>
-                    <span class="work__item"data-filter=".web">Web</span>
-                    <span class="work__item"data-filter=".movil">Mobile</span>
-                    <span class="work__item"data-filter=".design">Design</span>
-                    <span class="work__item"data-filter=".support">IT Support</span>
-                </div>
-
-                <div class="work__container container grid">
-                    <div class="work__card mix web">
-                        <img src="assets/img/kitabooking.png" alt="" class="work__img">
-
-                        <h3 class="work__title">Aplikasi Booking</h3>
-
-                        <a href="https://github.com/Rianto69/KitaBooking" class="work__button">
-                            Demo <i class="bx bx-right-arrow-alt work__icon"></i>
-                        </a>
-                    </div>
-
-                    <div class="work__card mix design">
-                        <img src="assets/img/kompas.png" alt="" class="work__img">
-
-                        <h3 class="work__title">Redesign Kompas</h3>
-
-                        <a href="https://www.figma.com/file/kE9Ai8J4iRnk3ULr1H0mZr/Kompas?node-id=0%3A1&t=FoGMxZmHGpC95S01-1" class="work__button">
-                            Demo <i class="bx bx-right-arrow-alt work__icon"></i>
-                        </a>
-                    </div>
-
-                    <div class="work__card mix movil">
-                        <img src="assets/img/vlclite.jpg" alt="" class="work__img">
-
-                        <h3 class="work__title">VLC Lite</h3>
-
-                        <a href="https://github.com/Rianto69/VLCLite" class="work__button">
-                            Demo <i class="bx bx-right-arrow-alt work__icon"></i>
-                        </a>
-                    </div>
-
-                    <div class="work__card mix web">
-                        <img src="assets/img/npwp.png" alt="" class="work__img">
-
-                        <h3 class="work__title">Web Portal Berita</h3>
-
-                        <a href="https://github.com/Rianto69/NPWPNews" class="work__button">
-                            Demo <i class="bx bx-right-arrow-alt work__icon"></i>
-                        </a>
-                    </div>
-
-                    <div class="work__card mix design">
-                        <img src="assets/img/mainpage.png" alt="" class="work__img">
-
-                        <h3 class="work__title">Whatsapp</h3>
-
-                        <a href="https://www.figma.com/file/8Ctvjgac6jo87xl2euTTdu/Whatsapp-Concept?node-id=0%3A1" class="work__button">
-                            Demo <i class="bx bx-right-arrow-alt work__icon"></i>
-                        </a>
-                    </div>
-
-                    
-
-                    <!-- <div class="work__card mix design">
-                        <img src="assets/img/insta.png" alt="" class="work__img">
-
-                        <h3 class="work__title">Instagram</h3>
-                        <h4 class="work__title">No Demo</h4>
-                    </div> -->
-
-                    <div class="work__card mix design">
-                        <img src="assets/img/proto.png" alt="" class="work__img">
-
-                        <h3 class="work__title">Vape Thing App</h3>
-
-                        <a href="#" class="work__button">
-                            Demo <i class="bx bx-right-arrow-alt work__icon"></i>
-                        </a>
-                    </div>
-
-                    <!-- <div class="work__card mix support">
-                        <img src="assets/img/lepi.jpeg" alt="" class="work__img">
-
-                        <h3 class="work__title">Cleaning and mount SSD</h3>
-                        <h4 class="work__title">No Demo</h4>
-                    </div> -->
-
-                    
-                </div>
-            </section>
-
-            <section class="contact section" id="contact">
-                <span class="section__subtitle">Get In Touch</span>
-                <h2 class="section__title">Contact Me</h2>
-
-                <div class="contact__container container grid">
-                    <div class="contact__content">
-                        <h3 class="contact__title">Talk to me</h3>
-
-                        <div class="contact__info">
-                            <div class="contact__card">
-                                <i class="bx bx-mail-send contact__card-icon"></i>
-                                <h3 class="contact__card-title">Email</h3>
-                                <span class="contact__card-data">riantodwi2002@gmail.com</span>
-
-                                <a href="https://mail.google.com/mail/u/4/#inbox?compose=CllgCJfmrpqVJbvkWclhcDSFcBkVgcgDBfrPdNpfFRChspbSWHpfqFtlrJwWpcNrcHzbfLhtXmg" target="_blank" class="contact__button">Write Me <i class="bx bx-right-arrow-alt contact__button-icon"></i></a>
-                            </div>
-
-                            <div class="contact__card">
-                                <i class="bx bxl-whatsapp contact__card-icon"></i>
-                                <h3 class="contact__card-title">Whatsap</h3>
-                                <span class="contact__card-data">+628138992997</span>
-
-                                <a href="https://wa.me/6281389962997" target="_blank" class="contact__button">Write Me <i class="bx bx-right-arrow-alt contact__button-icon"></i></a>
-                            </div>
-
-                            <div class="contact__card">
-                                <i class="bx bxl-messenger contact__card-icon"></i>
-                                <h3 class="contact__card-title">Messenger</h3>
-                                <span class="contact__card-data">Ntoo Ntoo</span>
-
-                                <a href="https://web.facebook.com/messages/t/100010345442099" target="_blank" class="contact__button">Write Me <i class="bx bx-right-arrow-alt contact__button-icon"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="contact__content">
-                        <h3 class="contact__title">Write me your project</h3>
-
-                        <form name="contact_ntoo" action="" class="contact__form">
-                            <div class="contact__form-div">
-                                <label for="" class="contact__form-tag">Name</label>
-                                <input type="text" placeholder="Insert your Name" class="contact__form-input" name="nama">
-                            </div>
-
-                            <div class="contact__form-div">
-                                <label for="" class="contact__form-tag">Email</label>
-                                <input type="email" placeholder="insert your email" class="contact__form-input" name="email">
-                            </div>
-
-                            <div class="contact__form-div contact__form-area">
-                                <label for="" class="contact__form-tag">Project</label>
-                                <textarea name="pesan" id="" cols="30" rows="10" class="contact__form-input" placeholder="Write your project"></textarea>
-                            </div>
-                            <button type="submit" class="button">Send Message</button>
-                        </form>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <!--=============== FOOTER ===============-->
-        <footer class="footer">
-            <div class="footer__container container">
-                <h1 class="footer__title">Ntoo with Luv <3</h1>
-
-                <ul class="footer__list">
-                    <li>
-                        <a href="#about" class="footer__link">About</a>
-                    </li>
-                    <li>
-                        <a href="#work" class="footer__link">Projects</a>
-                    </li>
-                </ul>
-
-                <ul class="footer__social">
-                    <a href="https://www.facebook.com/ntoo69/" target="_blank" class="footer__social-link">
-                        <i class="bx bxl-facebook"></i>
-                    </a>
-
-                    <a href="https://www.instagram.com/nto.turu/" target="_blank" class="footer__social-link">
-                        <i class="bx bxl-instagram"></i>
-                    </a>
-
-                    <a href="https://twitter.com/sinsproof_" target="_blank" class="footer__social-link">
-                        <i class="bx bxl-twitter"></i>
-                    </a>
-                </ul>
-
-                <span class="footer__copy">
-                    &#169; Ntoo Ntoo. All rights reserved
-                </span>
+            <div class="carousel-indicator"><span id="mobileSlideNum">1</span> / 13</div>
+            <div class="carousel-controls">
+              <button class="carousel-btn" onclick="prevSlide('mobileCarousel')"><i class="bx bx-chevron-left"></i></button>
+              <button class="carousel-btn" onclick="nextSlide('mobileCarousel')"><i class="bx bx-chevron-right"></i></button>
             </div>
-        </footer>
+          </div>
+        </div>
 
-        <!--=============== SCROLLREVEAL ===============-->
-        <script src="assets/js/scrollreveal.min.js"></script>
+      </div>
+    </div>
+  </section>
 
-        <!--=============== SWIPER JS ===============-->
-        <script src="assets/js/swiper-bundle.min.js"></script>
+  <!-- ═══ PORTFOLIO ═══ -->
+  <section class="portfolio" id="portfolio">
+    <div class="container">
+      <span class="section-eyebrow fade-up">My Work</span>
+      <h2 class="section-title fade-up">Recent Projects</h2>
 
-        <!--=============== MIXITUP FILTER ===============-->
-        <script src="assets/js/mixitup.min.js"></script>
+      <div class="port-filters fade-up">
+        <button class="f-btn active" data-filter="all">All</button>
+        <button class="f-btn" data-filter="web">Web</button>
+        <button class="f-btn" data-filter="mobile">Mobile</button>
+        <button class="f-btn" data-filter="design">Design</button>
+      </div>
 
-        <!--=============== MAIN JS ===============-->
-        <script src="assets/js/main.js"></script>
+      <div class="port-grid">
 
-        <script>
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbzGocESVSxlmSYliTzUO7kmyadyt6Ty4kepVZibbMmsqfxidmKFigWqAzNiP_7Vil4l/exec'
-            const form = document.forms['contact_ntoo'];
-            const alertNew = document.querySelector('alert');
-          
-            form.addEventListener('submit', e => {
-              e.preventDefault()
-              fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-                .then(response => {
-                    console.log('Success!', response)
-                })
-                .catch(error => console.error('Error!', error.message))
-            })
-        </script>
-    </body>
+        <div class="work-card" data-cat="design">
+          <img src="assets/img/mainpage.png" alt="Whatsapp Redesign" class="work-thumb"
+               onerror="this.outerHTML='<div class=\'work-thumb-empty\'><i class=\'bx bx-image\'></i></div>'">
+          <div class="work-body">
+            <span class="work-type t-design">Design</span>
+            <h3>Whatsapp Redesign</h3>
+            <p>Concept UI redesign of WhatsApp mobile app interface, prototyped in Figma.</p>
+            <a href="https://www.figma.com/design/8Ctvjgac6jo87xl2euTTdu/Whatsapp-Concept?m=auto&t=6FWbkeBqbJw2KIbc-6" class="work-link" target="_blank">View on Figma <i class="bx bx-right-arrow-alt"></i></a>
+            </div>
+        </div>
+
+        <div class="work-card" data-cat="design">
+          <img src="assets/img/proto.png" alt="Vape Thing App" class="work-thumb"
+               onerror="this.outerHTML='<div class=\'work-thumb-empty\'><i class=\'bx bx-image\'></i></div>'">
+          <div class="work-body">
+            <span class="work-type t-design">Design</span>
+            <h3>Vape Thing App</h3>
+            <p>Mobile app UI/UX design and prototype built in Figma.</p>
+            <a href="https://www.figma.com/design/3yXhFjhcbu083aVDDf0RpF/Vape-Thing?m=auto&t=6FWbkeBqbJw2KIbc-6" class="work-link" target="_blank">View on Figma <i class="bx bx-right-arrow-alt"></i></a>
+          </div>
+        </div>
+
+        <div class="work-card" data-cat="design">
+          <div class="carousel-container" id="kompasCarousel" style="margin-bottom: 0; border-radius: 12px 12px 0 0">
+            <div class="carousel-wrapper">
+              <div class="carousel-track">
+                <div class="carousel-slide"><img src="assets/img/compas/Kompas.png" alt="Kompas 1"></div>
+                <div class="carousel-slide"><img src="assets/img/compas/Kompas1.png" alt="Kompas 2"></div>
+                <div class="carousel-slide"><img src="assets/img/compas/Kompas2.png" alt="Kompas 3"></div>
+                <div class="carousel-slide"><img src="assets/img/compas/Kompas3.png" alt="Kompas 4"></div>
+              </div>
+            </div>
+            <div class="carousel-indicator"><span id="kompasSlideNum">1</span> / 4</div>
+            <div class="carousel-controls">
+              <button class="carousel-btn" onclick="prevSlide('kompasCarousel')"><i class="bx bx-chevron-left"></i></button>
+              <button class="carousel-btn" onclick="nextSlide('kompasCarousel')"><i class="bx bx-chevron-right"></i></button>
+            </div>
+          </div>
+          <div class="work-body">
+            <span class="work-type t-design">Design</span>
+            <h3>Redesign Kompas.com</h3>
+            <p>Complete UI/UX redesign of Kompas news portal, prototyped in Figma.</p>
+            <a href="https://www.figma.com/design/kE9Ai8J4iRnk3ULr1H0mZr/Kompas?m=auto&t=6FWbkeBqbJw2KIbc-6" class="work-link" target="_blank">View in Figma <i class="bx bx-right-arrow-alt"></i></a>
+          </div>
+        </div>
+
+        <div class="work-card" data-cat="design">
+          <div class="carousel-container" id="calligraphyCarousel" style="margin-bottom: 0; border-radius: 12px 12px 0 0">
+            <div class="carousel-wrapper">
+              <div class="carousel-track">
+                <div class="carousel-slide"><img src="assets/img/calligraphsy/1. Landing Guest.png" alt="Landing"></div>
+                <div class="carousel-slide"><img src="assets/img/calligraphsy/2. Forms.png" alt="Forms"></div>
+                <div class="carousel-slide"><img src="assets/img/calligraphsy/3. Result.png" alt="Result"></div>
+                <div class="carousel-slide"><img src="assets/img/calligraphsy/4. Modal_Dashboard Gallery Admin.png" alt="Admin Dashboard"></div>
+              </div>
+            </div>
+            <div class="carousel-indicator"><span id="calligraphySlideNum">1</span> / 4</div>
+            <div class="carousel-controls">
+              <button class="carousel-btn" onclick="prevSlide('calligraphyCarousel')"><i class="bx bx-chevron-left"></i></button>
+              <button class="carousel-btn" onclick="nextSlide('calligraphyCarousel')"><i class="bx bx-chevron-right"></i></button>
+            </div>
+          </div>
+          <div class="work-body">
+            <span class="work-type t-design">Design</span>
+            <h3>Calligraphy Expert System</h3>
+            <p>Complete UI/UX calligraphy expert system prototyped in Figma.</p>
+            <a href="https://www.figma.com/design/kE9Ai8J4iRnk3ULr1H0mZr/Kompas?m=auto&t=6FWbkeBqbJw2KIbc-6" class="work-link" target="_blank">View in Figma <i class="bx bx-right-arrow-alt"></i></a>
+          </div>
+        </div>
+
+        <div class="work-card" data-cat="web">
+          <img src="assets/img/kitabooking.png" alt="Aplikasi Booking" class="work-thumb"
+               onerror="this.outerHTML='<div class=\'work-thumb-empty\'><i class=\'bx bx-image\'></i></div>'">
+          <div class="work-body">
+            <span class="work-type t-web">Web</span>
+            <h3>Aplikasi Booking</h3>
+            <p>Full-featured booking web application built with PHP &amp; Laravel.</p>
+            <a href="https://github.com/Rianto69/KitaBooking" class="work-link" target="_blank">View on GitHub <i class="bx bx-right-arrow-alt"></i></a>
+          </div>
+        </div>
+
+        <div class="work-card" data-cat="mobile">
+          <img src="assets/img/vlclite.jpg" alt="VLC Lite" class="work-thumb"
+               onerror="this.outerHTML='<div class=\'work-thumb-empty\'><i class=\'bx bx-image\'></i></div>'">
+          <div class="work-body">
+            <span class="work-type t-mobile">Mobile</span>
+            <h3>VLC Lite</h3>
+            <p>Lightweight mobile media player with clean UI and core VLC features.</p>
+            <a href="https://github.com/Rianto69/VLCLite" class="work-link" target="_blank">View on GitHub <i class="bx bx-right-arrow-alt"></i></a>
+          </div>
+        </div>
+
+        <div class="work-card" data-cat="web">
+          <img src="assets/img/npwp.png" alt="Web Portal Berita" class="work-thumb"
+               onerror="this.outerHTML='<div class=\'work-thumb-empty\'><i class=\'bx bx-image\'></i></div>'">
+          <div class="work-body">
+            <span class="work-type t-web">Web</span>
+            <h3>Web Portal Berita</h3>
+            <p>News portal web app with CMS, categories, and article management.</p>
+            <a href="https://github.com/ianocent/NPWPNews" class="work-link" target="_blank">View on GitHub <i class="bx bx-right-arrow-alt"></i></a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CONTACT ═══ -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <span class="section-eyebrow fade-up">Get In Touch</span>
+      <h2 class="section-title fade-up">Contact Me</h2>
+      <div class="contact-grid">
+
+        <div class="fade-up">
+          <p class="contact-lead">
+            Ready to discuss a project, a full-time opportunity, or just want to say hello? I'm currently available for full-time roles as a Fullstack Developer or IT Support professional.
+          </p>
+          <div class="contact-cards">
+            <a href="mailto:riantodwi2002@gmail.com" class="c-card">
+              <div class="c-ico"><i class="bx bx-envelope"></i></div>
+              <div><h4>Email</h4><span>riantodwi2002@gmail.com</span></div>
+            </a>
+            <a href="https://wa.me/6281389962997" target="_blank" class="c-card">
+              <div class="c-ico"><i class="bx bxl-whatsapp"></i></div>
+              <div><h4>WhatsApp</h4><span>+62 813 8996 2997</span></div>
+            </a>
+            <a href="https://www.linkedin.com/in/dwirianto" target="_blank" class="c-card">
+              <div class="c-ico"><i class="bx bxl-linkedin"></i></div>
+              <div><h4>LinkedIn</h4><span>linkedin.com/in/dwirianto</span></div>
+            </a>
+          </div>
+        </div>
+
+        <div class="fade-up" style="transition-delay:.12s">
+          <form name="contact_ntoo" class="cf" id="contact-form">
+            <div class="fg">
+              <label>Name</label>
+              <input type="text" name="nama" placeholder="Your name" required>
+            </div>
+            <div class="fg">
+              <label>Email</label>
+              <input type="email" name="email" placeholder="your@email.com" required>
+            </div>
+            <div class="fg">
+              <label>Message</label>
+              <textarea name="pesan" placeholder="Tell me about your project or opportunity…" required></textarea>
+            </div>
+            <div>
+              <button type="submit" class="btn btn-primary">
+                <i class="bx bx-send"></i> Send Message
+              </button>
+            </div>
+            <p id="form-msg" style="font-size:.8rem;color:var(--green);display:none;margin-top:.25rem">
+              Message sent — I'll get back to you shortly.
+            </p>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-logo">ıanocent<span>.</span></div>
+        <span class="footer-copy">© 2026 Dwi Rianto. All rights reserved.</span>
+        <div class="footer-social">
+          <a href="https://www.facebook.com/ntoo69/" target="_blank" class="social-link"><i class="bx bxl-facebook"></i></a>
+          <a href="https://www.instagram.com/ianocent/" target="_blank" class="social-link"><i class="bx bxl-instagram"></i></a>
+          <a href="https://twitter.com/sinsproof_" target="_blank" class="social-link"><i class="bx bxl-twitter"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+
+    // Portfolio filter
+    document.querySelectorAll('.f-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.dataset.filter;
+        document.querySelectorAll('.work-card').forEach(c => {
+          c.style.display = (f === 'all' || c.dataset.cat === f) ? '' : 'none';
+        });
+      });
+    });
+
+    // Carousel functionality
+    const carouselStates = {};
+    
+    function initCarousel(containerId, totalSlides) {
+      carouselStates[containerId] = { current: 0, total: totalSlides };
+      updateCarousel(containerId);
+    }
+
+    function nextSlide(containerId) {
+      if (!carouselStates[containerId]) initCarousel(containerId, document.querySelector(`#${containerId} .carousel-slide`).parentElement.children.length);
+      const state = carouselStates[containerId];
+      state.current = (state.current + 1) % state.total;
+      updateCarousel(containerId);
+    }
+
+    function prevSlide(containerId) {
+      if (!carouselStates[containerId]) initCarousel(containerId, document.querySelector(`#${containerId} .carousel-slide`).parentElement.children.length);
+      const state = carouselStates[containerId];
+      state.current = (state.current - 1 + state.total) % state.total;
+      updateCarousel(containerId);
+    }
+
+    function updateCarousel(containerId) {
+      const state = carouselStates[containerId];
+      const carousel = document.getElementById(containerId);
+      const track = carousel.querySelector('.carousel-track');
+      const numIndicator = carousel.querySelector(`#${containerId.replace('Carousel', 'SlideNum')}`);
+      
+      track.style.transform = `translateX(-${state.current * 100}%)`;
+      if (numIndicator) numIndicator.textContent = state.current + 1;
+    }
+
+    // Initialize carousels on load
+    window.addEventListener('load', () => {
+      const mobileTrack = document.querySelector('#mobileCarousel .carousel-track');
+      if (mobileTrack) initCarousel('mobileCarousel', mobileTrack.children.length);
+      
+      const kompasTrack = document.querySelector('#kompasCarousel .carousel-track');
+      if (kompasTrack) initCarousel('kompasCarousel', kompasTrack.children.length);
+      
+      const calligraphyTrack = document.querySelector('#calligraphyCarousel .carousel-track');
+      if (calligraphyTrack) initCarousel('calligraphyCarousel', calligraphyTrack.children.length);
+    });
+
+    // Lightbox (used by dashboard screenshots)
+    function openLightbox(src) {
+      const lb = document.createElement('div');
+      lb.className = 'lightbox';
+      lb.innerHTML = '<img src="' + src + '" alt="">';
+      lb.addEventListener('click', () => lb.remove());
+      document.body.appendChild(lb);
+    }
+
+    // Active nav on scroll
+    const secs = document.querySelectorAll('section[id]');
+    window.addEventListener('scroll', () => {
+      const y = window.pageYOffset;
+      secs.forEach(s => {
+        if (y >= s.offsetTop - 120 && y < s.offsetTop + s.offsetHeight) {
+          document.querySelectorAll('.nav-links a').forEach(a => {
+            a.style.color = a.getAttribute('href') === '#' + s.id ? 'var(--text)' : '';
+          });
+        }
+      });
+    });
+
+    // Contact form
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzGocESVSxlmSYliTzUO7kmyadyt6Ty4kepVZibbMmsqfxidmKFigWqAzNiP_7Vil4l/exec';
+    document.getElementById('contact-form').addEventListener('submit', e => {
+      e.preventDefault();
+      fetch(scriptURL, { method: 'POST', body: new FormData(e.target) })
+        .then(() => {
+          const msg = document.getElementById('form-msg');
+          msg.style.display = 'block';
+          e.target.reset();
+          setTimeout(() => msg.style.display = 'none', 5000);
+        })
+        .catch(console.error);
+    });
+  </script>
+</body>
 </html>
