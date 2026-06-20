@@ -19,7 +19,8 @@
       --gold2:     #e8c98d;
       --gold-dim:  rgba(201,169,110,0.08);
       --text:      #f0f1f5;
-      --text2:     #787c8d;
+      /* --text2:     #787c8d; */
+      --text2:     #9ea1ad;
       --text3:     #646876;
       --green:     #34d399;
       --blue:      #60a5fa;
@@ -116,6 +117,7 @@
     .nav-list a { font-size: .72rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--text3); text-decoration: none; padding: .38rem .8rem; border-radius: 6px; transition: color .2s, background .2s; }
     .nav-list a:hover, .nav-list a.on { color: var(--text2); background: var(--surface2); }
     .nav-cta { background: var(--gold) !important; color: #08090d !important; font-weight: 600 !important; }
+    .nav-cta a:hover a.on { border-color: #c9a96e33; color: var(--gold); background: var(--gold-dim); }
     
     .hbg { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
     .hbg span { display: block; width: 20px; height: 1.5px; background: var(--text2); border-radius: 2px; }
@@ -288,7 +290,6 @@
     .cinema-label-top, .cinema-label-bottom { position: absolute; left: 50%; transform: translateX(-50%); font-family: var(--sans); font-size: .45rem; letter-spacing: .2em; color: rgba(201,169,110,0.4); white-space: nowrap; }
     .cinema-label-top    { top: -14px; }
     .cinema-label-bottom { bottom: -14px; }
-
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
       .hero-grid { grid-template-columns: 1fr 280px; gap: 2rem; }
