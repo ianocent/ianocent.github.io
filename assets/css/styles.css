@@ -247,7 +247,7 @@
     .w-card.hidden { display: none; }
 
     /* ── SECTION 6: CONTACT & FOOTER ── */
-    .contact-wrap { height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding-bottom: 0; }
+    .contact-wrap { height: 90%; display: flex; flex-direction: column; justify-content: space-between; padding-bottom: 0; }
     .ct-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-top: 1rem; }
     .ct-lead { font-size: .85rem; color: var(--text2); line-height: 1.8; margin-bottom: 1.5rem; }
     .ct-list { display: flex; flex-direction: column; gap: .5rem; }
