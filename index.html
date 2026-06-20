@@ -7,1208 +7,413 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
-  <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    :root {
-      --bg:        #080a0f;
-      --bg-sub:    #0c0e15;
-      --surface:   #111318;
-      --surface2:  #181b24;
-      --line:      rgba(255,255,255,0.06);
-      --line2:     rgba(255,255,255,0.10);
-      --gold:      #c9a96e;
-      --gold2:     #e8c98d;
-      --gold-dim:  rgba(201,169,110,0.08);
-      --gold-glow: rgba(201,169,110,0.14);
-      --text:      #f0f1f5;
-      --text2:     #787c8d;
-      --text3:     #353847;
-      --green:     #34d399;
-      --blue:      #60a5fa;
-      --serif:     'Playfair Display', Georgia, serif;
-      --sans:      'Geist', 'Inter', system-ui, sans-serif;
-      --r:         10px;
-      --nh:        64px;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--sans);
-      font-size: 15px;
-      line-height: 1.7;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* subtle noise */
-    body::after {
-      content: '';
-      position: fixed; inset: 0;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.022'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 9999;
-    }
-
-    /* ── PROGRESS BAR ── */
-    #bar {
-      position: fixed;
-      top: 0; left: 0;
-      height: 1px;
-      width: 0;
-      background: linear-gradient(90deg, var(--gold), var(--gold2), transparent);
-      z-index: 9998;
-      transition: width .12s linear;
-    }
-
-    /* ─────────────── NAV ─────────────── */
-    .nav {
-      position: fixed;
-      top: 0; inset-inline: 0;
-      height: var(--nh);
-      z-index: 500;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 clamp(1.25rem, 5vw, 3.5rem);
-      background: rgba(8,10,15,0.72);
-      backdrop-filter: blur(20px) saturate(1.6);
-      border-bottom: 1px solid var(--line);
-      transition: background .3s;
-    }
-    .nav.up { background: rgba(8,10,15,0.94); }
-
-    .logo {
-      font-family: var(--sans);
-      font-size: .9rem;
-      font-weight: 600;
-      color: var(--text);
-      text-decoration: none;
-      letter-spacing: .04em;
-      display: flex; align-items: center; gap: 2px;
-    }
-    .logo-sep { color: var(--gold); }
-
-    .nav-list {
-      display: flex;
-      gap: .15rem;
-      list-style: none;
-    }
-    .nav-list a {
-      font-size: .72rem;
-      font-weight: 500;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: var(--text3);
-      text-decoration: none;
-      padding: .38rem .8rem;
-      border-radius: 6px;
-      transition: color .2s, background .2s;
-    }
-    .nav-list a:hover, .nav-list a.on { color: var(--text2); background: var(--surface2); }
-    .nav-cta {
-      background: var(--gold) !important;
-      color: #08090d !important;
-      font-weight: 600 !important;
-    }
-    .nav-cta:hover { background: var(--gold2) !important; color: #08090d !important; }
-
-    /* hamburger */
-    .hbg {
-      display: none;
-      flex-direction: column; gap: 5px;
-      cursor: pointer; background: none; border: none; padding: 4px;
-    }
-    .hbg span {
-      display: block; width: 20px; height: 1.5px;
-      background: var(--text2); border-radius: 2px;
-      transition: all .28s cubic-bezier(.16,1,.3,1);
-    }
-
-    /* drawer */
-    .drawer {
-      position: fixed;
-      top: var(--nh); inset-inline: 0;
-      background: rgba(8,10,15,0.97);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--line);
-      z-index: 490;
-      padding: 1rem 1.5rem 1.5rem;
-      display: flex; flex-direction: column; gap: .3rem;
-      transform: translateY(-105%);
-      opacity: 0;
-      transition: transform .3s cubic-bezier(.16,1,.3,1), opacity .3s;
-      pointer-events: none;
-    }
-    .drawer.show { transform: none; opacity: 1; pointer-events: auto; }
-    .drawer a {
-      font-size: .8rem; font-weight: 500;
-      letter-spacing: .08em; text-transform: uppercase;
-      color: var(--text2); text-decoration: none;
-      padding: .7rem .25rem;
-      border-bottom: 1px solid var(--line);
-      transition: color .2s;
-    }
-    .drawer a:last-child { border: none; color: var(--gold); }
-    .drawer a:hover { color: var(--gold); }
-
-    /* ─────────────── UTILS ─────────────── */
-    section { position: relative; z-index: 1; }
-    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 2rem); }
-
-    .eyebrow {
-      display: inline-flex; align-items: center; gap: .65rem;
-      font-size: .65rem; font-weight: 600;
-      letter-spacing: .22em; text-transform: uppercase;
-      color: var(--gold); margin-bottom: .8rem;
-    }
-    .eyebrow i { font-size: .7rem; opacity: .7; }
-
-    .h2 {
-      font-family: var(--serif);
-      font-size: clamp(1.9rem, 3.5vw, 2.8rem);
-      font-weight: 400;
-      font-style: italic;
-      line-height: 1.12;
-      color: var(--text);
-    }
-
-    /* reveal */
-    .r {
-      opacity: 0;
-      transform: translateY(22px);
-      transition: opacity .55s cubic-bezier(.16,1,.3,1), transform .55s cubic-bezier(.16,1,.3,1);
-    }
-    .r.v { opacity: 1; transform: none; }
-
-    /* btns */
-    .btn {
-      display: inline-flex; align-items: center; gap: .4rem;
-      padding: .68rem 1.5rem; border-radius: 8px;
-      font-size: .82rem; font-weight: 500;
-      text-decoration: none; border: none; cursor: pointer;
-      font-family: var(--sans); letter-spacing: .01em;
-      transition: all .2s;
-    }
-    .btn-p { background: var(--gold); color: #08090d; }
-    .btn-p:hover { background: var(--gold2); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(201,169,110,.2); }
-    .btn-o { background: transparent; color: var(--text2); border: 1px solid var(--line2); }
-    .btn-o:hover { border-color: rgba(255,255,255,.18); color: var(--text); }
-
-    .icon-btn {
-      width: 36px; height: 36px;
-      border-radius: 8px; border: 1px solid var(--line2);
-      display: inline-flex; align-items: center; justify-content: center;
-      color: var(--text3); font-size: 1rem;
-      text-decoration: none;
-      transition: all .2s;
-    }
-    .icon-btn:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
-
-    /* divider */
-    .div {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--line2) 20%, var(--line2) 80%, transparent);
-      margin: 0;
-    }
-
-    /* ─────────────── HERO ─────────────── */
-    .hero {
-      min-height: 100svh;
-      display: flex; align-items: center;
-      padding: calc(var(--nh) + 5rem) 0 6rem;
-    }
-
-    /* ambient */
-    .orb {
-      position: absolute; border-radius: 50%;
-      pointer-events: none; filter: blur(90px);
-    }
-    .orb-1 { width: 440px; height: 440px; background: rgba(201,169,110,.035); top: -80px; right: -80px; }
-    .orb-2 { width: 300px; height: 300px; background: rgba(52,211,153,.025); bottom: 60px; left: -60px; }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1fr 360px;
-      gap: 5rem;
-      align-items: center;
-    }
-
-    /* availability */
-    .avail {
-      display: inline-flex; align-items: center; gap: .55rem;
-      padding: .28rem .8rem .28rem .55rem;
-      border: 1px solid rgba(52,211,153,.2);
-      border-radius: 100px;
-      background: rgba(52,211,153,.04);
-      margin-bottom: 2rem;
-    }
-    .dot {
-      width: 5px; height: 5px;
-      background: var(--green); border-radius: 50%;
-      animation: blink 2.4s infinite;
-    }
-    @keyframes blink {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(52,211,153,.6); }
-      50%       { box-shadow: 0 0 0 4px rgba(52,211,153,.0); }
-    }
-    .avail span { font-size: .72rem; color: var(--green); font-weight: 500; letter-spacing: .02em; }
-
-    .hero-name {
-      font-family: var(--serif);
-      font-size: clamp(3.8rem, 9vw, 6.8rem);
-      font-weight: 400;
-      line-height: .92;
-      letter-spacing: -.02em;
-      color: var(--text);
-      margin-bottom: .12em;
-    }
-    .hero-name em { font-style: italic; color: var(--gold); display: block; }
-
-    .hero-role {
-      font-size: .88rem; color: var(--text2); font-weight: 300;
-      margin: 1.8rem 0 .4rem; line-height: 1.8; max-width: 400px;
-    }
-    .hero-role b { color: var(--text); font-weight: 500; }
-
-    .hero-school { font-size: .74rem; color: var(--text3); margin-bottom: 1.75rem; }
-    .hero-school span { color: var(--text2); }
-
-    .chips {
-      display: flex; flex-wrap: wrap; gap: .3rem;
-      margin-bottom: 2.2rem;
-    }
-    .chip {
-      font-size: .68rem; font-weight: 500;
-      padding: .22rem .62rem; border-radius: 100px;
-      border: 1px solid var(--line2); color: var(--text3);
-      letter-spacing: .03em;
-      transition: all .18s;
-    }
-    .chip:hover { border-color: var(--gold); color: var(--gold); }
-    .chip.hi { border-color: rgba(201,169,110,.28); color: var(--gold); background: var(--gold-dim); }
-
-    .hero-act { display: flex; gap: .7rem; flex-wrap: wrap; margin-bottom: 2.4rem; }
-
-    .social-row { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; }
-    .waka img { height: 19px; border-radius: 3px; opacity: .6; transition: opacity .2s; }
-    .waka:hover img { opacity: 1; }
-
-    /* photo */
-    .photo-col { position: relative; }
-    .photo-frame {
-      border-radius: 8px; overflow: hidden;
-      border: 1px solid var(--line2);
-      aspect-ratio: 1/1; max-height: 500px;
-      background: var(--surface);
-    }
-    .photo-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .photo-frame::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(180deg, transparent 60%, rgba(8,10,15,.4));
-      pointer-events: none;
-    }
-    .yr-badge {
-      position: absolute; top: -12px; right: -12px;
-      width: 68px; height: 68px;
-      border-radius: 12px;
-      background: var(--surface2); border: 1px solid var(--line2);
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
-      box-shadow: 0 8px 28px rgba(0,0,0,.4);
-    }
-    .yr-badge strong { font-family: var(--serif); font-size: 1.45rem; font-style: italic; color: var(--gold); line-height: 1; font-weight: 400; }
-    .yr-badge span { font-size: .56rem; color: var(--text3); letter-spacing: .12em; text-transform: uppercase; }
-
-    /* stats */
-    .stats {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      border: 1px solid var(--line);
-      border-radius: var(--r);
-      overflow: hidden;
-      margin-top: 5rem;
-    }
-    .stat {
-      background: var(--surface);
-      padding: 1.6rem 1.25rem;
-      text-align: center;
-      border-right: 1px solid var(--line);
-      position: relative;
-    }
-    .stat:last-child { border-right: none; }
-    .stat::after {
-      content: '';
-      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-      width: 50%; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      opacity: .35;
-    }
-    .stat-n { font-family: var(--serif); font-style: italic; font-size: 2rem; font-weight: 400; color: var(--gold); line-height: 1; }
-    .stat-l { font-size: .73rem; color: var(--text2); margin-top: .25rem; letter-spacing: .02em; }
-
-    /* ─────────────── ABOUT ─────────────── */
-    .about { padding: 8rem 0; }
-    .about-grid {
-      display: grid; grid-template-columns: 1.15fr 1fr;
-      gap: 5rem; align-items: start; margin-top: 3.5rem;
-    }
-
-    .prose p { color: var(--text2); font-size: .91rem; line-height: 1.95; margin-bottom: 1.1rem; font-weight: 300; }
-    .prose p b { color: var(--text); font-weight: 500; }
-
-    .callout {
-      background: linear-gradient(135deg, rgba(201,169,110,.06), rgba(201,169,110,.02));
-      border: 1px solid rgba(201,169,110,.15);
-      border-left: 2px solid var(--gold);
-      border-radius: 0 8px 8px 0;
-      padding: 1rem 1.35rem;
-      margin-top: 1.5rem;
-      font-size: .85rem; color: var(--text2); line-height: 1.75;
-    }
-    .callout b { color: var(--gold); font-weight: 500; }
-
-    .info-list { display: flex; flex-direction: column; gap: .6rem; }
-    .info-item {
-      display: flex; align-items: center; gap: .9rem;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: var(--r);
-      padding: .95rem 1.1rem;
-      transition: border-color .2s, transform .2s;
-    }
-    .info-item:hover { border-color: var(--line2); transform: translateX(3px); }
-    .ico {
-      width: 34px; height: 34px; flex-shrink: 0;
-      border-radius: 8px; background: var(--gold-dim);
-      display: flex; align-items: center; justify-content: center;
-      font-size: .95rem; color: var(--gold);
-    }
-    .info-item h4 { font-size: .8rem; font-weight: 600; color: var(--text); line-height: 1.25; }
-    .info-item p  { font-size: .73rem; color: var(--text2); margin: 0; }
-
-    /* ─────────────── SKILLS ─────────────── */
-    .skills { padding: 8rem 0; background: var(--bg-sub); }
-    .sk-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(232px, 1fr));
-      gap: .85rem; margin-top: 3.5rem;
-    }
-    .sk-card {
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: var(--r);
-      padding: 1.6rem;
-      transition: border-color .2s, transform .22s;
-      position: relative; overflow: hidden;
-    }
-    .sk-card::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, var(--gold), transparent 55%);
-      opacity: 0; transition: opacity .22s;
-    }
-    .sk-card:hover { border-color: var(--line2); transform: translateY(-3px); }
-    .sk-card:hover::before { opacity: 1; }
-    .sk-head { display: flex; align-items: center; gap: .65rem; margin-bottom: 1.4rem; }
-    .sk-ico { width: 34px; height: 34px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: .95rem; }
-    .sk-card h3 { font-size: .86rem; font-weight: 600; color: var(--text); }
-    .sk-list { list-style: none; display: flex; flex-direction: column; gap: .55rem; }
-    .sk-row { display: flex; align-items: center; justify-content: space-between; font-size: .8rem; }
-    .sk-name { display: flex; align-items: center; gap: .45rem; color: var(--text2); }
-    .sk-name::before { content: ''; width: 3px; height: 3px; border-radius: 50%; background: var(--gold); opacity: .5; flex-shrink: 0; }
-    .badge {
-      font-size: .61rem; padding: .1rem .45rem;
-      border-radius: 100px; font-weight: 600;
-      letter-spacing: .05em; text-transform: uppercase;
-      background: var(--gold-dim); color: var(--gold);
-      border: 1px solid rgba(201,169,110,.15);
-    }
-
-    /* ─────────────── WORKFLOW ─────────────── */
-    .workflow { padding: 8rem 0; }
-    .wf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 3.5rem; }
-    .wf-card {
-      background: var(--surface); border: 1px solid var(--line);
-      border-radius: var(--r); padding: 1.65rem;
-      transition: border-color .2s, transform .22s;
-    }
-    .wf-card:hover { border-color: var(--line2); transform: translateY(-2px); }
-    .wf-card h3 { font-size: .92rem; font-weight: 600; color: var(--text); margin-bottom: .6rem; }
-    .wf-card p  { color: var(--text2); font-size: .82rem; line-height: 1.8; font-weight: 300; }
-    .pill-row { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: 1rem; }
-    .pill {
-      font-size: .66rem; padding: .16rem .55rem;
-      border-radius: 100px;
-      background: var(--bg); border: 1px solid var(--line2);
-      color: var(--text2); font-weight: 500; letter-spacing: .02em;
-    }
-
-    /* dash grid */
-    .dash-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: .45rem; margin-top: 1rem; }
-    .dash-grid img {
-      width: 100%; aspect-ratio: 16/9; object-fit: cover;
-      border-radius: 6px; border: 1px solid var(--line);
-      cursor: zoom-in; display: block;
-      transition: opacity .18s, transform .18s;
-    }
-    .dash-grid img:hover { opacity: .82; transform: scale(1.015); }
-
-    /* carousel */
-    .car-wrap {
-      position: relative;
-      aspect-ratio: 13/13;
-      border-radius: 8px; overflow: hidden;
-      border: 1px solid var(--line);
-      background: var(--surface2);
-    }
-    .car-track {
-      display: flex; height: 100%;
-      transition: transform .42s cubic-bezier(.16,1,.3,1);
-    }
-    .car-slide {
-      min-width: 100%; height: 100%; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .car-slide img { width: 100%; height: 100%; object-fit: contain; display: block; }
-    .car-ctrl {
-      position: absolute; bottom: .75rem; left: 50%; transform: translateX(-50%);
-      display: flex; gap: .38rem; z-index: 10;
-    }
-    .car-btn {
-      width: 30px; height: 30px; border-radius: 6px;
-      background: rgba(8,10,15,.78); border: 1px solid rgba(255,255,255,.1);
-      color: var(--text2); cursor: pointer; font-size: .85rem;
-      display: flex; align-items: center; justify-content: center;
-      transition: all .18s;
-    }
-    .car-btn:hover { border-color: var(--gold); color: var(--gold); }
-    .car-count {
-      position: absolute; top: .65rem; right: .65rem;
-      background: rgba(8,10,15,.75); color: var(--text2);
-      padding: .18rem .5rem; border-radius: 4px;
-      font-size: .64rem; font-weight: 600; letter-spacing: .06em;
-      border: 1px solid rgba(255,255,255,.08);
-    }
-
-    /* ─────────────── PORTFOLIO ─────────────── */
-    .portfolio { padding: 8rem 0; background: var(--bg-sub); }
-    .port-filters { display: flex; gap: .45rem; flex-wrap: wrap; margin: 1.75rem 0; }
-    .flt {
-      padding: .3rem .85rem; border-radius: 100px;
-      border: 1px solid var(--line2); background: transparent;
-      color: var(--text2); font-size: .72rem; font-weight: 500;
-      cursor: pointer; font-family: var(--sans);
-      letter-spacing: .04em; transition: all .15s;
-    }
-    .flt.on, .flt:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
-
-    .port-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .9rem; }
-
-    .w-card {
-      background: var(--surface); border: 1px solid var(--line);
-      border-radius: var(--r); overflow: hidden;
-      transition: border-color .2s, transform .22s, box-shadow .22s;
-    }
-    .w-card:hover { border-color: var(--line2); transform: translateY(-3px); box-shadow: 0 14px 36px rgba(0,0,0,.28); }
-    .w-thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; background: var(--surface2); }
-    .w-empty { width: 100%; aspect-ratio: 16/9; background: var(--surface2); display: flex; align-items: center; justify-content: center; }
-    .w-empty i { font-size: 1.6rem; color: var(--text3); }
-    .w-body { padding: 1rem 1.1rem; }
-    .w-header { display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; margin-bottom: .3rem; }
-    .w-body h3 { font-size: .86rem; font-weight: 600; color: var(--text); }
-    .w-tag { font-size: .6rem; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; padding: .16rem .48rem; border-radius: 4px; white-space: nowrap; }
-    .t-web    { background: rgba(96,165,250,.09); color: var(--blue); }
-    .t-design { background: rgba(52,211,153,.09); color: var(--green); }
-    .t-mobile { background: var(--gold-dim); color: var(--gold); }
-    .w-body p { font-size: .75rem; color: var(--text2); margin-bottom: .85rem; line-height: 1.65; }
-    .w-link {
-      display: inline-flex; align-items: center; gap: .28rem;
-      font-size: .73rem; font-weight: 600; color: var(--gold);
-      text-decoration: none; letter-spacing: .02em;
-      transition: gap .15s;
-    }
-    .w-link:hover { gap: .5rem; }
-
-    /* ─────────────── CONTACT ─────────────── */
-    .contact { padding: 8rem 0; }
-    .ct-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; margin-top: 3.5rem; align-items: start; }
-
-    .ct-lead { font-size: .88rem; color: var(--text2); line-height: 1.95; margin-bottom: 2rem; font-weight: 300; }
-    .ct-list { display: flex; flex-direction: column; gap: .55rem; }
-    .ct-item {
-      display: flex; align-items: center; gap: .85rem;
-      background: var(--surface); border: 1px solid var(--line);
-      border-radius: var(--r); padding: .88rem 1.05rem;
-      text-decoration: none;
-      transition: border-color .2s, transform .2s;
-    }
-    .ct-item:hover { border-color: rgba(201,169,110,.22); transform: translateX(3px); }
-    .ct-ico { width: 34px; height: 34px; border-radius: 8px; background: var(--gold-dim); display: flex; align-items: center; justify-content: center; font-size: .95rem; color: var(--gold); flex-shrink: 0; }
-    .ct-item h4 { font-size: .79rem; font-weight: 600; color: var(--text); }
-    .ct-item span { font-size: .72rem; color: var(--text2); }
-
-    /* form */
-    .form { display: flex; flex-direction: column; gap: .75rem; }
-    .fg { display: flex; flex-direction: column; gap: .28rem; }
-    .fg label { font-size: .68rem; font-weight: 600; color: var(--text2); letter-spacing: .1em; text-transform: uppercase; }
-    .fg input, .fg textarea {
-      background: var(--surface); border: 1px solid var(--line2);
-      border-radius: 8px; padding: .7rem .9rem;
-      color: var(--text); font-family: var(--sans);
-      font-size: .85rem; font-weight: 300; outline: none;
-      transition: border-color .2s, box-shadow .2s; width: 100%;
-    }
-    .fg input:focus, .fg textarea:focus {
-      border-color: rgba(201,169,110,.32);
-      box-shadow: 0 0 0 3px rgba(201,169,110,.06);
-    }
-    .fg input::placeholder, .fg textarea::placeholder { color: var(--text3); }
-    .fg textarea { resize: vertical; min-height: 128px; }
-    #form-ok { font-size: .78rem; color: var(--green); display: none; margin-top: .3rem; }
-
-    /* ─────────────── FOOTER ─────────────── */
-    .footer { border-top: 1px solid var(--line); padding: 1.6rem 0; }
-    .ft-inner {
-      display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 1rem;
-    }
-    .ft-logo { font-size: .86rem; font-weight: 600; color: var(--text2); }
-    .ft-logo span { color: var(--gold); }
-    .ft-copy { font-size: .7rem; color: var(--text3); }
-    .ft-social { display: flex; gap: .4rem; }
-
-    /* ─────────────── LIGHTBOX ─────────────── */
-    .lb {
-      position: fixed; inset: 0; z-index: 9990;
-      background: rgba(0,0,0,.94);
-      display: flex; align-items: center; justify-content: center;
-      cursor: zoom-out; animation: lbFade .16s ease;
-    }
-    @keyframes lbFade { from { opacity: 0; } to { opacity: 1; } }
-    .lb img { max-width: 90vw; max-height: 90vh; border-radius: 8px; box-shadow: 0 24px 64px rgba(0,0,0,.6); }
-
-    /* ─────────────── RESPONSIVE ─────────────── */
-    @media (max-width: 1000px) {
-      .hero-grid { grid-template-columns: 1fr; }
-      .photo-col { display: none; }
-      .about-grid, .wf-grid, .ct-grid { grid-template-columns: 1fr; gap: 3rem; }
-      .port-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 740px) {
-      .nav-list { display: none; }
-      .hbg { display: flex; }
-      .stats { grid-template-columns: 1fr; }
-      .stat { border-right: none; border-bottom: 1px solid var(--line); }
-      .stat:last-child { border-bottom: none; }
-      .port-grid { grid-template-columns: 1fr; }
-      .dash-grid { grid-template-columns: 1fr; }
-      .sk-grid { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 380px) {
-      .hero-act { flex-direction: column; }
-      .hero-act .btn { width: 100%; justify-content: center; }
-    }
-  </style>
+  <!-- Spline 3D Viewer -->
+  <!-- <script type="module" src="https://unpkg.com/@splinetool/viewer@1.0.94/build/spline-viewer.js"></script> -->
+  <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
-  <div id="bar"></div>
 
-  <!-- NAV -->
-  <nav class="nav" id="nav">
-    <a href="#home" class="logo">ianocent<span class="logo-sep">.</span></a>
-    <ul class="nav-list">
-      <li><a href="#home">Home</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#workflow">Workflow</a></li>
-      <li><a href="#portfolio">Portfolio</a></li>
-      <li><a href="#contact" class="nav-cta">Hire Me</a></li>
-    </ul>
-    <button class="hbg" id="hbg" aria-label="Menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
+  <!-- Dynamic Animated Pastel Background & Cursor Glow -->
+  <div id="bg-layer"></div>
+  <div id="bg-glow"></div>
 
-  <div class="drawer" id="drawer">
-    <a href="#home"      onclick="closeDrawer()">Home</a>
-    <a href="#about"     onclick="closeDrawer()">About</a>
-    <a href="#skills"    onclick="closeDrawer()">Skills</a>
-    <a href="#workflow"  onclick="closeDrawer()">Workflow</a>
-    <a href="#portfolio" onclick="closeDrawer()">Portfolio</a>
-    <a href="#contact"   onclick="closeDrawer()">Hire Me →</a>
+  <!-- Cinema Frame -->
+  <div class="cinema-frame" id="cinemaFrame">
+    <div class="cinema-holes cinema-holes-left"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="cinema-holes cinema-holes-right"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="cinema-vignette"></div>
+    <div class="cinema-scanline"></div>
+    <!-- <div class="cinema-label-top" style="color: #c9a96ebf;">DWIRIANTO — FULLSTACK DEVELOPER · 2026 · FRAME 001</div> -->
+    <!-- <div class="cinema-label-bottom" style="color: #c9a96ebf;">ianocent · copyright</div> -->
   </div>
 
-  <!-- ═══ HERO ═══ -->
-  <section class="hero" id="home">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="wrap">
-      <div class="hero-grid">
+  <!-- Custom cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
 
-        <div>
-          <div class="avail r">
-            <div class="dot"></div>
-            <span>Available for full-time opportunities</span>
-          </div>
+  <!-- PAGE CONTENT (SCROLL SNAP CONTAINER) -->
+  <div id="page-clip">
+    <div id="page-scroll">
+      
+      <div id="bar"></div>
 
-          <h1 class="hero-name r" style="transition-delay:.06s">
-            Dwi<em>Rianto</em>
-          </h1>
+      <!-- NAV -->
+      <nav class="nav" id="nav">
+        <a href="#home" class="logo" data-text="ianocent.">ianocent<span class="logo-sep">.</span></a>
+        <ul class="nav-list">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#workflow">Workflow</a></li>
+          <li><a href="#portfolio">Portfolio</a></li>
+          <li><a href="#contact" class="nav-cta">Hire Me</a></li>
+        </ul>
+        <button class="hbg" id="hbg" aria-label="Menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </nav>
 
-          <p class="hero-role r" style="transition-delay:.1s">
-            <b>Fullstack Developer</b> · DevOps CI/CD ·<br>
-            QA Manual &amp; Automation · Database Admin
-          </p>
-          <p class="hero-school r" style="transition-delay:.13s">
-            Graduate of <span>Multimedia Nusantara University</span>
-          </p>
-
-          <div class="chips r" style="transition-delay:.16s">
-            <span class="chip hi">3+ Yrs Exp</span>
-            <span class="chip">Next.js</span>
-            <span class="chip">React.js</span>
-            <span class="chip">Vue.js</span>
-            <span class="chip">Node.js</span>
-            <span class="chip">PHP</span>
-            <span class="chip">Laravel</span>
-            <span class="chip">Git</span>
-            <span class="chip">GitLab</span>
-            <span class="chip">GitHub</span>
-          </div>
-
-          <div class="hero-act r" style="transition-delay:.2s">
-            <a href="./assets/pdf/CV_DWIRIANTO.pdf" download class="btn btn-p">
-              <i class="bx bx-download"></i> Download CV
-            </a>
-            <a href="#about" class="btn btn-o">About Me</a>
-          </div>
-
-          <div class="social-row r" style="transition-delay:.24s">
-            <a href="https://www.linkedin.com/in/dwirianto" class="icon-btn" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="bx bxl-linkedin"></i></a>
-            <a href="https://www.github.com/ianocent"       class="icon-btn" target="_blank" rel="noopener" aria-label="GitHub"><i class="bx bxl-github"></i></a>
-            <a href="https://dribbble.com/Ntoo"             class="icon-btn" target="_blank" rel="noopener" aria-label="Dribbble"><i class="bx bxl-dribbble"></i></a>
-            <a href="https://wakatime.com/@018d6394-3140-41c9-8cdb-cbe349d742a3" class="waka" target="_blank" rel="noopener" aria-label="WakaTime">
-              <img src="https://wakatime.com/badge/user/018d6394-3140-41c9-8cdb-cbe349d742a3.svg" alt="WakaTime" loading="lazy">
-            </a>
-          </div>
-        </div>
-
-        <div class="photo-col r" style="transition-delay:.08s">
-          <div class="photo-frame">
-            <img src="assets/img/noot.jpeg" alt="Dwi Rianto" loading="eager">
-          </div>
-          <div class="yr-badge">
-            <strong>3+</strong>
-            <span>Years</span>
-          </div>
-        </div>
-
+      <div class="drawer" id="drawer">
+        <a href="#home"      onclick="closeDrawer()">Home</a>
+        <a href="#about"     onclick="closeDrawer()">About</a>
+        <a href="#skills"    onclick="closeDrawer()">Skills</a>
+        <a href="#workflow"  onclick="closeDrawer()">Workflow</a>
+        <a href="#portfolio" onclick="closeDrawer()">Portfolio</a>
+        <a href="#contact"   onclick="closeDrawer()">Hire Me →</a>
       </div>
 
-      <div class="stats r" style="transition-delay:.28s">
-        <div class="stat">
-          <div class="stat-n">3+</div>
-          <div class="stat-l">Years Experience</div>
-        </div>
-        <div class="stat">
-          <div class="stat-n">5+</div>
-          <div class="stat-l">Projects Completed</div>
-        </div>
-        <div class="stat">
-          <div class="stat-n">95<span style="font-size:.9rem;font-style:normal"> wpm</span></div>
-          <div class="stat-l">Avg Typing Speed</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="div"></div>
-
-  <!-- ═══ ABOUT ═══ -->
-  <section class="about" id="about">
-    <div class="wrap">
-      <span class="eyebrow r"><i class="bx bx-user"></i> My Intro</span>
-      <h2 class="h2 r">About Me</h2>
-      <div class="about-grid">
-
-        <div class="prose r">
-          <p>I'm a graduate of <b>Multimedia Nusantara University</b> with a strong enthusiasm for learning and embracing new challenges. I bring approximately <b>three years of experience</b> in Full Stack Development — including hands-on experience gained during my academic years.</p>
-          <p>Proficient in <b>HTML, CSS, PHP, Laravel, Vue.js, Next.js, React.js, Tailwind CSS, Bootstrap, Python</b> and <b>MySQL</b>. Beyond software, I have practical experience as an <b>IT Support specialist</b> — hardware and software troubleshooting, networking, and system administration.</p>
-          <p>I also have a keen interest in UI/UX design, regularly creating application prototypes in <b>Figma</b> and Adobe Photoshop.</p>
-          <div class="callout">
-            Actively seeking a <b>full-time opportunity</b> as a Fullstack Developer and/or IT Support professional where I can grow my skills and contribute meaningfully to the team.
-          </div>
-          <div style="margin-top:1.75rem">
-            <a href="#contact" class="btn btn-p">Get In Touch</a>
-          </div>
-        </div>
-
-        <div class="info-list r" style="transition-delay:.1s">
-          <div class="info-item"><div class="ico"><i class="bx bx-award"></i></div><div><h4>Academic</h4><p>S1 — Multimedia Nusantara University</p></div></div>
-          <div class="info-item"><div class="ico"><i class="bx bx-briefcase-alt"></i></div><div><h4>Experience</h4><p>~3 Years Fullstack Development</p></div></div>
-          <div class="info-item"><div class="ico"><i class="bx bx-code-alt"></i></div><div><h4>Projects</h4><p>5+ Completed Projects</p></div></div>
-          <div class="info-item"><div class="ico"><i class="bx bx-wrench"></i></div><div><h4>IT Support</h4><p>Hardware, Software &amp; Networking</p></div></div>
-          <div class="info-item">
-            <div class="ico"><i class="bx bx-time"></i></div>
-            <div><h4>Typing Speed</h4>
-              <p>
-                <a href="https://10fastfingers.com/user/riantoo-" style="color:var(--text2);text-decoration:none">96 WPM · 10FastFingers</a>
-                &nbsp;·&nbsp;
-                <a href="https://monkeytype.com/profile/Amemiya" style="color:var(--text2);text-decoration:none">95 WPM · MonkeyType</a>
-              </p>
+      <!-- ═══ SLIDE 1: HERO ═══ -->
+      <section class="slide" id="home">
+        <div class="wrap">
+          <div class="hero-grid">
+            <div class="r">
+              <div class="avail"><div class="dot"></div><span>Not available for full-time opportunities</span></div>
+              <h1 class="hero-name"><span class="line1"><span class="inner1">Dwi</span></span><span class="line2"><span class="inner2">Rianto</span></span></h1>
+              <p class="hero-role"><b>Fullstack Developer</b> · DevOps CI/CD ·<br>QA Manual &amp; Automation · Database Admin</p>
+              <div class="chips">
+                <span class="chip hi">3+ Years Experience</span><span class="chip">Next.js</span><span class="chip">React.js</span>
+                <span class="chip">Vue.js</span><span class="chip">Laravel</span><span class="chip">Python</span>
+              </div>
+              <div class="hero-act">
+                <a href="./assets/pdf/CV_DWIRIANTO.pdf" download class="btn btn-p magnetic"><i class="bx bx-download"></i> Download CV</a>
+                <a href="#about" class="btn btn-o magnetic">About Me</a>
+              </div>
+              <div class="social-row">
+                <a href="https://www.linkedin.com/in/dwirianto" class="icon-btn" target="_blank" rel="noopener"><i class="bx bxl-linkedin"></i></a>
+                <a href="https://www.github.com/ianocent"       class="icon-btn" target="_blank" rel="noopener"><i class="bx bxl-github"></i></a>
+                <a href="https://dribbble.com/Ntoo"             class="icon-btn" target="_blank" rel="noopener"><i class="bx bxl-dribbble"></i></a>
+              </div>
+            </div>
+            
+            <div class="photo-col r">
+              <div class="photo-frame">
+                <!-- <spline-viewer loading-anim-type="spinner" url="https://prod.spline.design/qZz2A9D6aH24Hpwz/scene.splinecode"></spline-viewer> -->
+                <img src="assets/img/noot.jpeg" alt="Dwi Rianto" loading="lazy" class="photo-frame">
+              </div>
+              <div class="yr-badge"><strong>3+</strong><span>Years</span></div>
             </div>
           </div>
-          <div class="info-item"><div class="ico"><i class="bx bx-check-circle"></i></div><div><h4>Availability</h4><p>Online 24/7 — Ready for full-time</p></div></div>
-        </div>
 
-      </div>
-    </div>
-  </section>
-
-  <div class="div"></div>
-
-  <!-- ═══ SKILLS ═══ -->
-  <section class="skills" id="skills">
-    <div class="wrap">
-      <span class="eyebrow r"><i class="bx bx-wrench"></i> My Abilities</span>
-      <h2 class="h2 r">Technical Skills</h2>
-      <div class="sk-grid">
-
-        <div class="sk-card r">
-          <div class="sk-head">
-            <div class="sk-ico" style="background:rgba(96,165,250,.1);color:var(--blue)"><i class="bx bx-code-curly"></i></div>
-            <h3>Frontend</h3>
-          </div>
-          <ul class="sk-list">
-            <li class="sk-row"><span class="sk-name">HTML / CSS</span><span class="badge">Advance</span></li>
-            <li class="sk-row"><span class="sk-name">Tailwind CSS</span><span class="badge">Advance</span></li>
-            <li class="sk-row"><span class="sk-name">Bootstrap</span><span class="badge">Advance</span></li>
-            <li class="sk-row"><span class="sk-name">Vue.js</span><span class="badge">Advance</span></li>
-            <li class="sk-row"><span class="sk-name">Next.js</span><span class="badge">Advance</span></li>
-            <li class="sk-row"><span class="sk-name">React.js</span><span class="badge">Advance</span></li>
-          </ul>
-        </div>
-
-        <div class="sk-card r" style="transition-delay:.07s">
-          <div class="sk-head">
-            <div class="sk-ico" style="background:rgba(52,211,153,.1);color:var(--green)"><i class="bx bx-server"></i></div>
-            <h3>Backend</h3>
-          </div>
-          <ul class="sk-list">
-            <li class="sk-row"><span class="sk-name">PHP</span><span class="badge">Advance</span></li>
-            <li class="sk-row"><span class="sk-name">Laravel</span><span class="badge">Advance</span></li>
-            <li class="sk-row"><span class="sk-name">Codeigniter</span><span class="badge">Advance</span></li>
-            <li class="sk-row"><span class="sk-name">Python</span><span class="badge">Advance</span></li>
-            <li class="sk-row"><span class="sk-name">MySQL</span><span class="badge">Advance</span></li>
-          </ul>
-        </div>
-
-        <div class="sk-card r" style="transition-delay:.14s">
-          <div class="sk-head">
-            <div class="sk-ico" style="background:var(--gold-dim);color:var(--gold)"><i class="bx bx-palette"></i></div>
-            <h3>UI/UX Design</h3>
-          </div>
-          <ul class="sk-list">
-            <li class="sk-row"><span class="sk-name">Figma</span><span class="badge">Advance</span></li>
-            <li class="sk-row"><span class="sk-name">Photoshop</span><span class="badge">Advance</span></li>
-            <li class="sk-row"><span class="sk-name">Canva</span><span class="badge">Advance</span></li>
-          </ul>
-        </div>
-
-        <div class="sk-card r" style="transition-delay:.21s">
-          <div class="sk-head">
-            <div class="sk-ico" style="background:rgba(52,211,153,.1);color:var(--green)"><i class="bx bx-terminal"></i></div>
-            <h3>IT Support &amp; Ops</h3>
-          </div>
-          <ul class="sk-list">
-            <li class="sk-row"><span class="sk-name">Hardware Support</span><span class="badge">Advance</span></li>
-            <li class="sk-row"><span class="sk-name">Software Troubleshoot</span><span class="badge">Advance</span></li>
-            <li class="sk-row"><span class="sk-name">Networking / MikroTik / FortiGate</span><span class="badge">Advance</span></li>
-            <li class="sk-row"><span class="sk-name">DevOps CI/CD</span><span class="badge">Advance</span></li>
-            <li class="sk-row"><span class="sk-name">QA Manual / Automation</span><span class="badge">Advance</span></li>
-          </ul>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <div class="div"></div>
-
-  <!-- ═══ WORKFLOW ═══ -->
-  <section class="workflow" id="workflow">
-    <div class="wrap">
-      <span class="eyebrow r"><i class="bx bx-briefcase"></i> Real Work</span>
-      <h2 class="h2 r">Workflow Experience</h2>
-      <div class="wf-grid">
-
-        <div class="wf-card r">
-          <h3>Hotel / Property Management System</h3>
-          <p>Built and maintained a full Hotel Management System covering room booking, guest management, billing, and reporting dashboards. Collaborated closely with hotel ops staff to map real-world workflows into the platform.</p>
-          <div class="pill-row">
-            <span class="pill">Next.js</span><span class="pill">PHP</span>
-            <span class="pill">Laravel</span><span class="pill">MySQL</span>
-            <span class="pill">Tailwind</span><span class="pill">REST API</span>
+          <div class="stats r scale-in">
+            <div class="stat"><div class="stat-n" data-count="3">0</div><div class="stat-l">Years Experience</div></div>
+            <div class="stat"><div class="stat-n" data-count="5">0</div><div class="stat-l">Projects Completed</div></div>
+            <div class="stat"><div class="stat-n" data-count="95">0</div><div class="stat-l">Avg WPM Speed</div></div>
           </div>
         </div>
+      </section>
 
-        <div class="wf-card r" style="transition-delay:.1s">
-          <h3>DevOps &amp; QA</h3>
-          <p>Implemented CI/CD pipelines for automated deployment. Conducted manual and automated QA testing across both management systems, ensuring production stability and catching regressions early.</p>
-          <div class="pill-row">
-            <span class="pill">CI/CD</span><span class="pill">QA Manual</span>
-            <span class="pill">QA Automation</span><span class="pill">Git</span>
-            <span class="pill">Linux</span>
-          </div>
-        </div>
-
-        <div class="wf-card r" style="transition-delay:.05s">
-          <h3>Desktop Screenshots</h3>
-          <p>Screenshots from the Hotel &amp; Property Management Systems.</p>
-          <div class="dash-grid">
-            <img src="assets/img/b. Main Dashboard.png"                     alt="Main Dashboard"    onclick="openLb(this.src)" loading="lazy">
-            <img src="assets/img/c. Forecast Market Segment Dashboard.png"  alt="Forecast"          onclick="openLb(this.src)" loading="lazy">
-            <img src="assets/img/d. Market Segment 2 & 3.png"               alt="Market Segment"    onclick="openLb(this.src)" loading="lazy">
-            <img src="assets/img/e. Dynamic Chart.png"                       alt="Dynamic Chart"    onclick="openLb(this.src)" loading="lazy">
-            <img src="assets/img/f. Role Based Access Control.png"           alt="RBAC"             onclick="openLb(this.src)" loading="lazy">
-            <img src="assets/img/a. Room Availability Tooltip.png"           alt="Room Availability"onclick="openLb(this.src)" loading="lazy">
-          </div>
-        </div>
-
-        <div class="wf-card r" style="transition-delay:.15s">
-          <h3>Mobile Screenshots</h3>
-          <p>Responsive views from the management systems.</p><br>
-          <div class="car-wrap" id="mobCar">
-            <div class="car-track" id="mobTrack">
-              <div class="car-slide"><img src="assets/img/1. Responsive Choose Property.png"               alt="Choose Property" loading="lazy"></div>
-              <div class="car-slide"><img src="assets/img/2. Responsive Dashboard.png"                    alt="Dashboard"       loading="lazy"></div>
-              <div class="car-slide"><img src="assets/img/3. Responsive Sidebar Mobile.png"               alt="Sidebar"         loading="lazy"></div>
-              <div class="car-slide"><img src="assets/img/4. Responsive User List Page.png"               alt="User List"       loading="lazy"></div>
-              <div class="car-slide"><img src="assets/img/5. Responsive User View Page.png"               alt="User View"       loading="lazy"></div>
-              <div class="car-slide"><img src="assets/img/6. Responsive User Form Page.png"               alt="User Form"       loading="lazy"></div>
-              <div class="car-slide"><img src="assets/img/7. Responsive Role List Page.png"               alt="Role List"       loading="lazy"></div>
-              <div class="car-slide"><img src="assets/img/8. Responsive Role View Page.png"               alt="Role View"       loading="lazy"></div>
-              <div class="car-slide"><img src="assets/img/9. Responsive Role Form Page.png"               alt="Role Form"       loading="lazy"></div>
-              <div class="car-slide"><img src="assets/img/10. Responsive Company Profile Main Form Page.png" alt="Company Profile" loading="lazy"></div>
-              <div class="car-slide"><img src="assets/img/11. Responsive Guest Profile Main Form Page.png"   alt="Guest Profile"   loading="lazy"></div>
-              <div class="car-slide"><img src="assets/img/12. Responsive Housekeeping Room Status.png"       alt="Housekeeping"    loading="lazy"></div>
-              <div class="car-slide"><img src="assets/img/13. Responsive Housekeeping Room Status History.png" alt="Room History"  loading="lazy"></div>
+      <!-- ═══ SLIDE 2: ABOUT ═══ -->
+      <section class="slide" id="about">
+        <div class="wrap">
+          <span class="eyebrow r"><i class="bx bx-user"></i> My Intro</span>
+          <h2 class="h2 r">About Me</h2>
+          <div class="about-grid">
+            <div class="prose r from-left">
+              <p>I'm a graduate of <b>Multimedia Nusantara University</b> with a strong enthusiasm for learning and embracing new challenges. I bring approximately <b>three years of experience</b> in Full Stack Development.</p>
+              <p>Proficient in <b>HTML, CSS, PHP, Laravel, Vue.js, Next.js, React.js, Tailwind, Python</b> and <b>MySQL</b>. Beyond software, I have practical experience as an <b>IT Support specialist</b> — hardware troubleshooting, networking, and system admin.</p>
+              <p>I also have a keen interest in UI/UX design, creating prototypes in <b>Figma</b>.</p>
+              <div class="callout">Actively seeking a <b>full-time opportunity</b> as a Fullstack Developer and/or IT Support.</div>
             </div>
-            <div class="car-count"><span id="mobN">1</span> / 13</div>
-            <div class="car-ctrl">
-              <button class="car-btn" onclick="carPrev('mobCar','mobN')" aria-label="Prev"><i class="bx bx-chevron-left"></i></button>
-              <button class="car-btn" onclick="carNext('mobCar','mobN')" aria-label="Next"><i class="bx bx-chevron-right"></i></button>
+            <div class="info-list r from-right">
+              <div class="info-item"><div class="ico"><i class="bx bx-award"></i></div><div><h4>Academic</h4><p>S1 — Multimedia Nusantara Univ.</p></div></div>
+              <div class="info-item"><div class="ico"><i class="bx bx-briefcase-alt"></i></div><div><h4>Experience</h4><p>~3 Years Fullstack Dev.</p></div></div>
+              <div class="info-item"><div class="ico"><i class="bx bx-code-alt"></i></div><div><h4>Projects</h4><p>5+ Completed Projects</p></div></div>
+              <div class="info-item"><div class="ico"><i class="bx bx-wrench"></i></div><div><h4>IT Support</h4><p>Hardware, Software &amp; Network</p></div></div>
+              <div class="info-item"><div class="ico"><i class="bx bx-check-circle"></i></div><div><h4>Availability</h4><p>Online 24/7 — Ready for full-time</p></div></div>
             </div>
           </div>
         </div>
+      </section>
 
-      </div>
-    </div>
-  </section>
-
-  <div class="div"></div>
-
-  <!-- ═══ PORTFOLIO ═══ -->
-  <section class="portfolio" id="portfolio">
-    <div class="wrap">
-      <span class="eyebrow r"><i class="bx bx-grid-alt"></i> My Work</span>
-      <h2 class="h2 r">Recent Projects</h2>
-
-      <div class="port-filters r">
-        <button class="flt on"   data-f="all">All</button>
-        <button class="flt"      data-f="web">Web</button>
-        <button class="flt"      data-f="mobile">Mobile</button>
-        <button class="flt"      data-f="design">Design</button>
-      </div>
-
-      <div class="port-grid">
-
-        <div class="w-card r" data-cat="design">
-          <img src="assets/img/mainpage.png" alt="Whatsapp Redesign" class="w-thumb" loading="lazy"
-               onerror="this.outerHTML='<div class=\'w-empty\'><i class=\'bx bx-image\'></i></div>'">
-          <div class="w-body">
-            <div class="w-header"><h3>Whatsapp Redesign</h3><span class="w-tag t-design">Design</span></div>
-            <p>Concept UI redesign of WhatsApp mobile interface, prototyped in Figma.</p>
-            <a href="https://www.figma.com/design/8Ctvjgac6jo87xl2euTTdu/Whatsapp-Concept?m=auto&t=6FWbkeBqbJw2KIbc-6" class="w-link" target="_blank" rel="noopener">View on Figma <i class="bx bx-right-arrow-alt"></i></a>
-          </div>
-        </div>
-
-        <div class="w-card r" style="transition-delay:.06s" data-cat="design">
-          <img src="assets/img/proto.png" alt="Vape Thing App" class="w-thumb" loading="lazy"
-               onerror="this.outerHTML='<div class=\'w-empty\'><i class=\'bx bx-image\'></i></div>'">
-          <div class="w-body">
-            <div class="w-header"><h3>Vape Thing App</h3><span class="w-tag t-design">Design</span></div>
-            <p>Mobile app UI/UX design and prototype built in Figma.</p>
-            <a href="https://www.figma.com/design/3yXhFjhcbu083aVDDf0RpF/Vape-Thing?m=auto&t=6FWbkeBqbJw2KIbc-6" class="w-link" target="_blank" rel="noopener">View on Figma <i class="bx bx-right-arrow-alt"></i></a>
-          </div>
-        </div>
-
-        <div class="w-card r" style="transition-delay:.12s" data-cat="design">
-          <div class="car-wrap" id="kompCar" style="aspect-ratio:16/9;border-radius:0;border:none;border-bottom:1px solid var(--line)">
-            <div class="car-track" id="kompTrack">
-              <div class="car-slide"><img src="assets/img/compas/Kompas.png"  alt="Kompas 1" loading="lazy"></div>
-              <div class="car-slide"><img src="assets/img/compas/Kompas1.png" alt="Kompas 2" loading="lazy"></div>
-              <div class="car-slide"><img src="assets/img/compas/Kompas2.png" alt="Kompas 3" loading="lazy"></div>
-              <div class="car-slide"><img src="assets/img/compas/Kompas3.png" alt="Kompas 4" loading="lazy"></div>
+      <!-- ═══ SLIDE 3: SKILLS ═══ -->
+      <section class="slide" id="skills">
+        <div class="wrap">
+          <span class="eyebrow r"><i class="bx bx-wrench"></i> My Abilities</span>
+          <h2 class="h2 r">Technical Skills</h2>
+          <div class="sk-grid">
+            <!-- Skill 1 -->
+            <div class="sk-card r">
+              <div class="sk-head"><div class="sk-ico" style="background:rgba(96,165,250,.1);color:var(--blue)"><i class="bx bx-code-curly"></i></div><h3>Frontend</h3></div>
+              <ul class="sk-list">
+                <li class="sk-row"><span class="sk-name">HTML</span><span class="badge">Advance</span></li>
+                <li class="sk-row"><span class="sk-name">CSS</span><span class="badge">Advance</span></li>
+                <li class="sk-row"><span class="sk-name">Tailwind</span><span class="badge">Advance</span></li>
+                <li class="sk-row"><span class="sk-name">Vue.js</span><span class="badge">Advance</span></li>
+                <li class="sk-row"><span class="sk-name">React.js</span><span class="badge">Advance</span></li>
+                <li class="sk-row"><span class="sk-name">Next.js</span><span class="badge">Advance</span></li>
+              </ul>
+              <div class="sk-bar-wrap"><div class="sk-bar-label"><span>Proficiency</span><span>90%</span></div><div class="sk-bar-track"><div class="sk-bar-fill" data-w=".90"></div></div></div>
             </div>
-            <div class="car-count"><span id="kompN">1</span> / 4</div>
-            <div class="car-ctrl">
-              <button class="car-btn" onclick="carPrev('kompCar','kompN')" aria-label="Prev"><i class="bx bx-chevron-left"></i></button>
-              <button class="car-btn" onclick="carNext('kompCar','kompN')" aria-label="Next"><i class="bx bx-chevron-right"></i></button>
+            <!-- Skill 2 -->
+            <div class="sk-card r" style="transition-delay:.05s">
+              <div class="sk-head"><div class="sk-ico" style="background:rgba(52,211,153,.1);color:var(--green)"><i class="bx bx-server"></i></div><h3>Backend</h3></div>
+              <ul class="sk-list">
+                <li class="sk-row"><span class="sk-name">PHP</span><span class="badge">Advance</span></li>
+                <li class="sk-row"><span class="sk-name">Laravel</span><span class="badge">Advance</span></li>
+                <li class="sk-row"><span class="sk-name">Codeigniter</span><span class="badge">Advance</span></li>
+                <li class="sk-row"><span class="sk-name">Node.js</span><span class="badge">Advance</span></li>
+                <li class="sk-row"><span class="sk-name">Python</span><span class="badge">Advance</span></li>
+                <li class="sk-row"><span class="sk-name">MySQL</span><span class="badge">Advance</span></li>
+              </ul>
+              <div class="sk-bar-wrap"><div class="sk-bar-label"><span>Proficiency</span><span>88%</span></div><div class="sk-bar-track"><div class="sk-bar-fill" data-w=".88"></div></div></div>
             </div>
-          </div>
-          <div class="w-body">
-            <div class="w-header"><h3>Redesign Kompas.com</h3><span class="w-tag t-design">Design</span></div>
-            <p>Complete UI/UX redesign of Kompas news portal, prototyped in Figma.</p>
-            <a href="https://www.figma.com/design/kE9Ai8J4iRnk3ULr1H0mZr/Kompas?m=auto&t=6FWbkeBqbJw2KIbc-6" class="w-link" target="_blank" rel="noopener">View in Figma <i class="bx bx-right-arrow-alt"></i></a>
-          </div>
-        </div>
-
-        <div class="w-card r" style="transition-delay:.06s" data-cat="design">
-          <div class="car-wrap" id="calCar" style="aspect-ratio:16/9;border-radius:0;border:none;border-bottom:1px solid var(--line)">
-            <div class="car-track" id="calTrack">
-              <div class="car-slide"><img src="assets/img/calligraphsy/1. Landing Guest.png"               alt="Landing" loading="lazy"></div>
-              <div class="car-slide"><img src="assets/img/calligraphsy/2. Forms.png"                       alt="Forms"   loading="lazy"></div>
-              <div class="car-slide"><img src="assets/img/calligraphsy/3. Result.png"                      alt="Result"  loading="lazy"></div>
-              <div class="car-slide"><img src="assets/img/calligraphsy/4. Modal_Dashboard Gallery Admin.png" alt="Admin" loading="lazy"></div>
+            <!-- Skill 3 -->
+            <div class="sk-card r" style="transition-delay:.1s">
+              <div class="sk-head"><div class="sk-ico" style="background:var(--gold-dim);color:var(--gold)"><i class="bx bx-palette"></i></div><h3>UI/UX Design</h3></div>
+              <ul class="sk-list">
+                <li class="sk-row"><span class="sk-name">Figma</span><span class="badge">Advance</span></li>
+                <li class="sk-row"><span class="sk-name">Photoshop</span><span class="badge">Advance</span></li>
+                <li class="sk-row"><span class="sk-name">Canva</span><span class="badge">Advance</span></li>
+              </ul>
+              <div class="sk-bar-wrap"><div class="sk-bar-label"><span>Proficiency</span><span>85%</span></div><div class="sk-bar-track"><div class="sk-bar-fill" data-w=".85"></div></div></div>
             </div>
-            <div class="car-count"><span id="calN">1</span> / 4</div>
-            <div class="car-ctrl">
-              <button class="car-btn" onclick="carPrev('calCar','calN')" aria-label="Prev"><i class="bx bx-chevron-left"></i></button>
-              <button class="car-btn" onclick="carNext('calCar','calN')" aria-label="Next"><i class="bx bx-chevron-right"></i></button>
+            <!-- Skill 4 -->
+            <div class="sk-card r" style="transition-delay:.15s">
+              <div class="sk-head"><div class="sk-ico" style="background:rgba(52,211,153,.1);color:var(--green)"><i class="bx bx-terminal"></i></div><h3>Ops &amp; Support</h3></div>
+              <ul class="sk-list">
+                <li class="sk-row"><span class="sk-name">Hardware</span><span class="badge">Advance</span></li>
+                <li class="sk-row"><span class="sk-name">Networking</span><span class="badge">Advance</span></li>
+                <li class="sk-row"><span class="sk-name">CI/CD Pipeline</span><span class="badge">Advance</span></li>
+                <li class="sk-row"><span class="sk-name">QA Manual/Auto</span><span class="badge">Advance</span></li>
+              </ul>
+              <div class="sk-bar-wrap"><div class="sk-bar-label"><span>Proficiency</span><span>82%</span></div><div class="sk-bar-track"><div class="sk-bar-fill" data-w=".82"></div></div></div>
             </div>
           </div>
-          <div class="w-body">
-            <div class="w-header"><h3>Calligraphy Expert System</h3><span class="w-tag t-design">Design</span></div>
-            <p>Complete UI/UX calligraphy expert system prototyped in Figma.</p>
-            <a href="https://www.figma.com/design/kE9Ai8J4iRnk3ULr1H0mZr/Kompas?m=auto&t=6FWbkeBqbJw2KIbc-6" class="w-link" target="_blank" rel="noopener">View in Figma <i class="bx bx-right-arrow-alt"></i></a>
-          </div>
         </div>
+      </section>
 
-        <div class="w-card r" style="transition-delay:.12s" data-cat="web">
-          <img src="assets/img/kitabooking.png" alt="Aplikasi Booking" class="w-thumb" loading="lazy"
-               onerror="this.outerHTML='<div class=\'w-empty\'><i class=\'bx bx-image\'></i></div>'">
-          <div class="w-body">
-            <div class="w-header"><h3>Aplikasi Booking</h3><span class="w-tag t-web">Web</span></div>
-            <p>Full-featured booking web application built with PHP &amp; Laravel.</p>
-            <a href="https://github.com/Rianto69/KitaBooking" class="w-link" target="_blank" rel="noopener">View on GitHub <i class="bx bx-right-arrow-alt"></i></a>
-          </div>
-        </div>
-
-        <div class="w-card r" style="transition-delay:.18s" data-cat="mobile">
-          <img src="assets/img/vlclite.jpg" alt="VLC Lite" class="w-thumb" loading="lazy"
-               onerror="this.outerHTML='<div class=\'w-empty\'><i class=\'bx bx-image\'></i></div>'">
-          <div class="w-body">
-            <div class="w-header"><h3>VLC Lite</h3><span class="w-tag t-mobile">Mobile</span></div>
-            <p>Lightweight mobile media player with clean UI and core VLC features.</p>
-            <a href="https://github.com/Rianto69/VLCLite" class="w-link" target="_blank" rel="noopener">View on GitHub <i class="bx bx-right-arrow-alt"></i></a>
-          </div>
-        </div>
-
-        <div class="w-card r" style="transition-delay:.06s" data-cat="web">
-          <img src="assets/img/npwp.png" alt="Web Portal Berita" class="w-thumb" loading="lazy"
-               onerror="this.outerHTML='<div class=\'w-empty\'><i class=\'bx bx-image\'></i></div>'">
-          <div class="w-body">
-            <div class="w-header"><h3>Web Portal Berita</h3><span class="w-tag t-web">Web</span></div>
-            <p>News portal web app with CMS, categories, and article management.</p>
-            <a href="https://github.com/ianocent/NPWPNews" class="w-link" target="_blank" rel="noopener">View on GitHub <i class="bx bx-right-arrow-alt"></i></a>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <div class="div"></div>
-
-  <!-- ═══ CONTACT ═══ -->
-  <section class="contact" id="contact">
-    <div class="wrap">
-      <span class="eyebrow r"><i class="bx bx-envelope"></i> Get In Touch</span>
-      <h2 class="h2 r">Contact Me</h2>
-      <div class="ct-grid">
-
-        <div class="r">
-          <p class="ct-lead">Ready to discuss a project, a full-time opportunity, or just want to say hello? I'm currently available for full-time roles as a Fullstack Developer or IT Support professional.</p>
-          <div class="ct-list">
-            <a href="mailto:riantodwi2002@gmail.com" class="ct-item">
-              <div class="ct-ico"><i class="bx bx-envelope"></i></div>
-              <div><h4>Email</h4><span>riantodwi2002@gmail.com</span></div>
-            </a>
-            <a href="https://wa.me/6281389962997" target="_blank" rel="noopener" class="ct-item">
-              <div class="ct-ico"><i class="bx bxl-whatsapp"></i></div>
-              <div><h4>WhatsApp</h4><span>+62 813 8996 2997</span></div>
-            </a>
-            <a href="https://www.linkedin.com/in/dwirianto" target="_blank" rel="noopener" class="ct-item">
-              <div class="ct-ico"><i class="bx bxl-linkedin"></i></div>
-              <div><h4>LinkedIn</h4><span>linkedin.com/in/dwirianto</span></div>
-            </a>
-          </div>
-        </div>
-
-        <div class="r" style="transition-delay:.1s">
-          <form class="form" id="cf" novalidate>
-            <div class="fg"><label for="nama">Name</label>
-              <input type="text" id="nama" name="nama" placeholder="Your name" required autocomplete="name">
+      <!-- ═══ SLIDE 4: WORKFLOW (3 Columns to fit 1 viewport) ═══ -->
+      <section class="slide" id="workflow">
+        <div class="wrap">
+          <span class="eyebrow r"><i class="bx bx-briefcase"></i> Real Work</span>
+          <h2 class="h2 r">Workflow Experience</h2>
+          <div class="wf-grid">
+            
+            <!-- Col 1: Text -->
+            <div style="display:flex; flex-direction:column; gap:1rem;">
+              <div class="wf-card r">
+                <h3>Hotel Management System</h3>
+                <p>Built and maintained a full system covering room booking, guest management, and dashboards.</p>
+                <div class="pill-row">
+                  <span class="pill">Next.js</span>
+                  <span class="pill">Node.js</span>
+                  <span class="pill">PHP</span>
+                  <span class="pill">Laravel</span>
+                  <span class="pill">MySQL</span>
+                </div>
+              </div>
+              <div class="wf-card r">
+                <h3>Technical Supports</h3>
+                <p>Maintenance accounting.</p>
+                <div class="pill-row">
+                  <span class="pill">Purchase Request</span>
+                  <span class="pill">Purchase Order</span>
+                  <span class="pill">Inventory Assets Module</span>
+                  <span class="pill">Profit&Loss Report</span>
+                  <span class="pill">Trial Balance Report</span>
+                </div>
+              </div>
+              <div class="wf-card r" style="transition-delay:.05s">
+                <h3>DevOps &amp; QA</h3>
+                <p>Implemented CI/CD pipelines for deployment. Conducted manual and automated QA testing.</p>
+                <div class="pill-row">
+                  <span class="pill">CI/CD</span>
+                  <span class="pill">Gitlab</span>
+                  <span class="pill">Github</span>
+                  <span class="pill">QA Manual</span>
+                  <span class="pill">QA Automation</span>
+                  <span class="pill">Linux</span>
+                </div>
+              </div>
             </div>
-            <div class="fg"><label for="email">Email</label>
-              <input type="email" id="email" name="email" placeholder="your@email.com" required autocomplete="email">
+
+            <!-- Col 2: Desktop Screen Grid -->
+            <div class="wf-card r" style="transition-delay:.1s">
+              <h3>Desktop Screenshots</h3>
+              <div class="dash-grid">
+                <img src="assets/img/1. multiple-properties.png"                      alt="Dash" onclick="openLb(this.src)" loading="lazy">
+                <img src="assets/img/2. dashboard-view.png"  alt="Fore" onclick="openLb(this.src)" loading="lazy">
+                <img src="assets/img/19. booking-engine-analytics.png"           alt="Room" onclick="openLb(this.src)" loading="lazy">
+                <!-- <img src="assets/img/3. dashboard-custom.png"               alt="Segm" onclick="openLb(this.src)" loading="lazy"> -->
+                <!-- <img src="assets/img/4. dashboard-intuitive.png"                       alt="Char" onclick="openLb(this.src)" loading="lazy"> -->
+                <img src="assets/img/5. folio-listing-frontdesk.png"           alt="RBAC" onclick="openLb(this.src)" loading="lazy">
+                <!-- <img src="assets/img/6. room-availability.png"           alt="Room" onclick="openLb(this.src)" loading="lazy"> -->
+                <img src="assets/img/7. room-availability-move-rsv-dragndrop.png"           alt="Room" onclick="openLb(this.src)" loading="lazy">
+                <!-- <img src="assets/img/8. floor-plan.png"           alt="Room" onclick="openLb(this.src)" loading="lazy"> -->
+                <!-- <img src="assets/img/9. create-reservation.png"           alt="Room" onclick="openLb(this.src)" loading="lazy"> -->
+                <!-- <img src="assets/img/10. edit-guest-profile.png"           alt="Room" onclick="openLb(this.src)" loading="lazy"> -->
+                <!-- <img src="assets/img/11. night-audit-precheck.png"           alt="Room" onclick="openLb(this.src)" loading="lazy"> -->
+                <!-- <img src="assets/img/12. housekeeping-shifting.png"           alt="Room" onclick="openLb(this.src)" loading="lazy"> -->
+                <!-- <img src="assets/img/13. housekeeping-rosting.png"           alt="Room" onclick="openLb(this.src)" loading="lazy"> -->
+                <!-- <img src="assets/img/14. housekeeping-room.png"           alt="Room" onclick="openLb(this.src)" loading="lazy"> -->
+                <!-- <img src="assets/img/15. housekeeping-scheduler.png"           alt="Room" onclick="openLb(this.src)" loading="lazy"> -->
+                <img src="assets/img/16. housekeeping-scheduler-list.png"           alt="Room" onclick="openLb(this.src)" loading="lazy">
+                <!-- <img src="assets/img/17. rate-setup.png"           alt="Room" onclick="openLb(this.src)" loading="lazy"> -->
+                <img src="assets/img/18. event-management-timeline.png"           alt="Room" onclick="openLb(this.src)" loading="lazy">
+                <img src="assets/img/20. role-management.png"           alt="Room" onclick="openLb(this.src)" loading="lazy">
+                <!-- <img src="assets/img/21. role-template.png"           alt="Room" onclick="openLb(this.src)" loading="lazy"> -->
+              </div>
             </div>
-            <div class="fg"><label for="pesan">Message</label>
-              <textarea id="pesan" name="pesan" placeholder="Tell me about your project or opportunity…" required></textarea>
+
+            <!-- Col 3: Mobile Screen Carousel -->
+            <div class="wf-card r" style="transition-delay:.15s">
+              <h3>Mobile Views</h3>
+              <div class="car-wrap" id="mobCar" style="margin-top:.5rem;">
+                <div class="car-track" id="mobTrack">
+                  <div class="car-slide"><img src="assets/img/mobile/1. Responsive Choose Property.png" alt="Img" loading="lazy"></div>
+                  <div class="car-slide"><img src="assets/img/mobile/2. Responsive Dashboard.png"       alt="Img" loading="lazy"></div>
+                  <div class="car-slide"><img src="assets/img/mobile/3. Responsive Sidebar Mobile.png"  alt="Img" loading="lazy"></div>
+                  <div class="car-slide"><img src="assets/img/mobile/4. Responsive User List Page.png"  alt="Img" loading="lazy"></div>
+                </div>
+                <div class="car-count"><span id="mobN">1</span> / 4</div>
+                <div class="car-ctrl">
+                  <button class="car-btn" onclick="carPrev('mobCar','mobN')" aria-label="Prev"><i class="bx bx-chevron-left"></i></button>
+                  <button class="car-btn" onclick="carNext('mobCar','mobN')" aria-label="Next"><i class="bx bx-chevron-right"></i></button>
+                </div>
+              </div>
             </div>
-            <div>
-              <button type="submit" class="btn btn-p" id="sbtn">
-                <i class="bx bx-send"></i> Send Message
-              </button>
-            </div>
-            <p id="form-ok">✓ Message sent — I'll get back to you shortly.</p>
-          </form>
+
+          </div>
         </div>
+      </section>
 
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="wrap">
-      <div class="ft-inner">
-        <div class="ft-logo">ianocent<span>.</span></div>
-        <span class="ft-copy">© 2026 Dwi Rianto. All rights reserved.</span>
-        <div class="ft-social">
-          <a href="https://www.facebook.com/ntoo69/"      target="_blank" rel="noopener" class="icon-btn" aria-label="Facebook"><i class="bx bxl-facebook"></i></a>
-          <a href="https://www.instagram.com/ianocent/"   target="_blank" rel="noopener" class="icon-btn" aria-label="Instagram"><i class="bx bxl-instagram"></i></a>
-          <a href="https://twitter.com/sinsproof_"        target="_blank" rel="noopener" class="icon-btn" aria-label="Twitter"><i class="bx bxl-twitter"></i></a>
+      <!-- ═══ SLIDE 5: PORTFOLIO (3x2 Grid) ═══ -->
+      <section class="slide" id="portfolio">
+        <div class="wrap">
+          <span class="eyebrow r"><i class="bx bx-grid-alt"></i> My Work</span>
+          <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+            <h2 class="h2 r" style="margin-bottom:1rem;">Recent Projects</h2>
+            <div class="port-filters r" style="margin-bottom:1.5rem;">
+              <button class="flt on" data-f="all">All</button>
+              <button class="flt" data-f="web">Web</button>
+              <button class="flt" data-f="mobile">Mobile</button>
+              <button class="flt" data-f="design">Design</button>
+            </div>
+          </div>
+          
+          <div class="port-grid">
+            <!-- 1 -->
+            <div class="w-card r" data-cat="design">
+              <img src="assets/img/proto.png" alt="Vape Thing App" class="w-thumb" loading="lazy">
+              <div class="w-body">
+                <div class="w-header"><h3>Vape Thing App</h3><span class="w-tag t-design">Design</span></div>
+                <p>Mobile app UI/UX design and prototype built in Figma.</p>
+                <a href="https://www.figma.com/design/3yXhFjhcbu083aVDDf0RpF/Vape-Thing?m=auto&t=6FWbkeBqbJw2KIbc-6" class="w-link" target="_blank" rel="noopener">View on Figma <i class="bx bx-right-arrow-alt"></i></a>
+              </div>
+            </div>
+            <!-- 2 -->
+            <div class="w-card r" data-cat="design" style="transition-delay:.05s">
+              <div class="car-wrap" id="calCar" style="border-radius:0; border:none; border-bottom:1px solid var(--line); aspect-ratio:16/8; min-height:0;">
+                <div class="car-track" id="calTrack">
+                  <div class="car-slide"><img src="assets/img/calligraphsy/1. Landing Guest.png" alt="1" loading="lazy"></div>
+                  <div class="car-slide"><img src="assets/img/calligraphsy/2. Forms.png" alt="2" loading="lazy"></div>
+                </div>
+                <div class="car-ctrl"><button class="car-btn" onclick="carPrev('calCar')"><i class="bx bx-chevron-left"></i></button><button class="car-btn" onclick="carNext('calCar')"><i class="bx bx-chevron-right"></i></button></div>
+              </div>
+              <div class="w-body">
+                <div class="w-header"><h3>Calligraphy System</h3><span class="w-tag t-design">Design</span></div>
+                <p>UI/UX expert system prototyped in Figma.</p>
+                <a href="https://www.figma.com/design/kE9Ai8J4iRnk3ULr1H0mZr/Kompas?m=auto&t=6FWbkeBqbJw2KIbc-6" class="w-link" target="_blank" rel="noopener">View in Figma <i class="bx bx-right-arrow-alt"></i></a>
+              </div>
+            </div>
+            <!-- 3 -->
+            <div class="w-card r" data-cat="design" style="transition-delay:.1s">
+              <div class="car-wrap" id="kompCar" style="border-radius:0; border:none; border-bottom:1px solid var(--line); aspect-ratio:16/8; min-height:0;">
+                <div class="car-track" id="kompTrack">
+                  <div class="car-slide"><img src="assets/img/compas/Kompas.png" alt="1" loading="lazy"></div>
+                  <div class="car-slide"><img src="assets/img/compas/Kompas1.png" alt="2" loading="lazy"></div>
+                </div>
+                <div class="car-ctrl"><button class="car-btn" onclick="carPrev('kompCar')"><i class="bx bx-chevron-left"></i></button><button class="car-btn" onclick="carNext('kompCar')"><i class="bx bx-chevron-right"></i></button></div>
+              </div>
+              <div class="w-body">
+                <div class="w-header"><h3>Redesign Kompas</h3><span class="w-tag t-design">Design</span></div>
+                <p>UI/UX redesign of Kompas news portal.</p>
+                <a href="https://www.figma.com/design/kE9Ai8J4iRnk3ULr1H0mZr/Kompas?m=auto&t=6FWbkeBqbJw2KIbc-6" class="w-link" target="_blank" rel="noopener">View in Figma <i class="bx bx-right-arrow-alt"></i></a>
+              </div>
+            </div>
+            <!-- 4 -->
+            <div class="w-card r" data-cat="web" style="transition-delay:.15s">
+              <img src="assets/img/kitabooking.png" alt="Booking" class="w-thumb" loading="lazy"
+              onerror="this.outerHTML='<div class=\'w-empty\'><i class=\'bx bx-image\'></i></div>'">
+              <div class="w-body">
+                <div class="w-header"><h3>Aplikasi Booking</h3><span class="w-tag t-web">Web</span></div>
+                <p>Booking web application built with PHP &amp; Laravel.</p>
+                <a href="https://github.com/Rianto69/KitaBooking" class="w-link" target="_blank" rel="noopener">View on GitHub <i class="bx bx-right-arrow-alt"></i></a>
+              </div>
+            </div>
+            <!-- 5 -->
+            <div class="w-card r" data-cat="design" style="transition-delay:.2s">
+              <img src="assets/img/whatsapp.png" alt="WA" class="w-thumb" loading="lazy">
+              <div class="w-body">
+                <div class="w-header"><h3>Whatsapp Redesign</h3><span class="w-tag t-design">Design</span></div>
+                <p>Concept UI redesign of WhatsApp interface.</p>
+                <a href="#" class="w-link">View on Figma <i class="bx bx-right-arrow-alt"></i></a>
+              </div>
+            </div>
+            <!-- 6 -->
+            <div class="w-card r" data-cat="mobile" style="transition-delay:.25s">
+              <img src="assets/img/vlclite.jpg" alt="VLC Lite" class="w-thumb" loading="lazy"
+              onerror="this.outerHTML='<div class=\'w-empty\'><i class=\'bx bx-image\'></i></div>'">
+              <div class="w-body">
+                <div class="w-header"><h3>VLC Lite</h3><span class="w-tag t-mobile">Mobile</span></div>
+                <p>Lightweight mobile media player.</p>
+                <a href="https://github.com/Rianto69/VLCLite" class="w-link" target="_blank" rel="noopener">View on GitHub <i class="bx bx-right-arrow-alt"></i></a>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </footer>
+      </section>
 
-  <script>
-  // ── Progress bar ──
-  const bar = document.getElementById('bar');
-  function upBar() {
-    const s = window.scrollY, h = document.documentElement.scrollHeight - window.innerHeight;
-    bar.style.width = (h > 0 ? (s/h*100) : 0) + '%';
-  }
+      <!-- ═══ SLIDE 6: CONTACT & FOOTER ═══ -->
+      <section class="slide" id="contact">
+        <div class="wrap contact-wrap">
+          <div>
+            <span class="eyebrow r"><i class="bx bx-envelope"></i> Get In Touch</span>
+            <h2 class="h2 r">Contact Me</h2>
+            <div class="ct-grid">
+              <div class="r from-left">
+                <p class="ct-lead">Ready to discuss a project, a full-time opportunity, or just want to say hello? I'm currently available for full-time roles as a Fullstack Developer or IT Support professional.</p>
+                <div class="ct-list">
+                  <a href="mailto:riantodwi2002@gmail.com" class="ct-item">
+                    <div class="ct-ico"><i class="bx bx-envelope"></i></div><div><h4>Email</h4><span>riantodwi2002@gmail.com</span></div>
+                  </a>
+                  <a href="https://wa.me/6281389962997" target="_blank" rel="noopener" class="ct-item">
+                    <div class="ct-ico"><i class="bx bxl-whatsapp"></i></div><div><h4>WhatsApp</h4><span>+62 813 8996 2997</span></div>
+                  </a>
+                  <a href="https://www.linkedin.com/in/dwirianto" target="_blank" rel="noopener" class="ct-item">
+                    <div class="ct-ico"><i class="bx bxl-linkedin"></i></div><div><h4>LinkedIn</h4><span>linkedin.com/in/dwirianto</span></div>
+                  </a>
+                </div>
+              </div>
+              <div class="r from-right">
+                <form class="form" id="cf" novalidate>
+                  <div class="fg"><input type="text" id="nama" name="nama" placeholder="Your name" required></div>
+                  <div class="fg"><input type="email" id="email" name="email" placeholder="your@email.com" required></div>
+                  <div class="fg"><textarea id="pesan" name="pesan" placeholder="Tell me about your project..." required></textarea></div>
+                  <div><button type="submit" class="btn btn-p magnetic" id="sbtn"><i class="bx bx-send"></i> Send Message</button></div>
+                  <p id="form-ok">✓ Message sent — I'll get back to you shortly.</p>
+                </form>
+              </div>
+            </div>
+          </div>
+          
+          <!-- FOOTER DITARUH DI BAWAH SLIDE INI -->
+          <footer class="footer r">
+            <div class="ft-inner">
+              <div class="ft-logo">ianocent<span>.</span></div>
+              <span class="ft-copy">© 2026 Dwi Rianto. All rights reserved.</span>
+              <div class="ft-social">
+                <a href="https://www.facebook.com/ntoo69/" target="_blank" class="icon-btn"><i class="bx bxl-facebook"></i></a>
+                <a href="https://www.instagram.com/ianocent/" target="_blank" class="icon-btn"><i class="bx bxl-instagram"></i></a>
+                <a href="https://twitter.com/sinsproof_" target="_blank" class="icon-btn"><i class="bx bxl-twitter"></i></a>
+              </div>
+            </div>
+          </footer>
+        </div>
+      </section>
 
-  // ── Nav scroll ──
-  const nav = document.getElementById('nav');
-  const secs = document.querySelectorAll('section[id]');
-  const links = document.querySelectorAll('.nav-list a');
-
-  function upNav() {
-    nav.classList.toggle('up', window.scrollY > 40);
-    const y = window.scrollY + 90;
-    secs.forEach(s => {
-      if (y >= s.offsetTop && y < s.offsetTop + s.offsetHeight) {
-        links.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#'+s.id));
-      }
-    });
-  }
-  window.addEventListener('scroll', () => { upBar(); upNav(); }, { passive: true });
-
-  // ── Hamburger ──
-  const hbg = document.getElementById('hbg');
-  const drawer = document.getElementById('drawer');
-  let open = false;
-
-  hbg.addEventListener('click', () => {
-    open = !open;
-    hbg.setAttribute('aria-expanded', open);
-    drawer.classList.toggle('show', open);
-    const [s1,s2,s3] = hbg.querySelectorAll('span');
-    if (open) {
-      s1.style.cssText = 'transform:translateY(6.5px) rotate(45deg)';
-      s2.style.opacity = '0';
-      s3.style.cssText = 'transform:translateY(-6.5px) rotate(-45deg)';
-    } else {
-      [s1,s2,s3].forEach(s => s.style.cssText = '');
-    }
-  });
-  function closeDrawer() {
-    open = false;
-    drawer.classList.remove('show');
-    hbg.setAttribute('aria-expanded', false);
-    hbg.querySelectorAll('span').forEach(s => s.style.cssText = '');
-  }
-
-  // ── Reveal ──
-  const io = new IntersectionObserver(es => {
-    es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('v'); io.unobserve(e.target); } });
-  }, { threshold: 0.07, rootMargin: '0px 0px -36px 0px' });
-  document.querySelectorAll('.r').forEach(el => io.observe(el));
-
-  // ── Portfolio filter ──
-  document.querySelectorAll('.flt').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.flt').forEach(b => b.classList.remove('on'));
-      btn.classList.add('on');
-      const f = btn.dataset.f;
-      document.querySelectorAll('.w-card').forEach(c => {
-        c.style.display = (f==='all' || c.dataset.cat===f) ? '' : 'none';
-      });
-    });
-  });
-
-  // ── Carousel ──
-  const cars = {};
-  function initCar(id) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    cars[id] = { cur: 0, total: el.querySelectorAll('.car-slide').length };
-  }
-  function carGo(id, numId, dir) {
-    if (!cars[id]) initCar(id);
-    const c = cars[id];
-    c.cur = (c.cur + dir + c.total) % c.total;
-    document.getElementById(id).querySelector('.car-track').style.transform = `translateX(-${c.cur * 100}%)`;
-    const n = document.getElementById(numId);
-    if (n) n.textContent = c.cur + 1;
-  }
-  function carNext(id, numId) { carGo(id, numId, 1); }
-  function carPrev(id, numId) { carGo(id, numId, -1); }
-  window.addEventListener('load', () => {
-    ['mobCar','kompCar','calCar'].forEach(initCar);
-  });
-
-  // ── Lightbox ──
-  function openLb(src) {
-    const lb = document.createElement('div');
-    lb.className = 'lb';
-    lb.innerHTML = `<img src="${src}" alt="">`;
-    lb.onclick = () => lb.remove();
-    document.addEventListener('keydown', function esc(e) {
-      if (e.key === 'Escape') { lb.remove(); document.removeEventListener('keydown', esc); }
-    });
-    document.body.appendChild(lb);
-  }
-
-  // ── Contact form ──
-  const GSCRIPT = 'https://script.google.com/macros/s/AKfycbwoxraERRIDFq-YBg5NBQ1d_HjJc6u0UQI4OXhnUnonlspaFF8eRGKVirU3KpCdubBY/exec';
-  document.getElementById('cf').addEventListener('submit', e => {
-    e.preventDefault();
-    const btn = document.getElementById('sbtn');
-    btn.disabled = true;
-    btn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Sending…';
-    fetch(GSCRIPT, { method:'POST', body: new FormData(e.target) })
-      .then(() => {
-        const ok = document.getElementById('form-ok');
-        ok.style.display = 'block';
-        e.target.reset();
-        btn.disabled = false;
-        btn.innerHTML = '<i class="bx bx-send"></i> Send Message';
-        setTimeout(() => ok.style.display = 'none', 6000);
-      })
-      .catch(() => {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="bx bx-send"></i> Send Message';
-      });
-  });
-  </script>
+    </div><!-- /page-scroll -->
+  </div><!-- /page-clip -->
+  <script src="assets/js/main.js" defer></script>
 </body>
 </html>
