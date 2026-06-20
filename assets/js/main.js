@@ -116,7 +116,7 @@ const io = new IntersectionObserver(
         const index = Array.from(sections).indexOf(el) + 1;
         const frameNum = String(index).padStart(3, "0");
         if (frameLabel)
-          frameLabel.textContent = `DWIRIANTO — FULLSTACK DEVELOPER · 2026 · FRAME ${frameNum}`;
+          frameLabel.textContent = `FRAME ${frameNum}`;
 
         links.forEach((a) =>
           a.classList.toggle("on", a.getAttribute("href") === "#" + el.id),
@@ -289,4 +289,26 @@ document.getElementById('cf').addEventListener('submit', e => {
       btn.disabled = false;
       btn.innerHTML = '<i class="bx bx-send"></i> Send Message';
     });
+});
+
+const photo = document.querySelector(".photo-frame img");
+
+function updateImageWithEffect(newSrc) {
+  photo.classList.add("animate-effect");
+
+  setTimeout(() => {
+    photo.src = newSrc;
+  }, 200);
+
+  setTimeout(() => {
+    photo.classList.remove("animate-effect");
+  }, 400);
+}
+
+photo.addEventListener("mouseover", () => {
+  updateImageWithEffect("assets/img/hehe1.png");
+});
+
+photo.addEventListener("mouseout", () => {
+  updateImageWithEffect("assets/img/hehe.png");
 });
