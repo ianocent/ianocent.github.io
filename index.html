@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dwi Rianto Present</title>
+  <title>ıanocent Present</title>
   <link rel="shortcut icon" href="assets/img/logo.png" type="image/x-icon" class="bx bx-ghost">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -41,7 +41,7 @@
 
       <!-- NAV -->
       <nav class="nav" id="nav">
-        <a href="#home" class="logo" data-text="ianocent.">ianocent<span class="logo-sep">.</span></a>
+        <a href="#home" class="logo" data-text="ianocent.">ıanocent<span class="logo-sep">.</span></a>
         <ul class="nav-list">
           <li><a href="#home">Home</a></li>
           <li><a href="#about">About</a></li>
@@ -71,9 +71,14 @@
             <div class="r">
               <div class="avail"><div class="dot"></div><span>Unavailable for full-time opportunities</span></div>
               <div>
-                <a href="https://wakatime.com/@018d6394-3140-41c9-8cdb-cbe349d742a3" class="wakatime-badge" target="_blank">
+                <!-- <a href="https://wakatime.com/@018d6394-3140-41c9-8cdb-cbe349d742a3" class="wakatime-badge" target="_blank">
                   <img src="https://wakatime.com/badge/user/018d6394-3140-41c9-8cdb-cbe349d742a3.svg" alt="WakaTime coding stats">
-                </a>
+                </a> -->
+                <!-- <div class="wakatime-stats r" style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem;"> -->
+                  <!-- <img src="https://github-readme-stats.vercel.app/api/wakatime?username=ianocent&layout=compact&theme=tokyonight&hide_border=true&bg_color=24242d&title_color=c9a96e&text_color=9ea1ad&icon_color=34d399" alt="WakaTime Stats" loading="lazy" style="border-radius: 8px; border: 1px solid var(--line);"> -->
+                  <!-- <img src="https://github-readme-stats.vercel.app/api?username=ianocent&show_icons=true&theme=tokyonight&hide_border=true&bg_color=24242d&title_color=c9a96e&text_color=9ea1ad&icon_color=34d399" alt="GitHub Stats" loading="lazy" style="border-radius: 8px; border: 1px solid var(--line);"> -->
+                  <!-- <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=ianocent&layout=compact&theme=tokyonight&hide_border=true&bg_color=24242d&title_color=c9a96e&text_color=9ea1ad" alt="Top Languages" loading="lazy" style="border-radius: 8px; border: 1px solid var(--line);"> -->
+                <!-- </div> -->
               </div>
               <h1 class="hero-name"><span class="line1"><span class="inner1" style="color: gainsboro;">Dwi</span></span><span class="line2"><span class="inner2"> Rianto</span></span></h1>
               <p class="hero-role"><b>Fullstack Developer</b> · DevOps CI/CD ·<br>QA Manual &amp; Automation · Database Admin · Mobile Applications</p>
@@ -103,9 +108,16 @@
           </div>
 
           <div class="stats r scale-in">
-            <div class="stat"><div class="stat-n" data-count="3">0</div><div class="stat-l">Years Experience</div></div>
+            <!-- <div class="stat"><div class="stat-n" data-count="3">0</div><div class="stat-l">Years Experience</div></div> -->
+            <div class="stat magnetic" id="expTrigger" style="cursor: pointer; position: relative;" title="Click to see my coding activity!">
+              <div class="stat-n" data-count="3">0</div><div class="stat-l">Years Experience <i class="bx bx-bar-chart-alt-2" style="color: var(--gold); font-size: medium;"></i></div>
+            </div>
             <div class="stat"><div class="stat-n" data-count="5">0</div><div class="stat-l">Projects Completed</div></div>
-            <div class="stat"><div class="stat-n" data-count="95">0</div><div class="stat-l">Avg WPM Speed</div></div>
+            <!-- <div class="stat"><div class="stat-n" data-count="95">0</div><div class="stat-l">Avg WPM Speed</div></div> -->
+            <div class="stat magnetic" id="wpmTrigger" style="cursor: pointer; position: relative;" title="Click to beat my WPM!">
+              <div class="stat-n" data-count="95">0</div>
+              <div class="stat-l">Avg WPM Speed <i class="bx bx-play-circle" style="color: var(--gold); font-size: medium;"></i></div>
+            </div>
           </div>
         </div>
       </section>
@@ -451,8 +463,8 @@
           <!-- FOOTER DITARUH DI BAWAH SLIDE INI -->
           <footer class="footer r">
             <div class="ft-inner">
-              <div class="ft-logo">ianocent<span>.</span></div>
-              <span class="ft-copy">© 2026 Dwi Rianto. All rights reserved.</span>
+              <div class="ft-logo">ıanocent<span>.</span></div>
+              <span class="ft-copy">© 2026 ıanocent. All rights reserved.</span>
               <div class="ft-social">
                 <a href="https://www.facebook.com/ntoo69/" target="_blank" class="icon-btn"><i class="bx bxl-facebook"></i></a>
                 <a href="https://www.instagram.com/ianocent/" target="_blank" class="icon-btn"><i class="bx bxl-instagram"></i></a>
@@ -462,9 +474,82 @@
           </footer>
         </div>
       </section>
-
     </div><!-- /page-scroll -->
   </div><!-- /page-clip -->
+  </div></div><button class="chat-fab" id="chatFab"><i class="bx bx-message-dots"></i></button>
+  <div class="chat-window" id="chatWindow">
+    <div class="chat-header">
+      <div><i class="bx bx-bot"></i> ıanoBot</div>
+      <button id="closeChat"><i class="bx bx-x"></i></button>
+    </div>
+    <div class="chat-body" id="chatBody">
+      <div class="chat-msg bot">Halo! Gwa asisten virtualnya rıan. Mau tanya apa nih?</div>
+    </div>
+    <div class="chat-options" id="chatOptions">
+      <button class="chat-opt" data-q="stack">💻 Tech Stack lu apa aja?</button>
+      <button class="chat-opt" data-q="avail">🚀 Bisa kerja full-time kapan?</button>
+      <button class="chat-opt" data-q="typing">⚡ Kok ngetiknya kenceng?</button>
+    </div>
+  </div>
+
+  <div class="wpm-modal" id="wpmModal">
+    <div class="wpm-content">
+      <button class="wpm-close" id="wpmClose"><i class="bx bx-x"></i></button>
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; margin-top: 1.5rem;">
+        <h3 style="color: var(--text); font-size: 1.2rem; font-weight: 600;"><i class="bx bxs-keyboard" style="color: var(--gold);"></i> Beat My WPM!</h3>
+        <div style="font-size: 0.9rem; color: var(--gold); font-family: var(--serif); font-style: italic;" id="typTimer">0s</div>
+      </div>
+      
+      <p id="typTarget" style="color: var(--text2); font-size: 0.85rem; margin-bottom: 1rem; user-select: none; line-height: 1.6;">Gwa nulis kode secepat kilat. Coba ketik kalimat ini dan buktikan kecepatan tangan lu. Semakin cepat lu ngetik, semakin besar peluang lu buat ngalahin rekor gwa.</p>
+      
+      <textarea id="typInput" placeholder="Mulai ngetik di sini buat jalanin timer..." rows="3" style="width: 100%; background: var(--surface2); border: 1px solid var(--line2); color: var(--text); padding: 1rem; border-radius: 8px; font-family: var(--sans); resize: none; margin-bottom: 1rem; outline: none; transition: border-color 0.2s;"></textarea>
+      
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; gap: 1.5rem; font-size: 0.9rem;">
+          <span style="color: var(--text2);">WPM: <b id="typWPM" style="color: var(--gold); font-size: 1.2rem;">0</b></span>
+          <span style="color: var(--text2);">Accuracy: <b id="typAcc" style="color: var(--gold); font-size: 1.2rem;">100%</b></span>
+        </div>
+        <button id="typReset" class="btn btn-o" style="padding: 0.4rem 1rem; font-size: 0.8rem;">Reset</button>
+      </div>
+    </div>
+  </div>
+<!-- 3. Modal Experience / Coding Stats -->
+  <div class="wpm-modal" id="expModal"> 
+    <div class="wpm-content" style="max-width: 850px; width: 95%;"> <!-- Dilebarin dikit biar grid lega -->
+      <button class="wpm-close" id="expClose"><i class="bx bx-x"></i></button>
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3 style="color: var(--text); font-size: 1.2rem; font-weight: 600;"><i class="bx bx-code-alt" style="color: var(--gold);"></i> Live Coding Stats</h3>
+      </div>
+      
+      <p style="color: var(--text2); font-size: 0.85rem; margin-bottom: 1.5rem; line-height: 1.6;">
+        Statistik <i>real-time</i> ini ditarik langsung dari WakaTime dan GitHub untuk ngerekam jam terbang gwa nulis kode.
+      </p>
+      
+      <!-- WakaTime Badge Mungil -->
+      <div style="text-align: center; margin-bottom: 1.5rem;">
+        <a href="https://wakatime.com/@018d6394-3140-41c9-8cdb-cbe349d742a3" target="_blank">
+          <img src="https://wakatime.com/badge/user/018d6394-3140-41c9-8cdb-cbe349d742a3.svg" alt="WakaTime coding stats" style="height: 25px;">
+        </a>
+      </div>
+
+      <!-- Container Flex Baru (Kiri Lebih Lebar, Kanan Lebih Kecil) -->
+      <div class="stats-container">
+        
+        <div class="stats-left">
+          <img src="https://github-readme-stats.vercel.app/api/wakatime?username=ianocent&layout=compact&theme=tokyonight&hide_border=true&bg_color=24242d&title_color=c9a96e&text_color=9ea1ad&icon_color=34d399" alt="WakaTime Stats" loading="lazy" style="border-radius: 8px; border: 1px solid var(--line); width: 100%; height: auto; display: block;">
+        </div>
+        
+        <div class="stats-right">
+          <img src="https://github-readme-stats.vercel.app/api?username=ianocent&show_icons=true&theme=tokyonight&hide_border=true&bg_color=24242d&title_color=c9a96e&text_color=9ea1ad&icon_color=34d399" alt="GitHub Stats" loading="lazy" style="border-radius: 8px; border: 1px solid var(--line); width: 100%; height: auto; display: block;">
+          
+          <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=ianocent&layout=compact&theme=tokyonight&hide_border=true&bg_color=24242d&title_color=c9a96e&text_color=9ea1ad" alt="Top Languages" loading="lazy" style="border-radius: 8px; border: 1px solid var(--line); width: 100%; height: auto; display: block;">
+        </div>
+
+      </div>
+    </div>
+  </div>
   <script src="assets/js/main.js" defer></script>
 </body>
 </html>
