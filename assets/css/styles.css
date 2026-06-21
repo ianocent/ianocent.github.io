@@ -27,6 +27,8 @@
       --text3:     #646876;
       --green:     #34d399;
       --blue:      #60a5fa;
+      --purple:      #e560fa;
+      --red:      #fa6060;
       --serif:     'Playfair Display', Georgia, serif;
       --sans:      'Geist', 'Inter', system-ui, sans-serif;
       --r:         10px;
@@ -203,6 +205,22 @@
     .info-item p  { font-size: .7rem; color: var(--text2); margin: 0; }
 
     /* ── SECTION 3: SKILLS ── */
+    /* Badge standar */
+    .badge {
+      transition: all 0.3s ease;
+      background: var(--gold-dim);
+      color: var(--gold);
+      border: 1px solid rgba(201,169,110,.15);
+    }
+
+    /* State Highlight (saat menyala) */
+    .badge.highlight {
+      background: var(--gold);
+      color: #08090d;
+      box-shadow: 0 0 12px var(--gold);
+      transform: scale(1.05);
+      border-color: var(--gold);
+    }
     .sk-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
     .sk-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 1.2rem; position: relative; overflow: hidden; backdrop-filter: blur(8px); transition: transform .2s; }
     .sk-card:hover { border-color: rgba(201,169,110,.2); transform: translateY(-4px); }
@@ -318,6 +336,7 @@
     }
     @media (max-width: 768px) {
       html, body { cursor: none; overflow: visible; height: auto; scroll-behavior: smooth;}
+      .port-header-row { flex-direction: column; align-items: flex-start; gap: .75rem; }
       #page-clip {
         position: static;
         inset: auto;
@@ -326,17 +345,23 @@
         overflow: visible;
         border-radius: 0;
       }
-      /* #page-scroll {
+      #page-scroll {
         position: static;
         inset: auto;
         height: auto;
         overflow: visible;
         scroll-snap-type: none;
-      } */
+      }
       #page-scroll::-webkit-scrollbar {display: none; }
+      html, body { cursor: none; overflow: visible; height: auto; scroll-behavior: smooth; }
+      html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; height: 0; }
+      html { scrollbar-width: none; -ms-overflow-style: none; }
+      body { scrollbar-width: none; -ms-overflow-style: none; }
 
       .cinema-frame, .cinema-vignette, .cinema-scanline, .cinema-holes { display: none; }
       #bg-layer, #bg-glow { position: fixed; }
+
+
 
       .slide {
         height: auto; min-height: 100svh; max-height: none;
@@ -382,6 +407,7 @@
 
       /* PORTFOLIO */
       .port-grid { grid-template-columns: 1fr; grid-template-rows: none; gap: .85rem; }
+      .port-header-row { display:flex; justify-content:space-between; align-items:flex-end; }
       .port-filters { flex-wrap: wrap; }
       .w-thumb, .w-empty { aspect-ratio: 16/10; }
 
