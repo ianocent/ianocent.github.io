@@ -1,6 +1,3 @@
-// ═══════════════════════════════════════════
-//  CURSOR & REACTIVE BACKGROUND GLOW
-// ═══════════════════════════════════════════
 const cursor = document.getElementById("cursor");
 const ring = document.getElementById("cursorRing");
 const bgGlow = document.getElementById("bg-glow");
@@ -47,15 +44,6 @@ function loop() {
 }
 loop();
 
-// ═══════════════════════════════════════════
-//  MOBILE-AWARE SCROLL TARGET
-//  Desktop (>768px): #page-clip / #page-scroll is the cinema-frame
-//  scroll container (position:fixed, overflow:scroll).
-//  Mobile (<=768px): CSS switches #page-scroll to position:static /
-//  overflow:visible, so the real scrolling element becomes the
-//  window/document instead. We detect that and read/scroll the
-//  right target without touching desktop behavior at all.
-// ═══════════════════════════════════════════
 const scrollerEl = document.getElementById("page-scroll");
 const isMobileLayout = () => window.matchMedia("(max-width: 768px)").matches;
 
@@ -77,27 +65,15 @@ function scrollToTarget(top) {
   }
 }
 function getOffsetTopFor(el) {
-  // offsetTop is relative to the nearest positioned ancestor; on mobile
-  // #page-scroll is position:static so offsetTop already resolves
-  // correctly against the document. On desktop it resolves against
-  // #page-scroll itself, which is what we want too.
   return el.offsetTop;
 }
 
-// ═══════════════════════════════════════════
-//  SCROLL OBSERVER, ANIMATIONS, PROGRESS
-// ═══════════════════════════════════════════
 const bar = document.getElementById("bar");
 const nav = document.getElementById("nav");
 const frameLabel = document.querySelector(".cinema-label-top");
 const sections = document.querySelectorAll(".slide");
 const links = document.querySelectorAll(".nav-list a");
 
-// Reveal animations (.r) re-trigger every time they enter/leave the
-// viewport — fixes the "animations only play once, gone after
-// scrolling back up" issue. Slide-level bookkeeping (frame counter,
-// active nav link, stat counters, skill bars) still only needs to
-// fire forward, so it keeps its own one-shot guards via classList.
 const io = new IntersectionObserver(
   (entries) => {
     entries.forEach((e) => {
@@ -179,12 +155,6 @@ function closeDrawer() {
   drawer.classList.remove("show");
 }
 
-// Anchor smooth scroll override (also closes the mobile drawer, if open,
-// from the SAME handler — avoids a race between the inline onclick="closeDrawer()"
-// firing independently from this addEventListener click, which on some mobile
-// browsers caused the drawer to collapse and reflow the document height
-// before the scroll target offset was computed, making scrollToTarget land
-// on a stale/wrong position and look like "nothing happened".
 document.querySelectorAll('a[href^="#"]').forEach((a) => {
   a.addEventListener("click", (e) => {
     const id = a.getAttribute("href").slice(1);
@@ -198,9 +168,6 @@ document.querySelectorAll('a[href^="#"]').forEach((a) => {
   });
 });
 
-// ═══════════════════════════════════════════
-//  INTERACTIVE ELEMENTS (Magnetic, Drawer, Lightbox, Filters)
-// ═══════════════════════════════════════════
 document.querySelectorAll(".magnetic").forEach((btn) => {
   btn.addEventListener("mousemove", (e) => {
     const rect = btn.getBoundingClientRect();
@@ -240,9 +207,6 @@ document.querySelectorAll(".flt").forEach((btn) => {
   });
 });
 
-// ═══════════════════════════════════════════
-//  CAROUSEL
-// ═══════════════════════════════════════════
 const cars = {};
 function initCar(id) {
   const el = document.getElementById(id);
@@ -383,3 +347,157 @@ const skillsObserver = new IntersectionObserver((entries) => {
 
 // Observe setiap card
 document.querySelectorAll('.sk-card').forEach(card => skillsObserver.observe(card));
+
+// Chatbot Logic
+const chatFab = document.getElementById('chatFab');
+const chatWindow = document.getElementById('chatWindow');
+const closeChat = document.getElementById('closeChat');
+const chatBody = document.getElementById('chatBody');
+const chatOptions = document.querySelectorAll('.chat-opt');
+
+const botAnswers = {
+  stack: "Gwa biasa pake MERN/MEVN stack, tapi belakangan sering megang Laravel, Next.js, sama Python buat automation. Cek section Skills ya!",
+  avail: "Saat ini gwa lagi ga available sih buat full-time role, tapi gwa bisa considering kalo ada part-time project based! Mau ngobrol lebih lanjut? Langsung WA aja di section Contact.",
+  typing: "Hobi aja sih dari dulu main 10fastfingers & Monkeytype jaman kuliah hahaha. Lumayan ngebantu ngetik code cepet tanpa mikirin keyboard."
+};
+
+chatFab.addEventListener('click', () => chatWindow.classList.add('open'));
+closeChat.addEventListener('click', () => chatWindow.classList.remove('open'));
+
+chatOptions.forEach(btn => {
+  btn.addEventListener('click', () => {
+    // Hide options after one is clicked (optional, biar kayak flow natural)
+    const qKey = btn.dataset.q;
+    const qText = btn.textContent;
+    
+    // Add User Message
+    chatBody.innerHTML += `<div class="chat-msg user">${qText}</div>`;
+    chatBody.scrollTop = chatBody.scrollHeight;
+    
+    // Disable buttons temporarily
+    document.getElementById('chatOptions').style.opacity = '0.5';
+    document.getElementById('chatOptions').style.pointerEvents = 'none';
+
+    // Simulate thinking delay
+    setTimeout(() => {
+      chatBody.innerHTML += `<div class="chat-msg bot">${botAnswers[qKey]}</div>`;
+      chatBody.scrollTop = chatBody.scrollHeight;
+      
+      // Re-enable options
+      document.getElementById('chatOptions').style.opacity = '1';
+      document.getElementById('chatOptions').style.pointerEvents = 'auto';
+    }, 800);
+  });
+});
+
+// --- BEAT WPM MODAL LOGIC ---
+const wpmModal = document.getElementById('wpmModal');
+const wpmTrigger = document.getElementById('wpmTrigger');
+const wpmClose = document.getElementById('wpmClose');
+
+const typTarget = document.getElementById('typTarget');
+const typInput = document.getElementById('typInput');
+const typWPM = document.getElementById('typWPM');
+const typAcc = document.getElementById('typAcc');
+const typTimer = document.getElementById('typTimer');
+const typReset = document.getElementById('typReset');
+
+const originalText = typTarget.innerText;
+let startTime = null;
+let typingInterval = null;
+
+// Buka Tutup Modal
+if(wpmTrigger) {
+  wpmTrigger.addEventListener('click', () => {
+    wpmModal.classList.add('open');
+    typInput.focus(); // Langsung auto focus ke input
+  });
+}
+wpmClose.addEventListener('click', () => wpmModal.classList.remove('open'));
+
+// Tutup modal kalo klik area luar box
+wpmModal.addEventListener('click', (e) => {
+  if (e.target === wpmModal) wpmModal.classList.remove('open');
+});
+
+function calculateStats() {
+  const typedText = typInput.value;
+  const timeElapsed = (Date.now() - startTime) / 1000 / 60; // dalam menit
+  
+  // WPM (1 kata = 5 karakter)
+  const wordsTyped = typedText.length / 5;
+  const wpm = Math.round(wordsTyped / timeElapsed) || 0;
+  
+  // Akurasi
+  let correctChars = 0;
+  for (let i = 0; i < typedText.length; i++) {
+    if (typedText[i] === originalText[i]) correctChars++;
+  }
+  const accuracy = Math.round((correctChars / Math.max(typedText.length, 1)) * 100);
+
+  typWPM.innerText = wpm;
+  typAcc.innerText = accuracy + '%';
+  
+  // Kalau selesai ngetik semuanya
+  if (typedText === originalText) {
+    clearInterval(typingInterval);
+    typInput.disabled = true;
+    typInput.style.borderColor = 'var(--green)';
+    
+    // Efek gold kalo berhasil ngalahin stat lu
+    if(wpm > 95) {
+      typWPM.style.color = 'var(--green)';
+      typWPM.innerText += ' 🔥 (You Win!)';
+    }
+  }
+}
+
+typInput.addEventListener('input', () => {
+  if (!startTime && typInput.value.length > 0) {
+    startTime = Date.now();
+    typingInterval = setInterval(() => {
+      const s = Math.floor((Date.now() - startTime) / 1000);
+      typTimer.innerText = s + 's';
+    }, 1000);
+  }
+  calculateStats();
+});
+
+typReset.addEventListener('click', () => {
+  clearInterval(typingInterval);
+  startTime = null;
+  typInput.value = '';
+  typInput.disabled = false;
+  typInput.style.borderColor = 'var(--line2)';
+  typWPM.innerText = '0';
+  typWPM.style.color = 'var(--gold)';
+  typAcc.innerText = '100%';
+  typTimer.innerText = '0s';
+  typInput.focus();
+});
+
+// --- EXPERIENCE / CODING STATS MODAL LOGIC ---
+const expModal = document.getElementById('expModal');
+const expTrigger = document.getElementById('expTrigger');
+const expClose = document.getElementById('expClose');
+
+// Buka Modal
+if (expTrigger) {
+  expTrigger.addEventListener('click', () => {
+    expModal.classList.add('open');
+  });
+}
+
+// Tutup Modal dari tombol X
+if (expClose) {
+  expClose.addEventListener('click', () => {
+    expModal.classList.remove('open');
+  });
+}
+
+// Tutup Modal kalo klik area luar box (background gelap)
+if (expModal) {
+  expModal.addEventListener('click', (e) => {
+    if (e.target === expModal) expModal.classList.remove('open');
+  });
+}
