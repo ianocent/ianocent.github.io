@@ -356,9 +356,16 @@ const chatBody = document.getElementById('chatBody');
 const chatOptions = document.querySelectorAll('.chat-opt');
 
 const botAnswers = {
-  stack: "Gwa biasa pake MERN/MEVN stack, tapi belakangan sering megang Laravel, Next.js, sama Python buat automation. Cek section Skills ya!",
-  avail: "Saat ini gwa lagi ga available sih buat full-time role, tapi gwa bisa considering kalo ada part-time project based! Mau ngobrol lebih lanjut? Langsung WA aja di section Contact.",
-  typing: "Hobi aja sih dari dulu main 10fastfingers & Monkeytype jaman kuliah hahaha. Lumayan ngebantu ngetik code cepet tanpa mikirin keyboard."
+  stack:
+    "Gwa biasa pake MERN/MEVN stack, tapi belakangan sering megang Laravel, Next.js, sama Python buat automation. Cek section Skills ya!",
+  avail:
+    "Saat ini gwa lagi ga available sih buat full-time role, tapi gwa bisa considering kalo ada part-time project based! Mau ngobrol lebih lanjut? Langsung WA aja di section Contact.",
+  typing:
+    "Hobi aja sih dari dulu main 10fastfingers & Monkeytype jaman kuliah hahaha. Lumayan ngebantu ngetik code cepet tanpa mikirin keyboard.",
+  wpm_game:
+    "Mau adu cepet ngetik? Klik tombol 'Beat My WPM!' di section Home ya, nanti bakal muncul modal game-nya!",
+  coding_stats:
+    "Penasaran sama jam terbang gwa? Klik icon bar chart di box 'Years Experience' di section Home buat liat statistik GitHub & WakaTime gwa.",
 };
 
 chatFab.addEventListener('click', () => chatWindow.classList.add('open'));
