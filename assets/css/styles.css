@@ -89,7 +89,6 @@
       background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
       pointer-events: none; z-index: 9999;
     }
-
     /* ── SLIDE LAYOUT (100VH TIAP SECTION) ── */
     .slide {
       position: relative; z-index: 2;
@@ -103,8 +102,8 @@
     .wrap { width: 100%; max-width: 1140px; margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 2rem); }
 
     /* ── CURSOR ── */
-    .cursor { position: fixed; width: 8px; height: 8px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 9997; transform: translate(-50%, -50%); transition: width .2s, height .2s, background .2s, opacity .2s; mix-blend-mode: difference; }
-    .cursor-ring { position: fixed; width: 32px; height: 32px; border: 1px solid rgba(201,169,110,0.5); border-radius: 50%; pointer-events: none; z-index: 9996; transform: translate(-50%, -50%); transition: width .35s ease, height .35s ease, border-color .2s; }
+    .cursor { top: 0; left: 0; position: fixed; width: 8px; height: 8px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 10001; transform: translate(-50%, -50%); transition: width .2s, height .2s, background .2s, opacity .2s; mix-blend-mode: difference; }
+    .cursor-ring { top: 0; left: 0; position: fixed; width: 32px; height: 32px; border: 1px solid rgba(201,169,110,0.5); border-radius: 50%; pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); transition: width .35s ease, height .35s ease, border-color .2s; }
     .cursor.hover { width: 14px; height: 14px; background: var(--gold2); }
     .cursor-ring.hover { width: 52px; height: 52px; border-color: rgba(201,169,110,0.3); }
     @media (hover: none) { .cursor, .cursor-ring { display: none; } }
@@ -174,6 +173,35 @@
     .animate-effect {
       animation: zoomRotate 0.4s ease-in-out;
     }
+     .wpm-modal { position: fixed; inset: 0; z-index: 9999; background: rgba(10, 11, 18, 0.85); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: all 0.3s ease; }
+    .wpm-modal.open { opacity: 1; pointer-events: auto; }
+
+    .wpm-content { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 2rem; width: 90%; max-width: 550px; position: relative; transform: translateY(30px); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 24px 64px rgba(0,0,0,0.6); }
+    .wpm-modal.open .wpm-content { transform: translateY(0); }
+
+    .wpm-close { position: absolute; top: 15px; right: 15px; background: var(--surface2); border: 1px solid var(--line2); color: var(--text2); font-size: 1.2rem; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+    .wpm-close:hover { border-color: var(--gold); color: var(--gold); transform: rotate(90deg); }
+
+    #typInput:focus { border-color: var(--gold) !important; background: rgba(0,0,0,0.5); }
+
+    /* ── CHATBOT WIDGET ── */
+    .chat-fab { position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; border-radius: 50%; background: var(--gold); color: #08090d; border: none; font-size: 1.5rem; cursor: pointer; z-index: 9991; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(201,169,110,0.3); transition: transform 0.2s; }
+    .chat-fab:hover { transform: scale(1.1); }
+
+    .chat-window { position: fixed; bottom: 90px; right: 30px; width: 320px; max-height: 400px; background: var(--surface2); border: 1px solid var(--line); border-radius: 12px; z-index: 9991; display: flex; flex-direction: column; overflow: hidden; transform: translateY(20px); opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 12px 24px rgba(0,0,0,0.5); backdrop-filter: blur(12px); }
+    .chat-window.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
+
+    .chat-header { background: rgba(0,0,0,0.3); padding: 12px 16px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; font-weight: 600; color: var(--gold); }
+    .chat-header button { background: none; border: none; color: var(--text2); cursor: pointer; font-size: 1.2rem; }
+
+    .chat-body { flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; font-size: 0.8rem; scrollbar-width: none; -ms-overflow-style: none;  }
+    .chat-msg { max-width: 85%; padding: 8px 12px; border-radius: 8px; line-height: 1.4; }
+    .chat-msg.bot { background: var(--surface); border: 1px solid var(--line2); color: var(--text); align-self: flex-start; border-bottom-left-radius: 0; }
+    .chat-msg.user { background: var(--gold-dim); border: 1px solid rgba(201,169,110,0.3); color: var(--gold); align-self: flex-end; border-bottom-right-radius: 0; }
+
+    .chat-options { padding: 12px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px; background: rgba(0,0,0,0.2); }
+    .chat-opt { background: var(--surface); border: 1px solid var(--line2); color: var(--text2); padding: 6px 10px; border-radius: 6px; text-align: left; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; }
+    .chat-opt:hover { border-color: var(--gold); color: var(--gold); }
 
     @keyframes zoomRotate {
       0% { transform: scale(1) rotate(0deg); }
@@ -207,10 +235,15 @@
     /* ── SECTION 3: SKILLS ── */
     /* Badge standar */
     .badge {
-      transition: all 0.3s ease;
+      /* transition: all 0.3s ease; */
+      transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
       background: var(--gold-dim);
       color: var(--gold);
       border: 1px solid rgba(201,169,110,.15);
+
+      will-change: transform, box-shadow;
+      transform: translateZ(0); 
+      backface-visibility: hidden;
     }
 
     /* State Highlight (saat menyala) */
@@ -219,6 +252,9 @@
       color: #08090d;
       box-shadow: 0 0 12px var(--gold);
       transform: scale(1.05);
+      border-color: var(--gold);
+
+      transform: scale(1.05) translateZ(0); 
       border-color: var(--gold);
     }
     .sk-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
@@ -440,3 +476,54 @@
       .dash-grid { grid-template-columns: 1fr; }
       .h2 { font-size: clamp(1.5rem, 7vw, 1.9rem); }
     }
+
+    /* ── LAYOUT STATS WAKATIME & GITHUB ── */
+.stats-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.stats-left {
+  flex: 1.4;
+  min-width: 320px;
+}
+
+.stats-right {
+  flex: 1;
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ── PERBAIKAN KHUSUS LAYAR HP (MOBILE) ── */
+@media (max-width: 768px) {
+  /* Kurangin padding modal & kasih efek scroll biar ga kepotong */
+  .wpm-modal .wpm-content {
+    padding: 1.2rem;
+    width: 92%;
+    max-height: 85vh; /* Bikin modalnya bisa di-scroll dalemnya */
+    overflow-y: auto;
+    scrollbar-width: none; -ms-overflow-style: none;
+  }
+  #wpm-modal::-webkit-scrollbar {display: none; }
+  html, body { cursor: none; overflow: visible; height: auto; scroll-behavior: smooth; }
+  html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; height: 0; }
+  html { scrollbar-width: none; -ms-overflow-style: none; }
+  body { scrollbar-width: none; -ms-overflow-style: none; }
+  
+  /* Bikin gambarnya numpuk lurus ke bawah (100% width) */
+  .stats-left, 
+  .stats-right {
+    min-width: 100%;
+    flex: 1 1 100%;
+  }
+
+  /* Kecilin dikit text intro di HP */
+  #expModal p {
+    font-size: 0.75rem !important;
+    margin-bottom: 1rem !important;
+  }
+}
