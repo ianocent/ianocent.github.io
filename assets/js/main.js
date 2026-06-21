@@ -165,14 +165,35 @@ scrollerEl.addEventListener("scroll", handleScroll, { passive: true });
 window.addEventListener("scroll", handleScroll, { passive: true });
 window.addEventListener("resize", handleScroll, { passive: true });
 
-// Anchor smooth scroll override
+// Drawer (mobile hamburger menu) — defined before the anchor click handler
+// below so closeDrawer() is unambiguously available when links are clicked.
+const hbg = document.getElementById("hbg");
+const drawer = document.getElementById("drawer");
+let openDrawerState = false;
+hbg.addEventListener("click", () => {
+  openDrawerState = !openDrawerState;
+  drawer.classList.toggle("show", openDrawerState);
+});
+function closeDrawer() {
+  openDrawerState = false;
+  drawer.classList.remove("show");
+}
+
+// Anchor smooth scroll override (also closes the mobile drawer, if open,
+// from the SAME handler — avoids a race between the inline onclick="closeDrawer()"
+// firing independently from this addEventListener click, which on some mobile
+// browsers caused the drawer to collapse and reflow the document height
+// before the scroll target offset was computed, making scrollToTarget land
+// on a stale/wrong position and look like "nothing happened".
 document.querySelectorAll('a[href^="#"]').forEach((a) => {
   a.addEventListener("click", (e) => {
     const id = a.getAttribute("href").slice(1);
     const target = document.getElementById(id);
     if (target) {
       e.preventDefault();
-      scrollToTarget(getOffsetTopFor(target));
+      const offset = getOffsetTopFor(target);
+      scrollToTarget(offset);
+      if (typeof closeDrawer === "function") closeDrawer();
     }
   });
 });
@@ -189,18 +210,6 @@ document.querySelectorAll(".magnetic").forEach((btn) => {
   });
   btn.addEventListener("mouseleave", () => (btn.style.transform = ""));
 });
-
-const hbg = document.getElementById("hbg");
-const drawer = document.getElementById("drawer");
-let openDrawerState = false;
-hbg.addEventListener("click", () => {
-  openDrawerState = !openDrawerState;
-  drawer.classList.toggle("show", openDrawerState);
-});
-function closeDrawer() {
-  openDrawerState = false;
-  drawer.classList.remove("show");
-}
 
 function openLb(src) {
   const lb = document.createElement("div");
@@ -270,20 +279,21 @@ document.querySelectorAll("img:not(.avatar-img)").forEach((img) => {
   );
 });
 
-const GSCRIPT = 'https://script.google.com/macros/s/AKfycbwoxraERRIDFq-YBg5NBQ1d_HjJc6u0UQI4OXhnUnonlspaFF8eRGKVirU3KpCdubBY/exec';
-document.getElementById('cf').addEventListener('submit', e => {
+const GSCRIPT =
+  "https://script.google.com/macros/s/AKfycbwoxraERRIDFq-YBg5NBQ1d_HjJc6u0UQI4OXhnUnonlspaFF8eRGKVirU3KpCdubBY/exec";
+document.getElementById("cf").addEventListener("submit", (e) => {
   e.preventDefault();
-  const btn = document.getElementById('sbtn');
+  const btn = document.getElementById("sbtn");
   btn.disabled = true;
   btn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Sending…';
-  fetch(GSCRIPT, { method:'POST', body: new FormData(e.target) })
+  fetch(GSCRIPT, { method: "POST", body: new FormData(e.target) })
     .then(() => {
-      const ok = document.getElementById('form-ok');
-      ok.style.display = 'block';
+      const ok = document.getElementById("form-ok");
+      ok.style.display = "block";
       e.target.reset();
       btn.disabled = false;
       btn.innerHTML = '<i class="bx bx-send"></i> Send Message';
-      setTimeout(() => ok.style.display = 'none', 6000);
+      setTimeout(() => (ok.style.display = "none"), 6000);
     })
     .catch(() => {
       btn.disabled = false;
@@ -312,3 +322,64 @@ photo.addEventListener("mouseover", () => {
 photo.addEventListener("mouseout", () => {
   updateImageWithEffect("assets/img/hehe.png");
 });
+// 1. Fungsi untuk Counter Angka (0% -> target%)
+function animateCounter(el, target) {
+  let current = 0;
+  const duration = 1500; // durasi dalam ms
+  const step = target / (duration / 20); // 20ms per update
+
+  const timer = setInterval(() => {
+    current += step;
+    if (current >= target) {
+      el.textContent = Math.floor(target) + "%";
+      clearInterval(timer);
+    } else {
+      el.textContent = Math.floor(current) + "%";
+    }
+  }, 20);
+}
+
+// 2. Fungsi Utama Animasi
+function runSkillAnimations(card) {
+  const bar = card.querySelector(".sk-bar-fill");
+  const label = card.querySelector(".sk-bar-label span:last-child");
+  const targetVal = parseFloat(bar.dataset.w) * 100;
+  
+  // Reset awal
+  bar.style.transform = `scaleX(0)`;
+  label.textContent = "0%";
+  
+  // Trigger Animasi (sedikit delay agar smooth)
+  setTimeout(() => {
+    bar.style.transform = `scaleX(${bar.dataset.w})`;
+    animateCounter(label, targetVal);
+  }, 200);
+
+  // Milestone Badge Highlight (Looping per item)
+  const items = card.querySelectorAll('.sk-row');
+  items.forEach((item, index) => {
+    const badge = item.querySelector('.badge');
+    const delay = 300 + (index * 150);
+    setTimeout(() => {
+      badge.classList.add('highlight');
+      setTimeout(() => badge.classList.remove('highlight'), 500);
+    }, delay);
+  });
+}
+
+// 3. Observer yang Re-trigger
+const skillsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      // Panggil animasi untuk setiap card yang terlihat
+      runSkillAnimations(entry.target);
+    } else {
+      // Opsional: Reset saat keluar layar supaya saat scroll balik ke atas, dia play lagi
+      const bar = entry.target.querySelector(".sk-bar-fill");
+      bar.style.transform = `scaleX(0)`;
+    }
+  });
+}, { threshold: 0.2 });
+
+// Observe setiap card
+document.querySelectorAll('.sk-card').forEach(card => skillsObserver.observe(card));
