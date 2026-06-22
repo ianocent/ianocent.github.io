@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/img/Picsart_26-06-21_21-17-54-132.jpg.jpg" alt="Dwi Rianto - Hero Section" width="100%">
+  <img src="assets/img/Picsart_26-06-21_21-17-54-132.jpg.jpeg" alt="Dwi Rianto - Hero Section" width="100%">
 
   <h1>Hi there, I'm Dwi Rianto 👋</h1>
   <h3>Fullstack Developer | DevOps CI/CD | QA Manual & Automation | Database Admin</h3>
@@ -13,7 +13,7 @@
 I am a graduate of **Multimedia Nusantara University** with a strong enthusiasm for learning and embracing new challenges. I bring approximately **three years of experience** in the field of Full Stack Development, including hands-on experience gained during my academic years.
 
 <div align="center">
-  <img src="assets/img/Screenshot 2026-06-21 150150(1)(1).jpg" alt="About Me Details" width="100%">
+  <img src="assets/img/Screenshot 2026-06-21 150150(1)(1).png" alt="About Me Details" width="100%">
 </div>
 
 <br>
@@ -26,13 +26,13 @@ I am a graduate of **Multimedia Nusantara University** with a strong enthusiasm 
 ## 🛠️ Technical Skills
 
 <div align="center">
-  <img src="assets/img/screenshot-1782050564407(1).jpg" alt="Technical Skills" width="100%">
+  <img src="assets/img/screenshot-1782050564407(1).png" alt="Technical Skills" width="100%">
 </div>
 
 ## 📊 Live Coding Stats
 
 <div align="center">
-  <img src="assets/img/screenshot-1782050534438.jpg" alt="Live Coding Stats" width="100%">
+  <img src="assets/img/screenshot-1782050534438.png" alt="Live Coding Stats" width="100%">
 </div>
 
 ---
