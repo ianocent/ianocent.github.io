@@ -244,7 +244,7 @@ document.querySelectorAll("img:not(.avatar-img)").forEach((img) => {
 });
 
 const GSCRIPT =
-  "https://script.google.com/macros/s/AKfycbzFvWxvNA5lJjA0Kdb9fRWK_Gu12Kw-E-BRHkwIGQFu37tAjIDpi-exZGhcbnHYFfUU/exec";
+  "https://script.google.com/macros/s/AKfycbyxAr6nhGRuRwu_fqCLJeFL5SZ_tbuuhOvEwjtqPBu2RDBFD9k7McEmJG1BE3eVAYXf/exec";
 document.getElementById("cf").addEventListener("submit", (e) => {
   e.preventDefault();
   const btn = document.getElementById("sbtn");
