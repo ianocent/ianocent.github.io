@@ -645,7 +645,7 @@
     scrollbar-width: none; -ms-overflow-style: none;
   }
 .wpm-trophy {
-    left: 55px;
+    right: 55px;
 }
   #wpm-modal::-webkit-scrollbar {display: none; }
   html, body { cursor: none; overflow: visible; height: auto; scroll-behavior: smooth; }
