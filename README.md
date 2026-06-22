@@ -1,7 +1,7 @@
 <div align="center">
-  <img src="assets/img/Picsart_26-06-21_21-17-54-132.jpg.jpeg" alt="Dwi Rianto - Hero Section" width="100%">
+  <img src="assets/img/Picsart_26-06-21_21-17-54-132.jpg.jpeg" alt="ıanocent - Hero Section" width="100%">
 
-  <h1>Hi there, I'm Dwi Rianto 👋</h1>
+  <h1>Hi there, I'm ıanocent 👋</h1>
   <h3>Fullstack Developer | DevOps CI/CD | QA Manual & Automation | Database Admin</h3>
   <p><i>Graduated from Multimedia Nusantara University | ~3 Years of Experience</i></p>
 </div>
