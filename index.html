@@ -384,7 +384,7 @@
                 <a href="https://www.figma.com/design/kE9Ai8J4iRnk3ULr1H0mZr/Kompas?m=auto&t=6FWbkeBqbJw2KIbc-6" class="w-link" target="_blank" rel="noopener">View in Figma <i class="bx bx-right-arrow-alt"></i></a>
               </div>
             </div>
-          <!-- 5 -->
+          <!-- 3 -->
             <div class="w-card r" data-cat="design" style="transition-delay:.2s">
               <img src="assets/img/whatsapp.png" alt="WA" class="w-thumb" loading="lazy">
               <div class="w-body">
@@ -500,23 +500,34 @@
 
   <div class="wpm-modal" id="wpmModal">
     <div class="wpm-content">
+      <i class='bx bx-trophy' id="wpmLeaderboardBtn" style="border-radius: 100px; border: 2px solid var(--line2); color: var(--text3); position: absolute; top: 25px; font-size: 1.4rem; color: var(--gold); cursor: pointer; transition: transform 0.2s;" title="View Leaderboard!" ></i>
       <button class="wpm-close" id="wpmClose"><i class="bx bx-x"></i></button>
-      
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; margin-top: 1.5rem;">
         <h3 style="color: var(--text); font-size: 1.2rem; font-weight: 600;"><i class="bx bxs-keyboard" style="color: var(--gold);"></i> Beat My WPM!</h3>
         <div style="font-size: 0.9rem; color: var(--gold); font-family: var(--serif); font-style: italic;" id="typTimer">0s</div>
       </div>
-      
       <p id="typTarget" style="color: var(--text2); font-size: 0.85rem; margin-bottom: 1rem; user-select: none; line-height: 1.6;">Gwa nulis kode secepat kilat. Coba ketik kalimat ini dan buktikan kecepatan tangan lu. Semakin cepat lu ngetik, semakin besar peluang lu buat ngalahin rekor gwa.</p>
-      
       <textarea id="typInput" placeholder="Mulai ngetik di sini buat jalanin timer..." rows="3" style="width: 100%; background: var(--surface2); border: 1px solid var(--line2); color: var(--text); padding: 1rem; border-radius: 8px; font-family: var(--sans); resize: none; margin-bottom: 1rem; outline: none; transition: border-color 0.2s;"></textarea>
-      
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <div style="display: flex; gap: 1.5rem; font-size: 0.9rem;">
           <span style="color: var(--text2);">WPM: <b id="typWPM" style="color: var(--gold); font-size: 1.2rem;">0</b></span>
           <span style="color: var(--text2);">Accuracy: <b id="typAcc" style="color: var(--gold); font-size: 1.2rem;">100%</b></span>
         </div>
         <button id="typReset" class="btn btn-o" style="padding: 0.4rem 1rem; font-size: 0.8rem;">Reset</button>
+      </div>
+    </div>
+    <div id="wpmNameModal" class="wpm-modal" style="display: none; z-index: 10001;">
+      <div class="wpm-content" style="max-width: 400px; text-align: center;">
+        <h3 style="color: var(--gold); margin-bottom: 1rem;">Save Your Score!</h3>
+        <p style="font-size: 0.9rem; color: #9ea1ad; margin-bottom: 1.5rem;">Ketikan lu valid! Masukin nama lu buat disimpen ke Leaderboard.</p>
+        
+        <input type="text" id="wpmPlayerName" placeholder="Ketik nama lu di sini..." 
+              style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid var(--line2); border-radius: 8px; color: #fff; text-align: center; margin-bottom: 1.5rem; outline: none; font-family: 'Geist', sans-serif;">
+        
+        <div style="display: flex; gap: 1rem; justify-content: center;">
+          <button id="btnCancelName" class="chipWpm btn-cancel-name">Cancel</button>
+          <button id="btnSubmitName" class="chipWpm btn-submit-name">Submit Score</button>
+        </div>
       </div>
     </div>
   </div>
@@ -552,10 +563,32 @@
           
           <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=ianocent&layout=compact&theme=tokyonight&hide_border=true&bg_color=24242d&title_color=c9a96e&text_color=9ea1ad" alt="Top Languages" loading="lazy" style="border-radius: 8px; border: 1px solid var(--line); width: 100%; height: auto; display: block;">
         </div>
-
       </div>
     </div>
   </div>
+  <div id="wpmLeaderboardModal" class="wpm-modal" style="display: none; z-index: 9999;">
+  <div class="wpm-content" style="max-width: 450px; text-align: center; position: relative;">
+    <i class='bx bx-x' id="closeLeaderboardBtn" style="position: absolute; right: 20px; top: 20px; font-size: 1.5rem; color: #9ea1ad; cursor: pointer;"></i>
+    
+    <h3 style="color: var(--gold); margin-bottom: 0.5rem;">🏆 Top 5 Speed Typers</h3>
+    <p style="font-size: 0.85rem; color: #9ea1ad; margin-bottom: 1.5rem;">Skor tertinggi live dari Leaderboard</p>
+    
+    <div id="leaderboardLoading" style="color: var(--gold); padding: 1rem 0;">⏳ Loading data...</div>
+    
+    <table id="leaderboardTable" style="width: 100%; border-collapse: collapse; display: none; margin-bottom: 1rem; font-size: 0.95rem;">
+      <thead>
+        <tr style="border-bottom: 1px solid var(--line2); color: var(--gold); text-align: left;">
+          <th style="padding: 0.5rem;">Rank</th>
+          <th style="padding: 0.5rem;">Nama</th>
+          <th style="padding: 0.5rem; text-align: center;">WPM</th>
+          <th style="padding: 0.5rem; text-align: center;">Acc</th>
+        </tr>
+      </thead>
+      <tbody id="leaderboardRows" style="text-align: left; color: #fff;">
+        </tbody>
+    </table>
+  </div>
+</div>
   <script src="assets/js/main.js" defer></script>
 </body>
 </html>
