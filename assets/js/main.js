@@ -243,8 +243,7 @@ document.querySelectorAll("img:not(.avatar-img)").forEach((img) => {
   );
 });
 
-const GSCRIPT =
-  "https://script.google.com/macros/s/AKfycbyUXi-t_xc3PixH3MU5BnWiKNa6PTMf9qLIZNnJw-WK8qlkHfgONIYKH6QCUICl7c2B/exec";
+const GSCRIPT = "https://script.google.com/macros/s/AKfycbwqlWxKHPvxlygeuLzKOnxOzI5RceqZS0RUL4C-yIUCD3RT_wOloRJqR_fx6_dBg-4V/exec";
 document.getElementById("cf").addEventListener("submit", (e) => {
   e.preventDefault();
   const btn = document.getElementById("sbtn");
@@ -347,173 +346,288 @@ const skillsObserver = new IntersectionObserver((entries) => {
 
 // Observe setiap card
 document.querySelectorAll('.sk-card').forEach(card => skillsObserver.observe(card));
-// --- CHATBOT WIDGET LOGIC (VERSI BERSIH) ---
-const chatFab = document.getElementById('chatFab');
-const chatWindow = document.getElementById('chatWindow');
-const closeChat = document.getElementById('closeChat');
-const chatBody = document.getElementById('chatBody');
-const chatOptions = document.querySelectorAll('.chat-opt');
-const chatInput = document.getElementById('chatInput');
-const sendChatBtn = document.getElementById('sendChatBtn');
 
-let chatPollingInterval;
-let currentChatLength = 0;
-
-// Setup Session ID
-let sessionId = localStorage.getItem('ianoBotSession');
-if (!sessionId) {
-  sessionId = 'session_' + Math.random().toString(36).substr(2, 9);
-  localStorage.setItem('ianoBotSession', sessionId);
+// ── State terpusat ────────────────────────────────────────────
+const ChatState = {
+  sessionId: null,
+  // Array of { sender, message } yang sudah dirender di DOM
+  rendered: [],
+  // Jumlah baris yang udah kita kirim ke server (pending write)
+  pendingServerRows: 0,
+  // Lock: true saat sedang animasi typing atau transisi
+  animating: false,
+  pollingTimer: null,
+};
+ 
+// ── Init session ──────────────────────────────────────────────
+function initSession() {
+  let id = localStorage.getItem("ianoBotSession");
+  if (!id) {
+    id = "session_" + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem("ianoBotSession", id);
+  }
+  ChatState.sessionId = id;
 }
-let isTyping = false; // Mencegah bentrok pas animasi jalan
-let isSaving = false; // Mencegah pesan kedap-kedip pas lagi dikirim
-let lastHistoryLength = 0; // Buat nge-track panjang pesan
-
-// Fungsi buat ngegambar isi chat ke layar
-function renderChat(historyArray) {
-  let chatContent =
-    '<div class="chat-msg bot">Halo! Gwa asisten virtualnya rıan. Mau tanya apa nih?</div>';
-
-  historyArray.forEach((chat) => {
-    // Cek biar ga ada bubble "kotak doang" gara-gara ada baris kosong di spreadsheet
-    if (chat.message && chat.message.toString().trim() !== "") {
-      chatContent += `<div class="chat-msg ${chat.sender}">${chat.message}</div>`;
-    }
-  });
-
-  chatBody.innerHTML = chatContent;
+ 
+// ── DOM refs ──────────────────────────────────────────────────
+const chatFab     = document.getElementById("chatFab");
+const chatWindow  = document.getElementById("chatWindow");
+const closeChat   = document.getElementById("closeChat");
+const chatBody    = document.getElementById("chatBody");
+const chatInput   = document.getElementById("chatInput");
+const sendChatBtn = document.getElementById("sendChatBtn");
+const chatOptions = document.querySelectorAll(".chat-opt");
+ 
+// ── Jawaban lokal untuk template buttons ──────────────────────
+const botAnswers = {
+  stack:        "Gwa biasa pake MERN/MEVN stack, tapi belakangan sering megang Laravel, Next.js, sama Python buat automation. Cek section Skills ya!",
+  avail:        "Saat ini gwa lagi ga available sih buat full-time role, tapi gwa bisa considering kalo ada part-time project based! Mau ngobrol lebih lanjut? Langsung WA aja di section Contact.",
+  typing:       "Hobi aja sih dari dulu main 10fastfingers & Monkeytype jaman kuliah hahaha. Lumayan ngebantu ngetik code cepet tanpa mikirin keyboard.",
+  wpm_game:     "Mau adu cepet ngetik? Klik tombol 'Beat My WPM!' di section Home ya, nanti bakal muncul modal game-nya!",
+  coding_stats: "Penasaran sama jam terbang gwa? Klik icon bar chart di box 'Years Experience' di section Home buat liat statistik GitHub & WakaTime gwa.",
+};
+ 
+// ── Render helpers ────────────────────────────────────────────
+function buildMsgEl(sender, text) {
+  const div = document.createElement("div");
+  div.className = `chat-msg ${sender}`;
+  div.textContent = text;
+  return div;
+}
+ 
+function buildTypingEl() {
+  const div = document.createElement("div");
+  div.className = "chat-msg bot";
+  div.id = "__typing__";
+  div.innerHTML = `
+    <div class="typing-indicator" style="padding:0 4px;margin:0;">
+      <span></span><span></span><span></span>
+    </div>`;
+  return div;
+}
+ 
+function scrollBottom() {
   chatBody.scrollTop = chatBody.scrollHeight;
 }
-
-// Logic ngecek & ngambil data dari spreadsheet
-async function loadChatHistory() {
-  // Kalo lagi ada animasi ngetik ATAU lagi proses nyimpen chat user, jangan narik data dulu!
-  if (isTyping || isSaving) return;
-
+ 
+// Tambah satu baris ke DOM + state, tanpa polling interference
+function appendMsg(sender, text) {
+  ChatState.rendered.push({ sender, message: text });
+  chatBody.appendChild(buildMsgEl(sender, text));
+  scrollBottom();
+}
+ 
+// Full re-render dari array (dipakai pas load awal)
+function renderAll(history) {
+  chatBody.innerHTML = '<div class="chat-msg bot">Halo! Gwa asisten virtualnya rıan. Mau tanya apa nih?</div>';
+  history.forEach(({ sender, message }) => {
+    if (message && message.toString().trim()) {
+      chatBody.appendChild(buildMsgEl(sender, message));
+    }
+  });
+  scrollBottom();
+}
+ 
+// ── Polling ───────────────────────────────────────────────────
+// Hash sederhana buat detect perubahan konten server
+function hashHistory(arr) {
+  return arr.map((r) => `${r.sender}|${r.message}`).join("||");
+}
+ 
+let lastServerHash = "";
+ 
+async function poll() {
+  // Jangan ganggu kalau lagi animasi
+  if (ChatState.animating) return;
+ 
+  let history;
   try {
-    const response = await fetch(
-      `${GSCRIPT}?action=getChat&sessionId=${sessionId}`,
+    const res = await fetch(
+      `${GSCRIPT}?action=getChat&sessionId=${ChatState.sessionId}&t=${Date.now()}`
     );
-    const history = await response.json();
-
-    // SKENARIO 1: ADA BALASAN BARU DARI LU (BOT/ADMIN)
-    if (history.length > lastHistoryLength && lastHistoryLength !== 0) {
-      const lastMsg = history[history.length - 1];
-
-      if (lastMsg.sender === "bot") {
-        isTyping = true;
-
-        // 1. Munculin chat sampe pesan sebelum balasan lu
-        renderChat(history.slice(0, history.length - 1));
-
-        // 2. Munculin bubble animasi seolah-olah lu lagi ngetik balesan
-        chatBody.innerHTML += `
-          <div class="chat-msg bot">
-            <div class="typing-indicator" style="padding: 0 4px; margin: 0;">
-              <span></span><span></span><span></span>
-            </div>
-          </div>
-        `;
-        chatBody.scrollTop = chatBody.scrollHeight;
-
-        // 3. Jeda 1.5 detik, hapus animasinya, terus ganti pake pesan asli lu
-        setTimeout(() => {
-          renderChat(history);
-          lastHistoryLength = history.length;
-          isTyping = false;
-        }, 1500);
-
-        return; // Setop di sini biar ga kerender dobel
+    history = await res.json();
+  } catch {
+    return; // network error, skip
+  }
+ 
+  const newHash = hashHistory(history);
+ 
+  // Kalau konten sama, skip
+  if (newHash === lastServerHash) return;
+ 
+  // Hitung berapa baris server yang "extra" di luar yang kita tunggu
+  // rendered.length = jumlah baris yang udah ada di layar
+  // pendingServerRows = jumlah baris yang kita kirim tapi server belum tentu confirm
+  const expectedMin = ChatState.rendered.length - ChatState.pendingServerRows;
+ 
+  if (history.length <= expectedMin) {
+    // Server belum up-to-date (data lebih sedikit dari ekspektasi), skip
+    return;
+  }
+ 
+  // Ada baris baru dari server yang belum ada di layar
+  // Cek apakah ada baris di luar yang udah kita render
+  if (history.length > ChatState.rendered.length) {
+    // Ambil baris-baris baru
+    const newRows = history.slice(ChatState.rendered.length);
+ 
+    for (const row of newRows) {
+      if (!row.message || !row.message.toString().trim()) continue;
+ 
+      // Kalau itu bot reply (kemungkinan dari spreadsheet manual)
+      if (row.sender === "bot") {
+        ChatState.animating = true;
+        chatBody.appendChild(buildTypingEl());
+        scrollBottom();
+ 
+        await new Promise((r) => setTimeout(r, 1200));
+ 
+        const tyEl = document.getElementById("__typing__");
+        if (tyEl) tyEl.remove();
+        appendMsg("bot", row.message);
+        ChatState.animating = false;
+      } else {
+        appendMsg(row.sender, row.message);
       }
     }
-
-    // SKENARIO 2: NORMAL (Ga ada pesan baru, atau pas baru buka chat)
-    renderChat(history);
-    lastHistoryLength = history.length;
-  } catch (error) {
-    console.error("Gagal load history:", error);
+ 
+    // Reset pending counter — server udah caught up
+    ChatState.pendingServerRows = 0;
+    lastServerHash = hashHistory(history);
+    return;
+  }
+ 
+  // Jumlah sama tapi hash beda → konten berubah (edit di spreadsheet)
+  // Re-render bersih
+  ChatState.rendered = history.filter((r) => r.message && r.message.toString().trim());
+  renderAll(ChatState.rendered);
+  ChatState.pendingServerRows = 0;
+  lastServerHash = newHash;
+}
+ 
+// ── Load awal saat chat dibuka ────────────────────────────────
+async function loadInitial() {
+  try {
+    const res = await fetch(
+      `${GSCRIPT}?action=getChat&sessionId=${ChatState.sessionId}&t=${Date.now()}`
+    );
+    const history = await res.json();
+    const valid = history.filter((r) => r.message && r.message.toString().trim());
+    ChatState.rendered = valid;
+    ChatState.pendingServerRows = 0;
+    lastServerHash = hashHistory(valid);
+    if (valid.length > 0) renderAll(valid);
+  } catch {
+    // Kalau gagal, biarkan greeting default tetap tampil
   }
 }
-
-// Logic pas user klik tombol Send
-function sendCustomMessage() {
+ 
+// ── Kirim pesan user (input manual) ──────────────────────────
+async function sendCustomMessage() {
   const text = chatInput.value.trim();
   if (!text) return;
-
   chatInput.value = "";
-
-  // 1. Munculin teksnya instan di layar user
-  chatBody.innerHTML += `<div class="chat-msg user">${text}</div>`;
-  chatBody.scrollTop = chatBody.scrollHeight;
-
-  // 2. Kunci layar (isSaving = true) biar data ga ketimpa pas polling jalan
-  isSaving = true;
-  lastHistoryLength++; // Update trackernya secara manual
-
-  // 3. Kirim ke Spreadsheet
+ 
+  // Render lokal SEGERA
+  appendMsg("user", text);
+  // Tandai 1 baris pending ke server
+  ChatState.pendingServerRows += 1;
+ 
+  // Kirim ke server (background)
   const fd = new FormData();
   fd.append("action", "chat");
-  fd.append("sessionId", sessionId);
+  fd.append("sessionId", ChatState.sessionId);
   fd.append("sender", "user");
   fd.append("message", text);
-
-  fetch(GSCRIPT, { method: "POST", body: fd })
-    .then(() => {
-      // 4. Kalo udah sukses nyimpen di spreadsheet, buka kunciannya
-      isSaving = false;
-      loadChatHistory();
-    })
-    .catch((err) => {
-      console.error(err);
-      isSaving = false;
-    });
+  fd.append("isTemplate", "false");
+ 
+  try {
+    await fetch(GSCRIPT, { method: "POST", body: fd });
+    // Server confirmed write, kurangi pending
+    ChatState.pendingServerRows = Math.max(0, ChatState.pendingServerRows - 1);
+  } catch {
+    ChatState.pendingServerRows = Math.max(0, ChatState.pendingServerRows - 1);
+  }
 }
-
-// Fungsi Save
-function saveChatToSheet(sender, messageText) {
-  const fd = new FormData();
-  fd.append('action', 'chat');
-  fd.append('sessionId', sessionId);
-  fd.append('sender', sender);
-  fd.append('message', messageText);
-  fetch(GSCRIPT, { method: "POST", body: fd }).catch(err => console.error(err));
-}
-
-// Event Buka Chat
-chatFab.addEventListener("click", () => {
-  chatWindow.classList.add("open");
-
-  loadChatHistory();
-
-  clearInterval(chatPollingInterval);
-
-  chatPollingInterval = setInterval(() => {
-    console.log("Mengecek chat baru...");
-    loadChatHistory();
-  }, 3000);
-
-  console.log("Polling chat dimulai.");
-});
-
-// Event Tutup Chat
-closeChat.addEventListener('click', () => {
-  chatWindow.classList.remove('open');
-  clearInterval(chatPollingInterval); // Penting: matiin polling!
-});
-
-sendChatBtn.addEventListener('click', sendCustomMessage);
-chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendCustomMessage(); });
-
-// Event Klik Opsi Template
-chatOptions.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const qText = btn.textContent;
-    chatBody.innerHTML += `<div class="chat-msg user">${qText}</div>`;
-    saveChatToSheet('user', qText);
-    currentChatLength++;
-    // (Bisa tambahin logic botAnswer di sini kalau mau)
+ 
+// ── Template button click ─────────────────────────────────────
+chatOptions.forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    const qText = btn.textContent.trim();
+    const qKey  = btn.dataset.q || "default";
+    const botReply = botAnswers[qKey] || "Gwa asisten virtualnya rıan. Mau ngobrol apa nih?";
+ 
+    // Disable tombol sementara
+    const optionsEl = document.getElementById("chatOptions");
+    optionsEl.style.opacity = "0.5";
+    optionsEl.style.pointerEvents = "none";
+ 
+    // 1. Render user message lokal SEGERA
+    appendMsg("user", qText);
+    ChatState.pendingServerRows += 1; // pending: user row
+ 
+    // 2. Kirim user message ke server (background, jangan tunggu)
+    const fdUser = new FormData();
+    fdUser.append("action", "chat");
+    fdUser.append("sessionId", ChatState.sessionId);
+    fdUser.append("sender", "user");
+    fdUser.append("message", qText);
+    fdUser.append("isTemplate", "true");
+    fetch(GSCRIPT, { method: "POST", body: fdUser })
+      .then(() => { ChatState.pendingServerRows = Math.max(0, ChatState.pendingServerRows - 1); })
+      .catch(() => { ChatState.pendingServerRows = Math.max(0, ChatState.pendingServerRows - 1); });
+ 
+    // 3. Typing animation
+    ChatState.animating = true;
+    chatBody.appendChild(buildTypingEl());
+    scrollBottom();
+ 
+    await new Promise((r) => setTimeout(r, 1000));
+ 
+    const tyEl = document.getElementById("__typing__");
+    if (tyEl) tyEl.remove();
+ 
+    // 4. Render bot reply lokal
+    appendMsg("bot", botReply);
+    ChatState.pendingServerRows += 1; // pending: bot row
+ 
+    ChatState.animating = false;
+ 
+    // 5. Kirim bot reply ke server (background)
+    const fdBot = new FormData();
+    fdBot.append("action", "chat");
+    fdBot.append("sessionId", ChatState.sessionId);
+    fdBot.append("sender", "bot");
+    fdBot.append("message", botReply);
+    fdBot.append("isTemplate", "true");
+    fetch(GSCRIPT, { method: "POST", body: fdBot })
+      .then(() => { ChatState.pendingServerRows = Math.max(0, ChatState.pendingServerRows - 1); })
+      .catch(() => { ChatState.pendingServerRows = Math.max(0, ChatState.pendingServerRows - 1); });
+ 
+    optionsEl.style.opacity = "1";
+    optionsEl.style.pointerEvents = "auto";
   });
 });
+ 
+// ── Event listeners ───────────────────────────────────────────
+chatFab.addEventListener("click", () => {
+  chatWindow.classList.add("open");
+  loadInitial();
+  ChatState.pollingTimer = setInterval(poll, 3000);
+});
+ 
+closeChat.addEventListener("click", () => {
+  chatWindow.classList.remove("open");
+  clearInterval(ChatState.pollingTimer);
+});
+ 
+sendChatBtn.addEventListener("click", sendCustomMessage);
+chatInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") sendCustomMessage();
+});
+ 
+// Init
+initSession();
 
 // --- BEAT WPM MODAL LOGIC ---
 const wpmModal = document.getElementById('wpmModal');
