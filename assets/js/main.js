@@ -243,7 +243,8 @@ document.querySelectorAll("img:not(.avatar-img)").forEach((img) => {
   );
 });
 
-const GSCRIPT = "https://script.google.com/macros/s/AKfycbwqlWxKHPvxlygeuLzKOnxOzI5RceqZS0RUL4C-yIUCD3RT_wOloRJqR_fx6_dBg-4V/exec";
+const GSCRIPT =
+  "https://script.google.com/macros/s/AKfycbwproNCkaC3CuSh0Go5i4bA9mLyuUNW2HYLRAeqFkvgElyaz_e7H4yemzxwC2CgOyit/exec";
 document.getElementById("cf").addEventListener("submit", (e) => {
   e.preventDefault();
   const btn = document.getElementById("sbtn");
@@ -358,7 +359,7 @@ const ChatState = {
   animating: false,
   pollingTimer: null,
 };
- 
+
 // ── Init session ──────────────────────────────────────────────
 function initSession() {
   let id = localStorage.getItem("ianoBotSession");
@@ -368,7 +369,7 @@ function initSession() {
   }
   ChatState.sessionId = id;
 }
- 
+
 // ── DOM refs ──────────────────────────────────────────────────
 const chatFab     = document.getElementById("chatFab");
 const chatWindow  = document.getElementById("chatWindow");
@@ -377,7 +378,7 @@ const chatBody    = document.getElementById("chatBody");
 const chatInput   = document.getElementById("chatInput");
 const sendChatBtn = document.getElementById("sendChatBtn");
 const chatOptions = document.querySelectorAll(".chat-opt");
- 
+
 // ── Jawaban lokal untuk template buttons ──────────────────────
 const botAnswers = {
   stack:        "Gwa biasa pake MERN/MEVN stack, tapi belakangan sering megang Laravel, Next.js, sama Python buat automation. Cek section Skills ya!",
@@ -386,7 +387,7 @@ const botAnswers = {
   wpm_game:     "Mau adu cepet ngetik? Klik tombol 'Beat My WPM!' di section Home ya, nanti bakal muncul modal game-nya!",
   coding_stats: "Penasaran sama jam terbang gwa? Klik icon bar chart di box 'Years Experience' di section Home buat liat statistik GitHub & WakaTime gwa.",
 };
- 
+
 // ── Render helpers ────────────────────────────────────────────
 function buildMsgEl(sender, text) {
   const div = document.createElement("div");
@@ -394,7 +395,7 @@ function buildMsgEl(sender, text) {
   div.textContent = text;
   return div;
 }
- 
+
 function buildTypingEl() {
   const div = document.createElement("div");
   div.className = "chat-msg bot";
@@ -633,7 +634,10 @@ initSession();
 const wpmModal = document.getElementById('wpmModal');
 const wpmTrigger = document.getElementById('wpmTrigger');
 const wpmClose = document.getElementById('wpmClose');
-
+const wpmNameModal = document.getElementById("wpmNameModal");
+const wpmPlayerName = document.getElementById("wpmPlayerName");
+const btnSubmitName = document.getElementById("btnSubmitName");
+const btnCancelName = document.getElementById("btnCancelName");
 const typTarget = document.getElementById('typTarget');
 const typInput = document.getElementById('typInput');
 const typWPM = document.getElementById('typWPM');
@@ -644,7 +648,14 @@ const typReset = document.getElementById('typReset');
 const originalText = typTarget.innerText;
 let startTime = null;
 let typingInterval = null;
-
+typInput.addEventListener("paste", (e) => {
+  e.preventDefault();
+  // Opsional: ganti text target sementara buat nge-troll yang copas
+  typTarget.innerText = "Eits, dilarang copas! Ketik manual dong bos 😜";
+  setTimeout(() => {
+    typTarget.innerText = originalText;
+  }, 2000);
+});
 // Buka Tutup Modal
 if(wpmTrigger) {
   wpmTrigger.addEventListener('click', () => {
@@ -681,13 +692,65 @@ function calculateStats() {
   if (typedText === originalText) {
     clearInterval(typingInterval);
     typInput.disabled = true;
-    typInput.style.borderColor = 'var(--green)';
-    
-    // Efek gold kalo berhasil ngalahin stat lu
-    if(wpm > 95) {
-      typWPM.style.color = 'var(--green)';
-      typWPM.innerText += ' 🔥 (You Win!)';
+    typInput.style.borderColor = "var(--green)";
+
+    if (wpm > 95) {
+      typWPM.style.color = "var(--green)";
+      typWPM.innerText += " 🔥 (You Win!)";
     }
+
+    // Tampilkan modal custom input nama, kosongkan input sebelumnya
+    wpmPlayerName.value = "";
+    wpmNameModal.style.display = "flex";
+    wpmNameModal.classList.add("open");
+    wpmPlayerName.focus();
+
+    // Remove event listener lama biar ga numpuk duplikasi submit saat test ulang
+    btnSubmitName.onclick = null;
+    btnCancelName.onclick = null;
+
+    // Aksi ketika tombol Submit Score ditekan
+    btnSubmitName.onclick = () => {
+      let playerName = wpmPlayerName.value.trim() || "Anonymous";
+
+      // Tutup modal nama
+      wpmNameModal.style.display = "none";
+      wpmNameModal.classList.remove("open");
+
+      // Beri feedback loading ke user di text target utama
+      typTarget.innerText = "⏳ Lagi nyimpen skor lu ke database...";
+      typTarget.style.color = "var(--gold)";
+
+      const fd = new FormData();
+      fd.append("action", "save_wpm");
+      fd.append("name", playerName);
+      fd.append("wpm", wpm);
+      fd.append("accuracy", accuracy);
+
+      fetch(GSCRIPT, { method: "POST", body: fd })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === "success") {
+            typTarget.innerText = `✅ Mantap ${playerName}! Skor lu udah sukses disimpen ke Leaderboard.`;
+            typTarget.style.color = "var(--green)";
+          } else {
+            throw new Error();
+          }
+        })
+        .catch(() => {
+          typTarget.innerText =
+            "❌ Yahh, gagal nyimpen ke database. Cek konfigurasi / koneksi lu.";
+          typTarget.style.color = "var(--red)";
+        });
+    };
+
+    // Aksi ketika tombol Cancel ditekan
+    btnCancelName.onclick = () => {
+      wpmNameModal.style.display = "none";
+      wpmNameModal.classList.remove("open");
+      typTarget.innerText =
+        "Skor tidak disimpan. Tekan tombol reset untuk mencoba kembali.";
+    };
   }
 }
 
@@ -712,8 +775,79 @@ typReset.addEventListener('click', () => {
   typWPM.style.color = 'var(--gold)';
   typAcc.innerText = '100%';
   typTimer.innerText = '0s';
+  typTarget.innerText = originalText;
+  typTarget.style.color = "var(--text)";
   typInput.focus();
 });
+
+// ── LIVE LEADERBOARD LOGIC ──
+const wpmLeaderboardBtn = document.getElementById('wpmLeaderboardBtn');
+const wpmLeaderboardModal = document.getElementById('wpmLeaderboardModal');
+const closeLeaderboardBtn = document.getElementById('closeLeaderboardBtn');
+const leaderboardLoading = document.getElementById('leaderboardLoading');
+const leaderboardTable = document.getElementById('leaderboardTable');
+const leaderboardRows = document.getElementById('leaderboardRows');
+
+// Efek hover membesar dikit pada icon piala
+if(wpmLeaderboardBtn) {
+  wpmLeaderboardBtn.addEventListener('mouseenter', () => wpmLeaderboardBtn.style.transform = 'scale(1.2)');
+  wpmLeaderboardBtn.addEventListener('mouseleave', () => wpmLeaderboardBtn.style.transform = 'scale(1)');
+  
+  // Klik icon piala buat buka leaderboard
+  wpmLeaderboardBtn.addEventListener('click', () => {
+    wpmLeaderboardModal.style.display = 'flex';
+    wpmLeaderboardModal.classList.add('open');
+    
+    // Tampilkan loading, sembunyikan tabel dulu
+    leaderboardLoading.style.display = 'block';
+    leaderboardLoading.innerText = '⏳ Loading data...';
+    leaderboardTable.style.display = 'none';
+    leaderboardRows.innerHTML = '';
+    
+    // Tarik data dari GSCRIPT
+    fetch(`${GSCRIPT}?action=get_leaderboard`)
+      .then(res => res.json())
+      .then(data => {
+        leaderboardLoading.style.display = 'none';
+        
+        if(data.length === 0) {
+          leaderboardLoading.style.display = 'block';
+          leaderboardLoading.innerText = '📭 Belum ada skor yang tercatat.';
+          return;
+        }
+        
+        // Buat baris tabel berdasarkan data yang dapet
+        data.forEach((row, index) => {
+          let medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}`;
+          let highlightStyle = index === 0 ? 'color: var(--gold); font-weight: 600;' : '';
+          
+          let tr = document.createElement('tr');
+          tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+          tr.innerHTML = `
+            <td style="padding: 0.7rem 0.5rem; font-size: 1.1rem;">${medal}</td>
+            <td style="padding: 0.7rem 0.5rem; ${highlightStyle}">${row.name}</td>
+            <td style="padding: 0.7rem 0.5rem; text-align: center; font-weight: 500; color: var(--green);">${Math.round(row.wpm)}</td>
+            <td style="padding: 0.7rem 0.5rem; text-align: center; color: #9ea1ad;">${row.accuracy}</td>
+          `;
+          leaderboardRows.appendChild(tr);
+        });
+        
+        leaderboardTable.style.display = 'table';
+      })
+      .catch(() => {
+        leaderboardLoading.style.display = 'block';
+        leaderboardLoading.innerText = '❌ Gagal memuat leaderboard.';
+      });
+  });
+}
+
+// Tutup modal Leaderboard
+if(closeLeaderboardBtn) {
+  closeLeaderboardBtn.addEventListener('click', () => {
+    wpmLeaderboardModal.style.display = 'none';
+    wpmLeaderboardModal.classList.remove('open');
+  });
+}
 
 // --- EXPERIENCE / CODING STATS MODAL LOGIC ---
 const expModal = document.getElementById('expModal');
