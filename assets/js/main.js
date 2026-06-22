@@ -365,25 +365,108 @@ if (!sessionId) {
   sessionId = 'session_' + Math.random().toString(36).substr(2, 9);
   localStorage.setItem('ianoBotSession', sessionId);
 }
+let isTyping = false; // Mencegah bentrok pas animasi jalan
+let isSaving = false; // Mencegah pesan kedap-kedip pas lagi dikirim
+let lastHistoryLength = 0; // Buat nge-track panjang pesan
 
-// Fungsi Load History
-async function loadChatHistory() {
-  try {
-    const response = await fetch(`${GSCRIPT}?action=getChat&sessionId=${sessionId}`);
-    const history = await response.json();
-    
-    if (history.length > currentChatLength) {
-      // Refresh chat area
-      chatBody.innerHTML = '<div class="chat-msg bot">Halo! Gwa asisten virtualnya rıan. Mau tanya apa nih?</div>'; 
-      history.forEach(chat => {
-        chatBody.innerHTML += `<div class="chat-msg ${chat.sender}">${chat.message}</div>`;
-      });
-      chatBody.scrollTop = chatBody.scrollHeight;
-      currentChatLength = history.length;
+// Fungsi buat ngegambar isi chat ke layar
+function renderChat(historyArray) {
+  let chatContent =
+    '<div class="chat-msg bot">Halo! Gwa asisten virtualnya rıan. Mau tanya apa nih?</div>';
+
+  historyArray.forEach((chat) => {
+    // Cek biar ga ada bubble "kotak doang" gara-gara ada baris kosong di spreadsheet
+    if (chat.message && chat.message.toString().trim() !== "") {
+      chatContent += `<div class="chat-msg ${chat.sender}">${chat.message}</div>`;
     }
+  });
+
+  chatBody.innerHTML = chatContent;
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+// Logic ngecek & ngambil data dari spreadsheet
+async function loadChatHistory() {
+  // Kalo lagi ada animasi ngetik ATAU lagi proses nyimpen chat user, jangan narik data dulu!
+  if (isTyping || isSaving) return;
+
+  try {
+    const response = await fetch(
+      `${GSCRIPT}?action=getChat&sessionId=${sessionId}`,
+    );
+    const history = await response.json();
+
+    // SKENARIO 1: ADA BALASAN BARU DARI LU (BOT/ADMIN)
+    if (history.length > lastHistoryLength && lastHistoryLength !== 0) {
+      const lastMsg = history[history.length - 1];
+
+      if (lastMsg.sender === "bot") {
+        isTyping = true;
+
+        // 1. Munculin chat sampe pesan sebelum balasan lu
+        renderChat(history.slice(0, history.length - 1));
+
+        // 2. Munculin bubble animasi seolah-olah lu lagi ngetik balesan
+        chatBody.innerHTML += `
+          <div class="chat-msg bot">
+            <div class="typing-indicator" style="padding: 0 4px; margin: 0;">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+        `;
+        chatBody.scrollTop = chatBody.scrollHeight;
+
+        // 3. Jeda 1.5 detik, hapus animasinya, terus ganti pake pesan asli lu
+        setTimeout(() => {
+          renderChat(history);
+          lastHistoryLength = history.length;
+          isTyping = false;
+        }, 1500);
+
+        return; // Setop di sini biar ga kerender dobel
+      }
+    }
+
+    // SKENARIO 2: NORMAL (Ga ada pesan baru, atau pas baru buka chat)
+    renderChat(history);
+    lastHistoryLength = history.length;
   } catch (error) {
     console.error("Gagal load history:", error);
   }
+}
+
+// Logic pas user klik tombol Send
+function sendCustomMessage() {
+  const text = chatInput.value.trim();
+  if (!text) return;
+
+  chatInput.value = "";
+
+  // 1. Munculin teksnya instan di layar user
+  chatBody.innerHTML += `<div class="chat-msg user">${text}</div>`;
+  chatBody.scrollTop = chatBody.scrollHeight;
+
+  // 2. Kunci layar (isSaving = true) biar data ga ketimpa pas polling jalan
+  isSaving = true;
+  lastHistoryLength++; // Update trackernya secara manual
+
+  // 3. Kirim ke Spreadsheet
+  const fd = new FormData();
+  fd.append("action", "chat");
+  fd.append("sessionId", sessionId);
+  fd.append("sender", "user");
+  fd.append("message", text);
+
+  fetch(GSCRIPT, { method: "POST", body: fd })
+    .then(() => {
+      // 4. Kalo udah sukses nyimpen di spreadsheet, buka kunciannya
+      isSaving = false;
+      loadChatHistory();
+    })
+    .catch((err) => {
+      console.error(err);
+      isSaving = false;
+    });
 }
 
 // Fungsi Save
@@ -397,10 +480,19 @@ function saveChatToSheet(sender, messageText) {
 }
 
 // Event Buka Chat
-chatFab.addEventListener('click', () => {
-  chatWindow.classList.add('open');
+chatFab.addEventListener("click", () => {
+  chatWindow.classList.add("open");
+
   loadChatHistory();
-  chatPollingInterval = setInterval(loadChatHistory, 3000); // Polling tiap 3 detik
+
+  clearInterval(chatPollingInterval);
+
+  chatPollingInterval = setInterval(() => {
+    console.log("Mengecek chat baru...");
+    loadChatHistory();
+  }, 3000);
+
+  console.log("Polling chat dimulai.");
 });
 
 // Event Tutup Chat
@@ -408,17 +500,6 @@ closeChat.addEventListener('click', () => {
   chatWindow.classList.remove('open');
   clearInterval(chatPollingInterval); // Penting: matiin polling!
 });
-
-// Kirim Pesan Manual
-function sendCustomMessage() {
-  const text = chatInput.value.trim();
-  if (!text) return;
-  chatBody.innerHTML += `<div class="chat-msg user">${text}</div>`;
-  chatBody.scrollTop = chatBody.scrollHeight;
-  chatInput.value = '';
-  saveChatToSheet('user', text);
-  currentChatLength++;
-}
 
 sendChatBtn.addEventListener('click', sendCustomMessage);
 chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendCustomMessage(); });
