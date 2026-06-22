@@ -181,6 +181,36 @@
 
     .wpm-close { position: absolute; top: 15px; right: 15px; background: var(--surface2); border: 1px solid var(--line2); color: var(--text2); font-size: 1.2rem; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
     .wpm-close:hover { border-color: var(--gold); color: var(--gold); transform: rotate(90deg); }
+    .chipWpm { font-size: medium; padding: .2rem .6rem; border-radius: 100px; border: 1px solid var(--line2); color: var(--text3); }
+    .btn-submit-name {
+      background: var(--gold) !important;
+      color: #141724 !important;
+      border: 1px solid var(--gold) !important;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .btn-submit-name:hover {
+      background: transparent !important;
+      color: var(--gold) !important;
+      box-shadow: 0 0 12px rgba(201, 169, 110, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .btn-cancel-name {
+      background: transparent !important;
+      color: #9ea1ad !important;
+      border: 1px solid var(--line2) !important;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .btn-cancel-name:hover {
+      background: rgba(239, 68, 68, 0.1) !important; /* Efek merah pastel transparan */
+      color: #ef4444 !important;
+      border-color: #ef4444 !important;
+      transform: translateY(-2px);
+    }
 
     #typInput:focus { border-color: var(--gold) !important; background: rgba(0,0,0,0.5); }
 
