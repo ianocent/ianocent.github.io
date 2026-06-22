@@ -244,7 +244,7 @@ document.querySelectorAll("img:not(.avatar-img)").forEach((img) => {
 });
 
 const GSCRIPT =
-  "https://script.google.com/macros/s/AKfycbwoxraERRIDFq-YBg5NBQ1d_HjJc6u0UQI4OXhnUnonlspaFF8eRGKVirU3KpCdubBY/exec";
+  "https://script.google.com/macros/s/AKfycbzFvWxvNA5lJjA0Kdb9fRWK_Gu12Kw-E-BRHkwIGQFu37tAjIDpi-exZGhcbnHYFfUU/exec";
 document.getElementById("cf").addEventListener("submit", (e) => {
   e.preventDefault();
   const btn = document.getElementById("sbtn");
@@ -347,50 +347,142 @@ const skillsObserver = new IntersectionObserver((entries) => {
 
 // Observe setiap card
 document.querySelectorAll('.sk-card').forEach(card => skillsObserver.observe(card));
-
-// Chatbot Logic
+// --- CHATBOT WIDGET LOGIC ---
 const chatFab = document.getElementById('chatFab');
 const chatWindow = document.getElementById('chatWindow');
 const closeChat = document.getElementById('closeChat');
 const chatBody = document.getElementById('chatBody');
 const chatOptions = document.querySelectorAll('.chat-opt');
 
-const botAnswers = {
-  stack:
-    "Gwa biasa pake MERN/MEVN stack, tapi belakangan sering megang Laravel, Next.js, sama Python buat automation. Cek section Skills ya!",
-  avail:
-    "Saat ini gwa lagi ga available sih buat full-time role, tapi gwa bisa considering kalo ada part-time project based! Mau ngobrol lebih lanjut? Langsung WA aja di section Contact.",
-  typing:
-    "Hobi aja sih dari dulu main 10fastfingers & Monkeytype jaman kuliah hahaha. Lumayan ngebantu ngetik code cepet tanpa mikirin keyboard.",
-  wpm_game:
-    "Mau adu cepet ngetik? Klik tombol 'Beat My WPM!' di section Home ya, nanti bakal muncul modal game-nya!",
-  coding_stats:
-    "Penasaran sama jam terbang gwa? Klik icon bar chart di box 'Years Experience' di section Home buat liat statistik GitHub & WakaTime gwa.",
-};
+// Gunakan GSCRIPT yang udah lu definisiin sebelumnya
+// const GSCRIPT = "https://script.google.com/macros/s/..."; 
 
-chatFab.addEventListener('click', () => chatWindow.classList.add('open'));
+// 1. Setup Session ID pake localStorage
+let sessionId = localStorage.getItem('ianoBotSession');
+if (!sessionId) {
+  // Generate random string buat ID kalo belum ada
+  sessionId = 'session_' + Math.random().toString(36).substr(2, 9);
+  localStorage.setItem('ianoBotSession', sessionId);
+}
+
+const botAnswers = {
+  stack: "Gwa biasa pake MERN/MEVN stack, tapi belakangan sering megang Laravel, Next.js, sama Python buat automation. Cek section Skills ya!",
+  avail: "Saat ini gwa lagi ga available sih buat full-time role, tapi gwa bisa considering kalo ada part-time project based! Mau ngobrol lebih lanjut? Langsung WA aja di section Contact.",
+  typing: "Hobi aja sih dari dulu main 10fastfingers & Monkeytype jaman kuliah hahaha. Lumayan ngebantu ngetik code cepet tanpa mikirin keyboard.",
+  wpm_game: "Mau adu cepet ngetik? Klik tombol 'Beat My WPM!' di section Home ya, nanti bakal muncul modal game-nya!",
+  coding_stats: "Penasaran sama jam terbang gwa? Klik icon bar chart di box 'Years Experience' di section Home buat liat statistik GitHub & WakaTime gwa.",
+};
+// Ambil elemen input baru
+const chatInput = document.getElementById('chatInput');
+const sendChatBtn = document.getElementById('sendChatBtn');
+
+let chatPollingInterval;
+let currentChatLength = 0; // Buat nge-track jumlah chat biar ga render ulang kalo ga ada yg baru
+
+// 2. Fungsi Load History (Di-update buat polling)
+async function loadChatHistory() {
+  try {
+    const response = await fetch(`${GSCRIPT}?action=getChat&sessionId=${sessionId}`);
+    const history = await response.json();
+    
+    // Kalo jumlah pesan di database LEBIH BANYAK dari yang ada di layar (ada balasan baru dari lu)
+    if (history.length > currentChatLength) {
+      chatBody.innerHTML = '<div class="chat-msg bot">Halo! Gwa asisten virtualnya rıan. Mau tanya apa nih?</div>'; 
+      
+      history.forEach(chat => {
+        chatBody.innerHTML += `<div class="chat-msg ${chat.sender}">${chat.message}</div>`;
+      });
+      
+      chatBody.scrollTop = chatBody.scrollHeight;
+      currentChatLength = history.length; // Update tracker jumlah chat
+    }
+  } catch (error) {
+    console.error("Gagal load history:", error);
+  }
+}
+
+// 4. Fungsi buat handle chat dari ketikan user
+function sendCustomMessage() {
+  const text = chatInput.value.trim();
+  if (!text) return; // Kalo kosong ga ngirim
+
+  // Munculin di layar user dulu biar cepet
+  chatBody.innerHTML += `<div class="chat-msg user">${text}</div>`;
+  chatBody.scrollTop = chatBody.scrollHeight;
+  chatInput.value = ''; // Kosongin kolom input
+  
+  // Nambah tracker manual biar ga ke-render ulang pas polling jalan
+  currentChatLength++; 
+
+  // Simpen ke Spreadsheet
+  saveChatToSheet('user', text);
+}
+
+// Event Listeners buat tombol Send & tombol Enter
+sendChatBtn.addEventListener('click', sendCustomMessage);
+chatInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') sendCustomMessage();
+});
+
+// Update Event buka/tutup chat buat ngatur Polling
+chatFab.addEventListener('click', () => {
+  chatWindow.classList.add('open');
+  loadChatHistory(); // Load pas pertama dibuka
+  
+  // Set interval biar nge-fetch ke spreadsheet tiap 5 detik (5000ms)
+  chatPollingInterval = setInterval(loadChatHistory, 5000); 
+});
+
+closeChat.addEventListener('click', () => {
+  chatWindow.classList.remove('open');
+  // Matiin interval polling pas chat ditutup biar ga menuhin kuota limit request Google Apps Script
+  clearInterval(chatPollingInterval); 
+});
+// 3. Fungsi Simpen Chat ke Spreadsheet
+function saveChatToSheet(sender, messageText) {
+  const fd = new FormData();
+  fd.append('action', 'chat');
+  fd.append('sessionId', sessionId);
+  fd.append('sender', sender); // 'user' atau 'bot'
+  fd.append('message', messageText);
+
+  fetch(GSCRIPT, { method: "POST", body: fd })
+    .catch(err => console.error("Gagal save chat:", err));
+}
+
+// Event Listeners Buka/Tutup Chat
+chatFab.addEventListener('click', () => {
+  chatWindow.classList.add('open');
+  // Load history pas pertama kali dibuka (opsional: bisa dikasih if logic biar ga fetch terus)
+  if(chatBody.children.length <= 1) { 
+    loadChatHistory();
+  }
+});
 closeChat.addEventListener('click', () => chatWindow.classList.remove('open'));
 
+// Event pas user ngeklik opsi chat
 chatOptions.forEach(btn => {
   btn.addEventListener('click', () => {
-    // Hide options after one is clicked (optional, biar kayak flow natural)
     const qKey = btn.dataset.q;
     const qText = btn.textContent;
     
-    // Add User Message
+    // Render Pesan User & Simpen ke DB
     chatBody.innerHTML += `<div class="chat-msg user">${qText}</div>`;
     chatBody.scrollTop = chatBody.scrollHeight;
+    saveChatToSheet('user', qText);
     
-    // Disable buttons temporarily
     document.getElementById('chatOptions').style.opacity = '0.5';
     document.getElementById('chatOptions').style.pointerEvents = 'none';
 
-    // Simulate thinking delay
+    // Jeda pura-pura mikir baru keluarin balesan bot
     setTimeout(() => {
-      chatBody.innerHTML += `<div class="chat-msg bot">${botAnswers[qKey]}</div>`;
+      const bText = botAnswers[qKey];
+      chatBody.innerHTML += `<div class="chat-msg bot">${bText}</div>`;
       chatBody.scrollTop = chatBody.scrollHeight;
       
-      // Re-enable options
+      // Simpen balesan Bot ke DB
+      saveChatToSheet('bot', bText);
+      
       document.getElementById('chatOptions').style.opacity = '1';
       document.getElementById('chatOptions').style.pointerEvents = 'auto';
     }, 800);
