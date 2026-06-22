@@ -425,25 +425,12 @@ chatInput.addEventListener('keypress', (e) => {
 });
 
 // Update Event buka/tutup chat buat ngatur Polling
-let chatPollingInterval; // Variabel buat nyimpen interval
-
-chatFab.addEventListener("click", () => {
-  chatWindow.classList.add("open");
-
-  // 1. Load sekali pas dibuka
-  loadChatHistory();
-
-  // 2. SET POLLING: Cek ke spreadsheet tiap 3 detik (3000ms)
-  chatPollingInterval = setInterval(() => {
-    loadChatHistory();
-  }, 3000);
-});
-
-closeChat.addEventListener("click", () => {
-  chatWindow.classList.remove("open");
-
-  // 3. MATIIN POLLING: Penting! Biar ga boros kuota/bikin lemot pas chat ditutup
-  clearInterval(chatPollingInterval);
+chatFab.addEventListener('click', () => {
+  chatWindow.classList.add('open');
+  loadChatHistory(); // Load pas pertama dibuka
+  
+  // Set interval biar nge-fetch ke spreadsheet tiap 3 detik (3000ms)
+  chatPollingInterval = setInterval(loadChatHistory, 3000); 
 });
 
 closeChat.addEventListener('click', () => {
