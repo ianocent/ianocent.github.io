@@ -12,9 +12,9 @@
 
 I am a graduate of **Multimedia Nusantara University** with a strong enthusiasm for learning and embracing new challenges. I bring approximately **three years of experience** in the field of Full Stack Development, including hands-on experience gained during my academic years.
 
-<div align="center">
+<!-- <div align="center">
   <img src="assets/img/Screenshot 2026-06-21 150150(1)(1).png" alt="About Me Details" width="100%">
-</div>
+</div> -->
 
 <br>
 
@@ -25,9 +25,9 @@ I am a graduate of **Multimedia Nusantara University** with a strong enthusiasm 
 
 ## 🛠️ Technical Skills
 
-<div align="center">
+<!-- <div align="center">
   <img src="assets/img/screenshot-1782050564407(1).png" alt="Technical Skills" width="100%">
-</div>
+</div> -->
 
 ## 📊 Live Coding Stats
 
