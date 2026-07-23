@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Blog and case studies by Dwi Rianto (ianocent) — Fullstack Developer. Project deep-dives on hotel management systems, Android apps, and more.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="Blog — Dwi Rianto (ianocent) Fullstack Developer">
+  <meta property="og:description" content="Case studies and project deep-dives by Dwi Rianto, a Fullstack Developer from Indonesia.">
+  <meta property="og:image" content="https://ianocent.github.io/assets/img/logo.png">
+  <meta property="og:url" content="https://ianocent.github.io/blog/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Blog — Dwi Rianto (ianocent)">
+  <meta name="twitter:description" content="Case studies and project deep-dives by Dwi Rianto, Fullstack Developer.">
+  <meta name="twitter:image" content="https://ianocent.github.io/assets/img/logo.png">
+  <title>Blog — Dwi Rianto (ianocent) Fullstack Developer</title>
+  <link rel="icon" href="../assets/img/logo.png" type="image/x-icon">
+  <link rel="canonical" href="https://ianocent.github.io/blog/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #1e1e24; --surface: rgba(24,27,36,0.85); --surface2: rgba(17,19,24,0.55);
+      --line: rgba(255,255,255,0.06); --gold: #c9a96e; --text: #f0f1f5; --text2: #9ea1ad; --text3: #646876;
+      --serif: 'Playfair Display', Georgia, serif; --sans: 'Geist', 'Inter', system-ui, sans-serif;
+    }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 15px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+    .wrap { max-width: 800px; margin: 0 auto; padding: 2rem 1.5rem; }
+    header { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 0; border-bottom: 1px solid var(--line); margin-bottom: 2.5rem; }
+    header a { color: var(--text2); text-decoration: none; font-size: 0.85rem; transition: color .2s; }
+    header a:hover { color: var(--gold); }
+    h1 { font-family: var(--serif); font-size: 2.2rem; font-weight: 400; font-style: italic; margin-bottom: 0.5rem; }
+    .subtitle { color: var(--text2); font-size: 0.95rem; margin-bottom: 2.5rem; }
+    .post { display: flex; gap: 1.5rem; padding: 1.5rem 0; border-bottom: 1px solid var(--line); text-decoration: none; color: inherit; transition: background .2s; border-radius: 8px; }
+    .post:hover { background: rgba(255,255,255,0.02); padding-left: 1rem; }
+    .post-img { width: 180px; height: 120px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: var(--surface2); border: 1px solid var(--line); }
+    .post-body h2 { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--text); }
+    .post-body .meta { font-size: 0.75rem; color: var(--gold); margin-bottom: 0.5rem; }
+    .post-body p { font-size: 0.85rem; color: var(--text2); line-height: 1.6; }
+    .back { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--gold); text-decoration: none; font-size: 0.85rem; margin-top: 2rem; }
+    .back:hover { text-decoration: underline; }
+    footer { text-align: center; padding: 2rem 0; color: var(--text3); font-size: 0.75rem; border-top: 1px solid var(--line); margin-top: 2rem; }
+    @media (max-width: 600px) { .post { flex-direction: column; } .post-img { width: 100%; height: 180px; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a href="../index.html"><i class="bx bx-arrow-back"></i> ianocent.dev</a>
+      <a href="../index.html">Portfolio</a>
+    </header>
+
+    <h1>Blog &amp; Case Studies</h1>
+    <p class="subtitle">Project deep-dives, technical write-ups, and lessons learned by <strong>Dwi Rianto</strong> (ianocent), a Fullstack Developer based in Indonesia.</p>
+
+    <!-- <a class="post" href="https://ianocent.github.io/blog/hms-case-study.html"> -->
+    <a class="post" href="hms-case-study.html">
+    <!-- <a class="post" href="file:///C:/Users/uzuma/Downloads/ianocent/ianocent.github.io/blog/hms-case-study.html"> -->
+      <img class="post-img" src="../assets/img/2. dashboard-view.png" alt="Hotel Management System dashboard" loading="lazy">
+      <div class="post-body">
+        <h2>Building a Production Hotel Management System: HMS Anyaman</h2>
+        <div class="meta"><i class="bx bx-time"></i> 10 min read · July 2026</div>
+        <p>How I built and maintained a full-featured hotel management system covering room booking, front desk operations, housekeeping scheduling, dynamic rate management, role-based access control, and OTA integration. From Laravel + Next.js to a Node.js + PostgreSQL migration.</p>
+      </div>
+    </a>
+
+    <!-- <a class="post" href="https://ianocent.github.io/blog/ianplayer-case-study.html"> -->
+    <a class="post" href="ianplayer-case-study.html">
+    <!-- <a class="post" href="file:///C:/Users/uzuma/Downloads/ianocent/ianocent.github.io/blog/ianplayer-case-study.html"> -->
+      <img class="post-img" src="../assets/img/mobs/1.png" alt="IanPlayer Android app" loading="lazy">
+      <div class="post-body">
+        <h2>IanPlayer: Building a Modern Android Music Player with Kotlin &amp; Compose</h2>
+        <div class="meta"><i class="bx bx-time"></i> 8 min read · July 2026</div>
+        <p>A deep dive into architecting a native Android music player with local playback, YouTube Music streaming via InnerTube API, synced lyrics, audio visualizer recording, card generators, and Material 3 design — all built with Jetpack Compose.</p>
+      </div>
+    </a>
+
+    <a class="back" href="../index.html"><i class="bx bx-arrow-back"></i> Back to Portfolio</a>
+
+    <footer>
+      <p>© 2026 Dwi Rianto (ianocent). Built with <i class="bx bx-code-alt"></i> and <i class="bx bx-coffee"></i></p>
+    </footer>
+  </div>
+</body>
+</html>

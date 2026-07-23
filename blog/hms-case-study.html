@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Case study: Building a production Hotel Management System (HMS Anyaman) by Dwi Rianto (ianocent). Next.js, Laravel, Node.js, PostgreSQL, and more.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="Building a Production Hotel Management System — Dwi Rianto">
+  <meta property="og:description" content="Case study on HMS Anyaman: full-featured hotel management with 186 tables, 80+ API endpoints, RBAC, OTA integration, and backend migration from Laravel to Node.js.">
+  <meta property="og:image" content="https://ianocent.github.io/assets/img/2. dashboard-view.png">
+  <meta property="og:url" content="https://ianocent.github.io/blog/hms-case-study">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Building a Production Hotel Management System — Dwi Rianto">
+  <meta name="twitter:description" content="Case study: HMS Anyaman by Dwi Rianto. Fullstack, 186 tables, RBAC, OTA, Laravel → Node.js migration.">
+  <meta name="twitter:image" content="https://ianocent.github.io/assets/img/2. dashboard-view.png">
+  <title>HMS Anyaman Case Study — Dwi Rianto (ianocent)</title>
+  <link rel="icon" href="../assets/img/logo.png" type="image/x-icon">
+  <link rel="canonical" href="https://ianocent.github.io/blog/hms-case-study">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #1e1e24; --surface: rgba(24,27,36,0.85); --surface2: rgba(17,19,24,0.55);
+      --line: rgba(255,255,255,0.06); --gold: #c9a96e; --text: #f0f1f5; --text2: #9ea1ad; --text3: #646876; --green: #34d399; --blue: #60a5fa;
+      --serif: 'Playfair Display', Georgia, serif; --sans: 'Geist', 'Inter', system-ui, sans-serif;
+    }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 15px; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+    .wrap { max-width: 780px; margin: 0 auto; padding: 2rem 1.5rem; }
+    header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--line); margin-bottom: 2rem; }
+    header a { color: var(--gold); text-decoration: none; font-size: 0.85rem; }
+    header a:hover { text-decoration: underline; }
+    h1 { font-family: var(--serif); font-size: 2rem; font-weight: 400; font-style: italic; line-height: 1.3; margin-bottom: 0.75rem; }
+    .meta { font-size: 0.8rem; color: var(--text2); margin-bottom: 2rem; display: flex; gap: 1rem; }
+    .meta span { display: inline-flex; align-items: center; gap: 0.3rem; }
+    .hero-img { width: 100%; border-radius: 10px; border: 1px solid var(--line); margin-bottom: 2rem; }
+    h2 { font-size: 1.3rem; font-weight: 600; margin: 2rem 0 0.75rem; color: var(--gold); }
+    h3 { font-size: 1.05rem; font-weight: 600; margin: 1.5rem 0 0.5rem; }
+    p { margin-bottom: 1rem; color: var(--text2); }
+    p b { color: var(--text); font-weight: 500; }
+    ul { margin: 0.5rem 0 1.5rem 1.5rem; color: var(--text2); }
+    li { margin-bottom: 0.3rem; }
+    .tag { display: inline-block; font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 100px; background: rgba(201,169,110,0.1); color: var(--gold); border: 1px solid rgba(201,169,110,0.15); margin: 0.15rem; }
+    .img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 1rem 0; }
+    .img-grid img { width: 100%; border-radius: 8px; border: 1px solid var(--line); cursor: zoom-in; }
+    blockquote { border-left: 2px solid var(--gold); padding: 0.75rem 1rem; margin: 1.5rem 0; background: rgba(201,169,110,0.04); border-radius: 0 8px 8px 0; font-style: italic; color: var(--text2); }
+    code { background: rgba(255,255,255,0.05); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.82rem; }
+    pre { background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.8rem; border: 1px solid var(--line); margin: 1rem 0; }
+    .back { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--gold); text-decoration: none; font-size: 0.85rem; margin-top: 2rem; }
+    .back:hover { text-decoration: underline; }
+    footer { text-align: center; padding: 2rem 0; color: var(--text3); font-size: 0.75rem; border-top: 1px solid var(--line); margin-top: 2rem; }
+    @media (max-width: 600px) { .img-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a href="../blog/index.html"><i class="bx bx-arrow-back"></i> All Posts</a>
+      <a href="../index.html">ianocent.dev</a>
+    </header>
+
+    <h1>Building a Production Hotel Management System: HMS Anyaman</h1>
+    <div class="meta">
+      <span><i class="bx bx-user"></i> Dwi Rianto</span>
+      <span><i class="bx bx-time"></i> 10 min read</span>
+      <span><i class="bx bx-calendar"></i> July 2026</span>
+    </div>
+
+    <img class="hero-img" src="../assets/img/2. dashboard-view.png" alt="HMS Anyaman dashboard showing revenue charts and statistics" loading="lazy">
+
+    <p><b>HMS Anyaman</b> is a full-featured Hotel Management System I built and maintained over ~2 years. It covers the complete hotel operations lifecycle — from room booking and front desk management to housekeeping scheduling, dynamic rate optimization, event management, and financial reporting.</p>
+
+    <p>In this case study, I walk through the architecture, key technical decisions, the recent backend migration from Laravel to Node.js, and lessons learned from building a system with <b>186 database tables</b> and <b>80+ API endpoints</b>.</p>
+
+    <h2>Tech Stack</h2>
+    <p>
+      <span class="tag">Next.js</span> <span class="tag">React.js</span> <span class="tag">Laravel</span>
+      <span class="tag">Node.js</span> <span class="tag">Express</span> <span class="tag">TypeScript</span>
+      <span class="tag">MySQL</span> <span class="tag">PostgreSQL</span> <span class="tag">Prisma ORM</span>
+      <span class="tag">PHP</span> <span class="tag">REST API</span> <span class="tag">Tailwind CSS</span>
+      <span class="tag">GitLab CI/CD</span> <span class="tag">Nginx</span> <span class="tag">Ubuntu</span>
+    </p>
+
+    <h2>Key Features</h2>
+
+    <h3>1. Room Booking &amp; Front Desk</h3>
+    <p>The core booking engine handles reservation creation, modification, cancellation, and check-in/check-out workflows. It supports <b>drag-and-drop room assignment</b> on a visual floor plan, making it intuitive for front desk staff to manage room availability in real-time.</p>
+
+    <div class="img-grid">
+      <img src="../assets/img/7. room-availability-move-rsv-dragndrop.png" alt="Room availability with drag and drop" loading="lazy">
+      <img src="../assets/img/5. folio-listing-frontdesk.png" alt="Front desk folio listing" loading="lazy">
+    </div>
+
+    <h3>2. Housekeeping Management</h3>
+    <p>A dedicated housekeeping module tracks room status (clean, dirty, inspected, out-of-order), assigns cleaning tasks to staff, and logs room status history. The scheduler provides a timeline view for coordinating housekeeping shifts.</p>
+
+    <div class="img-grid">
+      <img src="../assets/img/16. housekeeping-scheduler-list.png" alt="Housekeeping scheduler list" loading="lazy">
+      <img src="../assets/img/18. event-management-timeline.png" alt="Event management timeline" loading="lazy">
+    </div>
+
+    <h3>3. Dynamic Rate Management</h3>
+    <p>The rate engine supports configurable pricing rules based on occupancy, seasonality, and market segments. I built a <b>dynamic rate simulator</b> that forecasts ADR (Average Daily Rate) and helps revenue managers optimize pricing strategies.</p>
+
+    <h3>4. Role-Based Access Control (RBAC)</h3>
+    <p>A granular permission system with <b>menu-level CRUD flags</b> and custom transaction actions. Each role (developer, administrator, receptionist, etc.) can be configured with specific view/add/edit/delete permissions per menu item. The permission tree is cached and resolved at login.</p>
+
+    <pre>// Permission structure example
+{
+  "permissions": [{
+    "key": ["Front", "Desk"],
+    "label": ["Front", "Desk"],
+    "isaccess": true,
+    "access": [{ "view": true, "add": true, "edit": true, "delete": false }]
+  }]
+}</pre>
+
+    <img src="../assets/img/20. role-management.png" alt="Role management interface showing permission settings" style="width:100%;border-radius:8px;border:1px solid var(--line);margin:1rem 0;" loading="lazy">
+
+    <h3>5. OTA Integration</h3>
+    <p>Integrated with <b>STAAH</b> (an OTA channel manager) to synchronize room inventory and rates across multiple booking platforms. The integration ensures that when a booking is made on any connected OTA, the system updates availability in real-time to prevent overbooking.</p>
+
+    <h3>6. Financial Reporting &amp; Dashboards</h3>
+    <p>Real-time dashboards display key metrics: revenue, occupancy rates, ADR, RevPAR, and booking trends. The reporting module covers profit &amp; loss statements, trial balance reports, and market segment analysis.</p>
+
+    <div class="img-grid">
+      <img src="../assets/img/19. booking-engine-analytics.png" alt="Booking engine analytics" loading="lazy">
+      <img src="../assets/img/1. multiple-properties.png" alt="Multi-property management" loading="lazy">
+    </div>
+
+    <h2>Backend Migration: Laravel → Node.js</h2>
+
+    <p>When I joined the project, the backend was built with <b>Laravel (PHP) + MySQL</b>. The frontend was <b>Next.js</b>. During my tenure, I planned and initiated a migration of the backend to <b>Node.js (Express + TypeScript) + PostgreSQL</b>, <b>while maintaining 100% API compatibility</b> so the frontend required zero changes.</p>
+
+    <h3>Why Migrate?</h3>
+    <ul>
+      <li><b>Unified language:</b> Both frontend and backend in JavaScript/TypeScript reduces context switching</li>
+      <li><b>Better ecosystem:</b> Express + Prisma provides cleaner ORM and migration tooling</li>
+      <li><b>Scalability:</b> Node.js handles concurrent connections more efficiently for API workloads</li>
+    </ul>
+
+    <h3>Migration by the Numbers</h3>
+    <ul>
+      <li><b>186 tables</b> migrated from MySQL to PostgreSQL</li>
+      <li><b>574MB</b> of data migrated with 100% integrity verified</li>
+      <li><b>5-phase roadmap:</b> Database → Core Architecture → Auth → API Endpoints → Testing</li>
+      <li><b>80+ API endpoints</b> to replicate with identical response shapes</li>
+    </ul>
+
+    <blockquote>Key constraint: every API response must match the Laravel format exactly — including the <code>{ success, data, message, meta }</code> envelope — so the Next.js frontend works without a single line change.</blockquote>
+
+    <p>I built automation scripts for the migration: a <b>connection tester</b>, <b>data migrator</b> (MySQL → PostgreSQL), and <b>data verifier</b> with row-count validation. Phase 1 (Database Migration) was completed successfully.</p>
+
+    <h2>Frontend Architecture</h2>
+    <p>The frontend uses <b>Next.js</b> with a custom permission-aware component system. Every page and UI element conditionally renders based on the user's role and CRUD permissions. The app also has a <b>Capacitor</b> wrapper for mobile deployment via Android WebView.</p>
+
+    <p>State management uses <b>Redux</b> with persisted auth tokens. The sidebar and navigation are dynamically generated from the menu tree returned by the backend permission system.</p>
+
+    <h2>Lessons Learned</h2>
+    <ul>
+      <li><b>Permission systems are the hardest part</b> — Getting menu-level CRUD right with polymorphic role assignment required careful database design and caching strategy.</li>
+      <li><b>API contract first</b> — Having a strict API response format made the migration feasible. Without it, swapping backend frameworks would have been much riskier.</li>
+      <li><b>Automation saves weeks</b> — Building the migration scripts (schema extract, data mover, verifier) turned a potentially weeks-long manual migration into a 30-minute automated process.</li>
+      <li><b>OTA integration is complex</b> — Synchronizing inventory across multiple channels in real-time requires careful handling of race conditions and partial failures.</li>
+    </ul>
+
+    <h2>Links</h2>
+    <p>
+      <a href="../" style="color:var(--gold);">Portfolio</a> ·
+      <a href="https://linkedin.com/in/dwirianto" style="color:var(--gold);">LinkedIn</a> ·
+      <a href="https://github.com/ianocent" style="color:var(--gold);">GitHub</a>
+    </p>
+
+    <a class="back" href="../index.html"><i class="bx bx-arrow-back"></i> Back to all posts</a>
+
+    <footer>
+      <p>© 2026 Dwi Rianto (ianocent). Built with <i class="bx bx-code-alt"></i> and <i class="bx bx-coffee"></i></p>
+    </footer>
+  </div>
+</body>
+</html>

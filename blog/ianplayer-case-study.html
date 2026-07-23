@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Case study: IanPlayer — a native Android music player built with Kotlin and Jetpack Compose by Dwi Rianto (ianocent). YouTube Music streaming, lyrics, visualizer.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="IanPlayer: Building a Modern Android Music Player — Dwi Rianto">
+  <meta property="og:description" content="Case study on IanPlayer: native Android music player with Kotlin, Jetpack Compose, YouTube Music streaming, synced lyrics, audio visualizer recording, and more.">
+  <meta property="og:image" content="https://ianocent.github.io/assets/img/mobs/1.png">
+  <meta property="og:url" content="https://ianocent.github.io/blog/ianplayer-case-study">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="IanPlayer: Building a Modern Android Music Player — Dwi Rianto">
+  <meta name="twitter:description" content="Case study: IanPlayer by Dwi Rianto. Kotlin, Compose, YouTube Music, lyrics, visualizer.">
+  <meta name="twitter:image" content="https://ianocent.github.io/assets/img/mobs/1.png">
+  <title>IanPlayer Case Study — Dwi Rianto (ianocent)</title>
+  <link rel="icon" href="../assets/img/logo.png" type="image/x-icon">
+  <link rel="canonical" href="https://ianocent.github.io/blog/ianplayer-case-study">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #1e1e24; --surface: rgba(24,27,36,0.85); --surface2: rgba(17,19,24,0.55);
+      --line: rgba(255,255,255,0.06); --gold: #c9a96e; --text: #f0f1f5; --text2: #9ea1ad; --text3: #646876; --green: #34d399; --blue: #60a5fa;
+      --serif: 'Playfair Display', Georgia, serif; --sans: 'Geist', 'Inter', system-ui, sans-serif;
+    }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 15px; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+    .wrap { max-width: 780px; margin: 0 auto; padding: 2rem 1.5rem; }
+    header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--line); margin-bottom: 2rem; }
+    header a { color: var(--gold); text-decoration: none; font-size: 0.85rem; }
+    header a:hover { text-decoration: underline; }
+    h1 { font-family: var(--serif); font-size: 2rem; font-weight: 400; font-style: italic; line-height: 1.3; margin-bottom: 0.75rem; }
+    .meta { font-size: 0.8rem; color: var(--text2); margin-bottom: 2rem; display: flex; gap: 1rem; }
+    .meta span { display: inline-flex; align-items: center; gap: 0.3rem; }
+    .hero-img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 10px; border: 1px solid var(--line); margin-bottom: 2rem; }
+    h2 { font-size: 1.3rem; font-weight: 600; margin: 2rem 0 0.75rem; color: var(--gold); }
+    h3 { font-size: 1.05rem; font-weight: 600; margin: 1.5rem 0 0.5rem; }
+    p { margin-bottom: 1rem; color: var(--text2); }
+    p b { color: var(--text); font-weight: 500; }
+    ul { margin: 0.5rem 0 1.5rem 1.5rem; color: var(--text2); }
+    li { margin-bottom: 0.3rem; }
+    .tag { display: inline-block; font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 100px; background: rgba(201,169,110,0.1); color: var(--gold); border: 1px solid rgba(201,169,110,0.15); margin: 0.15rem; }
+    .img-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin: 1rem 0; }
+    .img-grid img { width: 100%; border-radius: 8px; border: 1px solid var(--line); }
+    blockquote { border-left: 2px solid var(--gold); padding: 0.75rem 1rem; margin: 1.5rem 0; background: rgba(201,169,110,0.04); border-radius: 0 8px 8px 0; font-style: italic; color: var(--text2); }
+    code { background: rgba(255,255,255,0.05); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.82rem; }
+    pre { background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.8rem; border: 1px solid var(--line); margin: 1rem 0; }
+    .back { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--gold); text-decoration: none; font-size: 0.85rem; margin-top: 2rem; }
+    .back:hover { text-decoration: underline; }
+    footer { text-align: center; padding: 2rem 0; color: var(--text3); font-size: 0.75rem; border-top: 1px solid var(--line); margin-top: 2rem; }
+    .badge { display: inline-block; font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 100px; background: var(--gold); color: #08090d; font-weight: 600; }
+    @media (max-width: 600px) { .img-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a href="../blog/index.html"><i class="bx bx-arrow-back"></i> All Posts</a>
+      <a href="../index.html">ianocent.dev</a>
+    </header>
+
+    <h1>IanPlayer: Building a Modern Android Music Player with Kotlin &amp; Jetpack Compose</h1>
+    <div class="meta">
+      <span><i class="bx bx-user"></i> Dwi Rianto</span>
+      <span><i class="bx bx-time"></i> 8 min read</span>
+      <span><i class="bx bx-calendar"></i> July 2026</span>
+    </div>
+
+    <img class="hero-img" src="../assets/img/mobs/1.png" alt="IanPlayer Android music player interface" loading="lazy">
+
+    <p><b>IanPlayer</b> is a native Android music player I built from scratch using <b>Kotlin</b> and <b>Jetpack Compose (Material 3)</b>. What started as a simple local music player evolved into a feature-rich application with YouTube Music streaming, synced lyrics, audio visualizer recording, card generators, and a monthly music recap — all running on-device with no server costs.</p>
+
+    <p>In this case study, I break down the architecture, key technical challenges, and design decisions behind IanPlayer.</p>
+
+    <p style="margin-top:1rem;">
+      <a class="badge" href="https://github.com/ianocent/IanPlayer" target="_blank" rel="noopener"><i class="bx bxl-github"></i> View on GitHub</a>
+      <a class="badge" href="https://github.com/ianocent/ianplayer/releases" target="_blank" rel="noopener" style="margin-left:0.5rem;"><i class="bx bx-download"></i> Download APK</a>
+    </p>
+
+    <h2>Tech Stack</h2>
+    <p>
+      <span class="tag">Kotlin</span> <span class="tag">Jetpack Compose</span> <span class="tag">Material 3</span>
+      <span class="tag">Media3 ExoPlayer</span> <span class="tag">MediaSession</span>
+      <span class="tag">Room DB</span> <span class="tag">Coil</span> <span class="tag">Palette API</span>
+      <span class="tag">InnerTube API</span> <span class="tag">FFT Visualizer</span>
+      <span class="tag">MediaProjection</span> <span class="tag">MediaCodec</span>
+      <span class="tag">mp3agic</span> <span class="tag">Coroutines</span>
+    </p>
+
+    <h2>Key Features</h2>
+
+    <h3>1. Core Music Playback</h3>
+    <p>IanPlayer automatically scans all local audio files via <code>MediaStore</code> (MP3, M4A, FLAC, WAV, OGG) and powers playback with <b>Media3 ExoPlayer</b> backed by a <code>MediaSessionService</code> for reliable background playback. The player supports shuffle, repeat modes (Off/All/One), a drag-to-reorder queue, crossfade between tracks, and automatic pre-fetching of the next track when 8 seconds remain.</p>
+
+    <p><b>Player state persistence</b> ensures the queue survives app restarts — the user picks up exactly where they left off.</p>
+
+    <div class="img-grid">
+      <img src="../assets/img/mobs/2.png" alt="IanPlayer now playing screen" loading="lazy">
+      <img src="../assets/img/mobs/3.png" alt="IanPlayer song list" loading="lazy">
+      <img src="../assets/img/mobs/4.png" alt="IanPlayer queue management" loading="lazy">
+    </div>
+
+    <h3>2. YouTube Music Streaming</h3>
+    <p>The most technically challenging feature. IanPlayer integrates with <b>YouTube Music via the InnerTube API</b> (the same API the official YouTube Music app uses). It handles <b>PoToken/BotGuard attestation</b> through a WebView-based cipher solution (ZemerCipher), with <b>multi-client fallback</b> (WEB → ANDROID → IOS → Invidious) if a stream fails.</p>
+
+    <p>Streamed songs are cached in a <b>two-tier system</b> (in-memory + Room DB) to minimize repeated network requests. The app always requests the highest available bitrate (up to 256k AAC/Opus). Users can also <b>download</b> streamed songs with proper ID3 metadata tagging (title, artist, album art) via mp3agic.</p>
+
+    <h3>3. Synced Lyrics &amp; Card Generators</h3>
+    <p>Lyrics are fetched from <b>lrclib.net</b>, supporting both synced LRC format (with auto-scroll and active-line highlight) and plain text lyrics. Users can <b>select lyric lines</b> to generate stylized quote-style cards rendered with Compose <code>GraphicsLayer</code>.</p>
+
+    <p>Beyond lyric cards, IanPlayer includes three more card generators:</p>
+    <ul>
+      <li><b>Song Card</b> — Now-playing card with blurred art background and song info</li>
+      <li><b>Playlist Card</b> — Playlist summary with song list; saved to gallery + shareable</li>
+      <li><b>Recap Card</b> — Monthly music recap (Wrapped-style) with top artists, songs, plays</li>
+    </ul>
+
+    <h3>4. Wave Record — Audio Visualizer Video</h3>
+    <p>A standout feature: IanPlayer can <b>record a video</b> of the audio visualizer with synced lyrics overlay. It uses the Android <code>Visualizer</code> API (FFT) for a <b>14-bar audio spectrum</b>, combines it with animated lyrics via <code>MediaProjection</code> + <code>AudioPlaybackCapture</code>, and encodes the result as H.264 + AAC using <code>MediaCodec</code> + <code>MediaMuxer</code>.</p>
+
+    <p>The recording runs as a foreground service (<code>WaveProjectionService</code>) and saves to <code>Pictures/IanPlayer/</code>. A static image frame capture is also available.</p>
+
+    <div class="img-grid">
+      <img src="../assets/img/mobs/5.png" alt="IanPlayer wave record feature" loading="lazy">
+      <img src="../assets/img/mobs/6.png" alt="IanPlayer album view" loading="lazy">
+      <img src="../assets/img/mobs/7.png" alt="IanPlayer playlist management" loading="lazy">
+    </div>
+
+    <h3>5. Monthly Music Recap</h3>
+    <p>A Spotify Wrapped-style summary generated entirely on-device each month. The recap shows <b>total plays, total minutes listened, top 5 artists, and top 3 songs</b> with auto-generated taste commentary based on listening patterns. A dismissible banner appears in the Songs tab when a new recap is ready.</p>
+
+    <h3>6. Adaptive UI &amp; Material You</h3>
+    <p>The now-playing screen uses <b>ambient color extraction</b> via the <code>Palette API</code> — the background, controls, slider, and lyrics are automatically tinted to match the album art's dominant color. It supports <b>dynamic color</b> (Material You on Android 12+), manual light/dark mode toggle, edge-to-edge display, and an animated gradient background.</p>
+
+    <p>The mini-player supports <b>three layouts</b>: Default / Floating / Queue — cycle by swiping down. The app also has a <b>fast scroller</b> with alphabetical index, draggable scrollbar, and swipe-to-reveal actions on song rows.</p>
+
+    <h3>7. Voice Search &amp; Auto-Updater</h3>
+    <p>IanPlayer includes <b>voice search</b> using <code>SpeechRecognizer</code> with Indonesian language support ("id-ID"), RMS level visualization during recording, and automatic 1-minute timeout.</p>
+
+    <p>The built-in <b>auto-updater</b> checks GitHub Releases on startup and handles in-app APK download + installation via <code>FileProvider</code>.</p>
+
+    <h2>Architecture &amp; Project Structure</h2>
+    <p>The app follows a clean architecture pattern with four main packages:</p>
+    <ul>
+      <li><b>data/</b> — Song/Playlist data classes, Room database, repositories (Music, Lyrics, YTMusic)</li>
+      <li><b>player/</b> — Media3 PlaybackService, PlayerManager, WaveProjectionService</li>
+      <li><b>viewmodel/</b> — Central MusicViewModel managing playback state, queue, search, downloads</li>
+      <li><b>ui/</b> — Compose screens: NowPlaying, card generators, WaveRecord, theme</li>
+    </ul>
+
+    <blockquote>The ViewModel holds the entire playback state in a single state class. This keeps the UI reactive — every screen observes the same state source and updates automatically.</blockquote>
+
+    <h2>Lessons Learned</h2>
+    <ul>
+      <li><b>InnerTube API is fragile</b> — YouTube's streaming endpoints change frequently. The multi-client fallback strategy was essential for reliability.</li>
+      <li><b>Compose state management scales well</b> — A single ViewModel with a unified state class kept complexity manageable across 30+ UI screens.</li>
+      <li><b>Media3 simplifies background playback</b> — MediaSessionService + Media3 ExoPlayer handles most edge cases (audio focus, headphone unplug, lock screen) out of the box.</li>
+      <li><b>Card generation in Compose is powerful</b> — Using GraphicsLayer to render Compose UI to a bitmap saved reinventing the wheel for image generation.</li>
+      <li><b>On-device analytics work</b> — The monthly recap runs entirely locally using SharedPreferences play-count tracking. No backend needed.</li>
+    </ul>
+
+    <p>The full source code is available on GitHub. It's <b>~20,000+ lines of Kotlin</b> spread across 40+ files, built over the course of several months.</p>
+
+    <p>
+      <a href="https://github.com/ianocent/IanPlayer" style="color:var(--gold);"><i class="bx bxl-github"></i> GitHub Repository</a> ·
+      <a href="https://github.com/ianocent/IanPlayer/releases" style="color:var(--gold);margin-left:0.5rem;"><i class="bx bx-download"></i> Releases &amp; APK</a>
+    </p>
+
+    <a class="back" href="../index.html"><i class="bx bx-arrow-back"></i> Back to all posts</a>
+
+    <footer>
+      <p>© 2026 Dwi Rianto (ianocent). Built with <i class="bx bx-code-alt"></i> and <i class="bx bx-coffee"></i></p>
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,41 +1,79 @@
 <div align="center">
-  <img src="assets/img/Picsart_26-06-21_21-17-54-132.jpg.jpeg" alt="ıanocent - Hero Section" width="100%">
+  <img src="assets/img/Picsart_26-06-21_21-17-54-132.jpg.jpeg" alt="Dwi Rianto (ianocent) — Fullstack Developer" width="100%">
 
-  <h1>Hi there, I'm ıanocent 👋</h1>
-  <h3>Fullstack Developer | DevOps CI/CD | QA Manual & Automation | Database Admin</h3>
-  <p><i>Graduated from Multimedia Nusantara University | ~3 Years of Experience</i></p>
+  <h1>Dwi Rianto — @ianocent</h1>
+  <h3>Fullstack Developer · DevOps CI/CD · QA Automation · Mobile Apps</h3>
+  <p><i>Multimedia Nusantara University Graduate · 3+ Years Experience</i></p>
+
+  <p>
+    <a href="https://ianocent.github.io"><strong>🌐 Portfolio</strong></a> ·
+    <a href="https://ianocent.github.io/blog"><strong>📝 Blog</strong></a> ·
+    <a href="https://linkedin.com/in/dwirianto"><strong>💼 LinkedIn</strong></a>
+  </p>
 </div>
 
 ---
 
 ## 👨‍💻 About Me
 
-I am a graduate of **Multimedia Nusantara University** with a strong enthusiasm for learning and embracing new challenges. I bring approximately **three years of experience** in the field of Full Stack Development, including hands-on experience gained during my academic years.
+I'm **Dwi Rianto**, a Fullstack Developer from Indonesia with ~3 years of experience building production-grade web and mobile applications. I specialize in:
 
-<!-- <div align="center">
-  <img src="assets/img/Screenshot 2026-06-21 150150(1)(1).png" alt="About Me Details" width="100%">
-</div> -->
+- **Frontend:** Next.js, React.js, Vue.js, Tailwind CSS
+- **Backend:** Laravel, Node.js (Express), PHP, Python
+- **Mobile:** Android (Kotlin, Jetpack Compose)
+- **DevOps:** CI/CD pipelines, GitLab/GitHub, Linux server, Nginx
+- **QA:** Manual & Automation testing (Selenium, Katalon)
+- **Database:** MySQL, PostgreSQL, Prisma ORM, Eloquent
+- **Other:** UI/UX Design (Figma), IT Support, Hardware & Networking
 
-<br>
+I'm passionate about building systems that are clean, scalable, and well-documented. Currently available for full-time opportunities.
 
-- 💻 **Tech Stack:** Proficient in various programming languages and frameworks, including **HTML, CSS, PHP, Laravel, Vue.js, Next.js, React.js, Tailwind CSS, Bootstrap CSS, Python, and MySQL**.
-- 🔧 **IT Support & DevOps:** In addition to software development, I have a strong interest in computer hardware and practical experience working as an IT Support specialist (hardware and software troubleshooting). 
-- 🎨 **UI/UX Design:** I have a keen interest in design and regularly create application prototypes using **Figma**.
-- 🚀 **Goals:** I am seeking a **full-time opportunity** where I can further develop my skills as a Full Stack Developer and/or IT Support professional while contributing effectively to the organization.
+---
 
-## 🛠️ Technical Skills
+## 🚀 Featured Projects
 
-<!-- <div align="center">
-  <img src="assets/img/screenshot-1782050564407(1).png" alt="Technical Skills" width="100%">
-</div> -->
+### 🏨 Hotel Management System (HMS Anyaman)
+Full-featured HMS covering room booking, front desk, housekeeping, rate management, event management, and role-based access. Built with **Next.js + Laravel + MySQL**, currently migrating backend to **Node.js + Express + Prisma + PostgreSQL**.
 
-## 📊 Live Coding Stats
+- 186 database tables, 80+ API endpoints
+- Complex permission system with CRUD flags per role
+- OTA integration (STAAH)
+- Real-time dashboards with revenue analytics
+- [Read case study →](https://ianocent.github.io/blog/hms-case-study)
+
+### 🎵 IanPlayer — Android Music Player
+Native Android music player built with **Kotlin + Jetpack Compose (Material 3)**. Features local library scanning, YouTube Music streaming (InnerTube API), synced lyrics, audio visualizer recording, card generators, and monthly recaps (Spotify Wrapped-style).
+
+- 20,000+ lines of Kotlin
+- 30+ UI screens built with Compose
+- Media3 ExoPlayer + MediaSessionService
+- Auto-updater from GitHub Releases
+- [Repository](https://github.com/ianocent/IanPlayer) · [Read case study →](https://ianocent.github.io/blog/ianplayer-case-study)
+
+### 🎨 Design Projects
+- **Vape Thing App** — Mobile app UI/UX prototype in Figma
+- **Calligraphy Expert System** — UI/UX design for an expert system
+- **Kompas Redesign** — News portal UI redesign
+- **WhatsApp Redesign** — Concept UI redesign
+
+---
+
+## 📊 GitHub Stats
 
 <div align="center">
-  <img src="assets/img/screenshot-1782050534438.png" alt="Live Coding Stats" width="100%">
+  <img src="https://github-readme-stats.vercel.app/api?username=ianocent&show_icons=true&theme=tokyonight&hide_border=true&bg_color=24242d&title_color=c9a96e&text_color=9ea1ad&icon_color=34d399" alt="GitHub Stats" height="160" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=ianocent&layout=compact&theme=tokyonight&hide_border=true&bg_color=24242d&title_color=c9a96e&text_color=9ea1ad" alt="Top Languages" height="160" />
 </div>
 
 ---
+
+## 📫 Let's Connect
+
 <div align="center">
-  📫 <b>Let's connect and build something awesome together!</b>
+  <a href="https://linkedin.com/in/dwirianto">LinkedIn</a> ·
+  <a href="https://ianocent.github.io">Portfolio</a> ·
+  <a href="https://github.com/ianocent">GitHub</a> ·
+  <a href="https://dribbble.com/Ntoo">Dribbble</a>
+  <br><br>
+  <b>Email:</b> riantodwi2002@gmail.com
 </div>
