@@ -224,7 +224,7 @@ function carGo(id, numId, dir) {
 window.carNext = (id, numId) => carGo(id, numId, 1);
 window.carPrev = (id, numId) => carGo(id, numId, -1);
 window.addEventListener("load", () => {
-  ["mobCar", "kompCar", "calCar"].forEach(initCar);
+  ["mobCar"].forEach(initCar); // hanya mobCar yg ada di DOM
 });
 
 document.querySelectorAll("img:not(.avatar-img)").forEach((img) => {
