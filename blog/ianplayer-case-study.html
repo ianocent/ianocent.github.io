@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:title" content="IanPlayer: Building a Modern Android Music Player — Dwi Rianto">
   <meta property="og:description" content="Case study on IanPlayer: native Android music player with Kotlin, Jetpack Compose, YouTube Music streaming, synced lyrics, audio visualizer recording, and more.">
-  <meta property="og:image" content="https://ianocent.github.io/assets/img/mobs/1.png">
+  <meta property="og:image" content="https://ianocent.github.io/assets/img/mainactivity-listing-stream-songs.jpg">
   <meta property="og:url" content="https://ianocent.github.io/blog/ianplayer-case-study">
   <meta property="og:type" content="article">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="IanPlayer: Building a Modern Android Music Player — Dwi Rianto">
   <meta name="twitter:description" content="Case study: IanPlayer by Dwi Rianto. Kotlin, Compose, YouTube Music, lyrics, visualizer.">
-  <meta name="twitter:image" content="https://ianocent.github.io/assets/img/mobs/1.png">
+  <meta name="twitter:image" content="https://ianocent.github.io/assets/img/mainactivity-listing-stream-songs.jpg">
   <title>IanPlayer Case Study — Dwi Rianto (ianocent)</title>
   <link rel="icon" href="../assets/img/logo.png" type="image/x-icon">
   <link rel="canonical" href="https://ianocent.github.io/blog/ianplayer-case-study">
@@ -69,7 +69,7 @@
       <span><i class="bx bx-calendar"></i> July 2026</span>
     </div>
 
-    <img class="hero-img" src="../assets/img/mobs/1.png" alt="IanPlayer Android music player interface" loading="lazy">
+    <img class="hero-img" src="../assets/img/mainactivity-listing-stream-songs.jpg" alt="IanPlayer Android music player interface" loading="lazy">
 
     <p><b>IanPlayer</b> is a native Android music player I built from scratch using <b>Kotlin</b> and <b>Jetpack Compose (Material 3)</b>. What started as a simple local music player evolved into a feature-rich application with YouTube Music streaming, synced lyrics, audio visualizer recording, card generators, and a monthly music recap — all running on-device with no server costs.</p>
 
@@ -98,9 +98,8 @@
     <p><b>Player state persistence</b> ensures the queue survives app restarts — the user picks up exactly where they left off.</p>
 
     <div class="img-grid">
-      <img src="../assets/img/mobs/2.png" alt="IanPlayer now playing screen" loading="lazy">
-      <img src="../assets/img/mobs/3.png" alt="IanPlayer song list" loading="lazy">
-      <img src="../assets/img/mobs/4.png" alt="IanPlayer queue management" loading="lazy">
+      <img src="../assets/img/mainactivity-listing-offline-songs.jpg" alt="IanPlayer now playing screen" loading="lazy">
+      <img src="../assets/img/mainactivity-listing-stream-songs.jpg" alt="IanPlayer queue management" loading="lazy">
     </div>
 
     <h3>2. YouTube Music Streaming</h3>
@@ -118,16 +117,16 @@
       <li><b>Recap Card</b> — Monthly music recap (Wrapped-style) with top artists, songs, plays</li>
     </ul>
 
+    <div class="img-grid">
+      <img src="../assets/img/lyric-card.jpg" alt="IanPlayer lyric card generator" loading="lazy">
+      <img src="../assets/img/song-card.jpg" alt="IanPlayer song card generator" loading="lazy">
+      <img src="../assets/img/playlist-card.jpg" alt="IanPlayer playlist card generator" loading="lazy">
+    </div>
+
     <h3>4. Wave Record — Audio Visualizer Video</h3>
     <p>A standout feature: IanPlayer can <b>record a video</b> of the audio visualizer with synced lyrics overlay. It uses the Android <code>Visualizer</code> API (FFT) for a <b>14-bar audio spectrum</b>, combines it with animated lyrics via <code>MediaProjection</code> + <code>AudioPlaybackCapture</code>, and encodes the result as H.264 + AAC using <code>MediaCodec</code> + <code>MediaMuxer</code>.</p>
 
     <p>The recording runs as a foreground service (<code>WaveProjectionService</code>) and saves to <code>Pictures/IanPlayer/</code>. A static image frame capture is also available.</p>
-
-    <div class="img-grid">
-      <img src="../assets/img/mobs/5.png" alt="IanPlayer wave record feature" loading="lazy">
-      <img src="../assets/img/mobs/6.png" alt="IanPlayer album view" loading="lazy">
-      <img src="../assets/img/mobs/7.png" alt="IanPlayer playlist management" loading="lazy">
-    </div>
 
     <h3>5. Monthly Music Recap</h3>
     <p>A Spotify Wrapped-style summary generated entirely on-device each month. The recap shows <b>total plays, total minutes listened, top 5 artists, and top 3 songs</b> with auto-generated taste commentary based on listening patterns. A dismissible banner appears in the Songs tab when a new recap is ready.</p>
