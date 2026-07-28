@@ -58,15 +58,6 @@ Native Android music player built with **Kotlin + Jetpack Compose (Material 3)**
 
 ---
 
-## 📊 GitHub Stats
-
-<div align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=ianocent&show_icons=true&theme=tokyonight&hide_border=true&bg_color=24242d&title_color=c9a96e&text_color=9ea1ad&icon_color=34d399" alt="GitHub Stats" height="160" />
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=ianocent&layout=compact&theme=tokyonight&hide_border=true&bg_color=24242d&title_color=c9a96e&text_color=9ea1ad" alt="Top Languages" height="160" />
-</div>
-
----
-
 ## 📫 Let's Connect
 
 <div align="center">
