@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://ianocent.github.io/sitemap.xml
+Sitemap: https://ianocent.github.io/images-sitemap.xml

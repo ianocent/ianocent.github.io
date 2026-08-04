@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://ianocent.github.io/</loc>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/hehe.png</image:loc>
+      <image:title>Dwi Rianto (ianocent) - Fullstack Developer</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/1.%20multiple-properties.png</image:loc>
+      <image:title>Hotel Management System - Multi Property Dashboard</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/2.%20dashboard-view.png</image:loc>
+      <image:title>Hotel Management System - Dashboard View</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/19.%20booking-engine-analytics.png</image:loc>
+      <image:title>Hotel Management System - Booking Engine Analytics</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/5.%20folio-listing-frontdesk.png</image:loc>
+      <image:title>Hotel Management System - Front Desk Folio Listing</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/7.%20room-availability-move-rsv-dragndrop.png</image:loc>
+      <image:title>Hotel Management System - Room Availability Drag and Drop</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/16.%20housekeeping-scheduler-list.png</image:loc>
+      <image:title>Hotel Management System - Housekeeping Scheduler</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/18.%20event-management-timeline.png</image:loc>
+      <image:title>Hotel Management System - Event Management Timeline</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/20.%20role-management.png</image:loc>
+      <image:title>Hotel Management System - Role Management</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/mobs/1.png</image:loc>
+      <image:title>Hotel Management System - Mobile Dashboard</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/mobs/2.png</image:loc>
+      <image:title>Hotel Management System - Mobile View 2</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/mobs/3.png</image:loc>
+      <image:title>Hotel Management System - Mobile View 3</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/mobs/4.png</image:loc>
+      <image:title>Hotel Management System - Mobile View 4</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/mobs/5.png</image:loc>
+      <image:title>Hotel Management System - Mobile View 5</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/mobs/6.png</image:loc>
+      <image:title>Hotel Management System - Mobile View 6</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/mobs/7.png</image:loc>
+      <image:title>Hotel Management System - Mobile View 7</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/mobs/8.png</image:loc>
+      <image:title>Hotel Management System - Mobile View 8</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/mobs/9.png</image:loc>
+      <image:title>Hotel Management System - Mobile View 9</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/mobs/10.png</image:loc>
+      <image:title>Hotel Management System - Mobile View 10</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/mobs/11.png</image:loc>
+      <image:title>Hotel Management System - Mobile View 11</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/mainactivity-listing-stream-songs.jpg</image:loc>
+      <image:title>IanPlayer - Android Music Player Stream Songs</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/proto.png</image:loc>
+      <image:title>Vape Thing App - Mobile App UI Design</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/calligraphsy/1.%20Landing%20Guest.png</image:loc>
+      <image:title>Calligraphy System - Landing Guest UI</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/whatsapp.png</image:loc>
+      <image:title>WhatsApp Redesign - UI Concept</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/compas/Kompas.png</image:loc>
+      <image:title>Redesign Kompas - News Portal UI</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://ianocent.github.io/blog/</loc>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/2.%20dashboard-view.png</image:loc>
+      <image:title>HMS Anyaman - Hotel Management System Dashboard</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/lyric-card.jpg</image:loc>
+      <image:title>IanPlayer - Lyric Card Generator</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/dashboard-expert.png</image:loc>
+      <image:title>Dashboard Expert - Customizable Dashboard Simulator</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://ianocent.github.io/blog/hms-case-study</loc>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/2.%20dashboard-view.png</image:loc>
+      <image:title>HMS Anyaman - Revenue Dashboard</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/7.%20room-availability-move-rsv-dragndrop.png</image:loc>
+      <image:title>HMS Anyaman - Drag and Drop Room Assignment</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/5.%20folio-listing-frontdesk.png</image:loc>
+      <image:title>HMS Anyaman - Front Desk Folio Listing</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/16.%20housekeeping-scheduler-list.png</image:loc>
+      <image:title>HMS Anyaman - Housekeeping Scheduler</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/18.%20event-management-timeline.png</image:loc>
+      <image:title>HMS Anyaman - Event Management Timeline</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/20.%20role-management.png</image:loc>
+      <image:title>HMS Anyaman - Role Based Access Control</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/19.%20booking-engine-analytics.png</image:loc>
+      <image:title>HMS Anyaman - Booking Engine Analytics</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/1.%20multiple-properties.png</image:loc>
+      <image:title>HMS Anyaman - Multi Property Management</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://ianocent.github.io/blog/ianplayer-case-study</loc>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/mainactivity-listing-stream-songs.jpg</image:loc>
+      <image:title>IanPlayer - Stream Songs Listing</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/mainactivity-listing-offline-songs.jpg</image:loc>
+      <image:title>IanPlayer - Offline Songs Listing</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/lyric-card.jpg</image:loc>
+      <image:title>IanPlayer - Synced Lyrics Card</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/song-card.jpg</image:loc>
+      <image:title>IanPlayer - Song Card Generator</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/playlist-card.jpg</image:loc>
+      <image:title>IanPlayer - Playlist Card Generator</image:title>
+    </image:image>
+  </url>
+</urlset>
