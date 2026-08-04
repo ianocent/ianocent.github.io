@@ -50,6 +50,11 @@ Native Android music player built with **Kotlin + Jetpack Compose (Material 3)**
 - Auto-updater from GitHub Releases
 - [Repository](https://github.com/ianocent/IanPlayer) · [Read case study →](https://ianocent.github.io/blog/ianplayer-case-study)
 
+### 📊 Dashboard Expert
+A fully customizable dashboard simulator built with vanilla HTML/CSS/JS — 6 working views, drag-and-drop card layouts, SVG charts, 5 accent themes, editable data, an AI prompt studio, and report export to PDF/Excel. Export/import your whole setup as a `.js` config.
+
+- [Try the live demo →](https://ianocent.github.io/blog/dashboard-expert)
+
 ### 🎨 Design Projects
 - **Vape Thing App** — Mobile app UI/UX prototype in Figma
 - **Calligraphy Expert System** — UI/UX design for an expert system
