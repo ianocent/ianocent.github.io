@@ -52,19 +52,25 @@
       position: fixed; inset: 0; z-index: 0;
       background: linear-gradient(-45deg, var(--color-bg1), var(--color-bg2), var(--color-bg3), var(--color-bg4));
       background-size: 400% 400%;
+      overflow: hidden;
+    }
+    #bg-layer::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 400%; height: 400%;
+      background: linear-gradient(-45deg, var(--color-bg1), var(--color-bg2), var(--color-bg3), var(--color-bg4));
       animation: gradientBG 20s ease infinite;
+      will-change: transform;
     }
     @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+      0%, 100% { transform: translate(0, -37.5%); }
+      50% { transform: translate(-75%, -37.5%); }
     }
 
     /* ── CURSOR REACTIVE GLOW ── */
     #bg-glow {
       position: fixed; inset: 0; z-index: 1;
       background: radial-gradient(circle 500px at var(--mx, 50%) var(--my, 50%), rgba(201,169,110, 0.1), transparent 80%);
-      pointer-events: none; transition: background 0.1s ease;
+      pointer-events: none;
     }
 
     /* ── PAGE WRAPPER & SCROLL SNAPPING (SLIDE EFFECT) ── */
@@ -145,7 +151,7 @@
     .icon-btn:hover::after { transform: scale(1); }
 
     /* ── SCROLL REVEAL ── */
-    .r { opacity: 0; transform: translateY(20px); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); will-change: opacity, transform; }
+    .r { opacity: 0; transform: translateY(20px); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
     .r.v { opacity: 1; transform: none; }
 
     /* ── SECTION 1: HERO ── */
@@ -173,8 +179,8 @@
     .animate-effect {
       animation: zoomRotate 0.4s ease-in-out;
     }
-    .wpm-modal { position: fixed; inset: 0; z-index: 9999; background: rgba(10, 11, 18, 0.85); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: all 0.3s ease; }
-    .wpm-modal.open { opacity: 1; pointer-events: auto; }
+    .wpm-modal { position: fixed; inset: 0; z-index: 9999; background: rgba(10, 11, 18, 0.85); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: all 0.3s ease; }
+    .wpm-modal.open { display: flex; opacity: 1; pointer-events: auto; }
 
     .wpm-content { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 2rem; width: 90%; max-width: 550px; position: relative; transform: translateY(30px); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 24px 64px rgba(0,0,0,0.6); }
     .wpm-modal.open .wpm-content { transform: translateY(0); }
@@ -662,4 +668,138 @@
     font-size: 0.75rem !important;
     margin-bottom: 1rem !important;
   }
+}
+
+/* ── DRIFT WALL (ReactBits DriftWall — vanilla port) ── */
+.drift-wall {
+  position: relative;
+  width: 100%;
+  height: clamp(460px, 62vh, 760px);
+  overflow: hidden;
+  margin-top: 2rem;
+  perspective: var(--dw-perspective, 1200px);
+  perspective-origin: 50% 50%;
+  --dw-tile-w: 170px;
+  --dw-tile-h: 113px;
+  --dw-gap: 14px;
+  --dw-radius: 12px;
+  --dw-lift: 56px;
+  --dw-dim: 0.55;
+  --dw-gray: 0;
+  --dw-overlay: #14161d;
+  --dw-edge: 42%;
+  -webkit-mask-image:
+    radial-gradient(ellipse 78% 82% at 50% 46%, #000 var(--dw-edge), transparent 100%),
+    linear-gradient(to top, #000 var(--dw-edge), transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    radial-gradient(ellipse 78% 82% at 50% 46%, #000 var(--dw-edge), transparent 100%),
+    linear-gradient(to top, #000 var(--dw-edge), transparent 100%);
+  mask-composite: intersect;
+}
+
+.drift-wall__plane {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  flex-direction: row;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+.drift-wall__col {
+  position: relative;
+  width: calc(var(--dw-tile-w) + var(--dw-gap));
+  transform-style: preserve-3d;
+}
+
+.drift-wall__track {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+  transform-style: preserve-3d;
+}
+
+.drift-wall__tile {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: calc(var(--dw-tile-h) + var(--dw-gap));
+  flex: 0 0 auto;
+  outline: none;
+  transform-style: preserve-3d;
+}
+
+.drift-wall__inner {
+  position: absolute;
+  inset: calc(var(--dw-gap) / 2);
+  display: block;
+  border-radius: var(--dw-radius);
+  overflow: hidden;
+  background: #0b0b12;
+  opacity: var(--dw-dim);
+  transform: translateZ(0);
+  pointer-events: none;
+  transition:
+    transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.drift-wall__tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(var(--dw-gray)) saturate(0.92);
+  transition: filter 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.drift-wall__overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--dw-overlay);
+  opacity: 0.42;
+  pointer-events: none;
+  transition: opacity 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.drift-wall__tile.is-active .drift-wall__inner,
+.drift-wall__tile:focus-visible .drift-wall__inner {
+  opacity: 1;
+  transform: translateZ(var(--dw-lift));
+  box-shadow: 0 24px 60px -18px rgba(0, 0, 0, 0.7);
+}
+
+.drift-wall__tile.is-active img,
+.drift-wall__tile:focus-visible img {
+  filter: grayscale(0) saturate(1.05);
+}
+
+.drift-wall__tile.is-active .drift-wall__overlay,
+.drift-wall__tile:focus-visible .drift-wall__overlay {
+  opacity: 0;
+}
+
+.drift-wall__tile:focus-visible .drift-wall__inner {
+  box-shadow:
+    0 24px 60px -18px rgba(0, 0, 0, 0.7),
+    0 0 0 2px rgba(255, 255, 255, 0.9);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drift-wall__plane,
+  .drift-wall__track {
+    will-change: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  #home .drift-wall { display: none; }
+  #gallery .drift-wall { display: block; height: 62vh; margin-top: 1.25rem; }
 }

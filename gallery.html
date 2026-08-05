@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Project gallery by Dwi Rianto (ianocent), Fullstack Developer from Indonesia. Screenshots of hotel management system dashboards, an Android music player, UI/UX prototypes, and web redesigns built with Next.js, Laravel, Vue.js, and Kotlin.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Dwi Rianto">
+  <meta name="theme-color" content="#1e1e24">
+  <meta property="og:title" content="Project Gallery — Dwi Rianto (ianocent) Fullstack Developer">
+  <meta property="og:description" content="A visual walkthrough of real production work: hotel management system dashboards, Android apps, and UI/UX prototypes.">
+  <meta property="og:image" content="https://ianocent.github.io/assets/img/b. Main Dashboard.png">
+  <meta property="og:url" content="https://ianocent.github.io/gallery.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Dwi Rianto (ianocent)">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Project Gallery — Dwi Rianto (ianocent)">
+  <meta name="twitter:description" content="Screenshots of real projects by Dwi Rianto: hotel management dashboards, Android app UI, and design prototypes.">
+  <meta name="twitter:image" content="https://ianocent.github.io/assets/img/b. Main Dashboard.png">
+  <title>Project Gallery — Dwi Rianto (ianocent) Fullstack Developer</title>
+  <link rel="shortcut icon" href="assets/img/logo.png" type="image/x-icon">
+  <link rel="canonical" href="https://ianocent.github.io/gallery.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <style>
+    /* Gallery page — taller single slide, no snap constraints */
+    #gallery.slide { height: auto; max-height: none; justify-content: flex-start; }
+    #gallery .drift-wall { height: clamp(420px, 55vh, 640px); }
+    .gal-intro { max-width: 720px; color: var(--text2); margin: 1rem 0 2rem; font-size: .95rem; line-height: 1.7; }
+    .gal-note { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 2.5rem 0 1rem; }
+    .gal-note h3 { font-family: var(--serif); font-size: 1.25rem; font-weight: 500; margin-bottom: .5rem; color: var(--gold); }
+    .gal-note p { color: var(--text2); font-size: .88rem; line-height: 1.7; }
+    @media (max-width: 768px) {
+      #gallery .drift-wall { display: block; height: 62vh; }
+      .gal-note { grid-template-columns: 1fr; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ImageGallery",
+    "name": "Project Gallery — Dwi Rianto (ianocent)",
+    "description": "Screenshots of production hotel management system dashboards, Android app UI, and UI/UX prototypes by Dwi Rianto, Fullstack Developer from Indonesia.",
+    "author": { "@type": "Person", "name": "Dwi Rianto", "url": "https://ianocent.github.io/" },
+    "image": [
+      "https://ianocent.github.io/assets/img/b. Main Dashboard.png",
+      "https://ianocent.github.io/assets/img/2. dashboard-view.png",
+      "https://ianocent.github.io/assets/img/19. booking-engine-analytics.png",
+      "https://ianocent.github.io/assets/img/20. role-management.png",
+      "https://ianocent.github.io/assets/img/16. housekeeping-scheduler-list.png",
+      "https://ianocent.github.io/assets/img/mobs/1.png",
+      "https://ianocent.github.io/assets/img/mainpage.png",
+      "https://ianocent.github.io/assets/img/proto.png",
+      "https://ianocent.github.io/assets/img/whatsapp.png",
+      "https://ianocent.github.io/assets/img/compas/Kompas.png"
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <!-- Dynamic Animated Pastel Background & Cursor Glow -->
+  <div id="bg-layer"></div>
+  <div id="bg-glow"></div>
+
+  <!-- Cinema Frame -->
+  <div class="cinema-frame" id="cinemaFrame">
+    <div class="cinema-holes cinema-holes-left"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="cinema-holes cinema-holes-right"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="cinema-vignette"></div>
+    <div class="cinema-scanline"></div>
+    <div class="cinema-label-top" style="color: #c9a96ebf; font-weight: bolder;">FRAME 001</div>
+  </div>
+
+  <!-- Custom cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <div id="page-clip">
+    <div id="page-scroll">
+
+      <div id="bar"></div>
+
+      <!-- NAV -->
+      <nav class="nav" id="nav">
+        <a href="index.html" class="logo" data-text="ianocent.">ıanocent<span class="logo-sep">.</span></a>
+        <ul class="nav-list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="index.html#skills">Skills</a></li>
+          <li><a href="index.html#workflow">Workflow</a></li>
+          <li><a href="index.html#portfolio">Portfolio</a></li>
+          <li><a href="gallery.html" class="on" aria-current="page">Gallery</a></li>
+          <li><a href="blog/index.html" target="_blank">Blog</a></li>
+          <li><a href="index.html#contact" class="nav-cta">Hire Me</a></li>
+        </ul>
+        <button class="hbg" id="hbg" aria-label="Menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </nav>
+
+      <div class="drawer" id="drawer">
+        <a href="index.html" onclick="closeDrawer()">Home</a>
+        <a href="index.html#about" onclick="closeDrawer()">About</a>
+        <a href="index.html#skills" onclick="closeDrawer()">Skills</a>
+        <a href="index.html#workflow" onclick="closeDrawer()">Workflow</a>
+        <a href="index.html#portfolio" onclick="closeDrawer()">Portfolio</a>
+        <a href="gallery.html" onclick="closeDrawer()">Gallery</a>
+        <a href="blog/index.html" onclick="closeDrawer()">Blog</a>
+        <a href="index.html#contact" onclick="closeDrawer()">Hire Me</a>
+      </div>
+
+      <!-- ═══ GALLERY ═══ -->
+      <section class="slide" id="gallery">
+        <div class="wrap">
+          <span class="eyebrow r"><i class="bx bx-images"></i> My Work</span>
+          <h1 class="h2 r">Project Gallery</h1>
+          <p class="gal-intro r">A visual walkthrough of real production work: hotel management system dashboards, a native Android music player, UI/UX prototypes, and web redesigns — built with <b>Next.js</b>, <b>Laravel</b>, <b>Kotlin</b>, and <b>vanilla JavaScript</b>.</p>
+
+          <!-- Drift Wall mounts here via assets/js/main.js -->
+
+          <div class="gal-note">
+            <div class="r">
+              <h3>Production Systems</h3>
+              <p>The <b>HMS Anyaman</b> hotel management system — front desk folio management, housekeeping scheduling, rate setup, booking engine analytics, role-based access control, and revenue dashboards used daily by hotel staff.</p>
+            </div>
+            <div class="r">
+              <h3>Apps &amp; Design Work</h3>
+              <p><b>IanPlayer</b>, a native Android music player built with Kotlin &amp; Jetpack Compose, plus Figma prototypes and redesigns — Vape Thing, Calligraphy System, Kompas, and the WhatsApp concept. Hover or click any tile to explore.</p>
+            </div>
+          </div>
+
+          <footer class="footer r">
+            <div class="ft-inner">
+              <div class="ft-logo">ıanocent<span>.</span></div>
+              <span class="ft-copy">© 2026 ıanocent. All rights reserved.</span>
+              <div class="ft-social">
+                <a href="index.html" class="icon-btn" aria-label="Back to portfolio"><i class="bx bx-home"></i></a>
+                <a href="https://www.github.com/ianocent" class="icon-btn" target="_blank" rel="noopener" aria-label="GitHub"><i class="bx bxl-github"></i></a>
+                <a href="https://www.instagram.com/ianocent/" class="icon-btn" target="_blank" rel="noopener" aria-label="Instagram"><i class="bx bxl-instagram"></i></a>
+              </div>
+            </div>
+          </footer>
+        </div>
+      </section>
+
+    </div><!-- /page-scroll -->
+  </div><!-- /page-clip -->
+
+  <script src="assets/js/main.js" defer></script>
+</body>
+</html>

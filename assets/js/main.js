@@ -5,19 +5,23 @@ let cx = 0,
   cy = 0,
   rx = 0,
   ry = 0;
+let lastMove = 0;
+let curRunning = false;
 
 document.addEventListener("mousemove", (e) => {
   cx = e.clientX;
   cy = e.clientY;
-
-  const xPos = (e.clientX / window.innerWidth) * 100;
-  const yPos = (e.clientY / window.innerHeight) * 100;
-  bgGlow.style.setProperty("--mx", `${xPos}%`);
-  bgGlow.style.setProperty("--my", `${yPos}%`);
+  lastMove = performance.now();
+  if (!curRunning) {
+    curRunning = true;
+    requestAnimationFrame(cursorLoop);
+  }
 });
 
 document
-  .querySelectorAll("a, button, .chip, .w-card, .info-item, .ct-item, .stat")
+  .querySelectorAll(
+    "a, button, .chip, .w-card, .info-item, .ct-item, .stat, .drift-wall__tile",
+  )
   .forEach((el) => {
     el.addEventListener("mouseenter", () => {
       cursor.classList.add("hover");
@@ -29,7 +33,7 @@ document
     });
   });
 
-function loop() {
+function cursorLoop(ts) {
   if (cursor) {
     cursor.style.left = cx + "px";
     cursor.style.top = cy + "px";
@@ -40,20 +44,28 @@ function loop() {
     ring.style.left = rx + "px";
     ring.style.top = ry + "px";
   }
-  requestAnimationFrame(loop);
+  if (bgGlow) {
+    bgGlow.style.setProperty("--mx", ((cx / window.innerWidth) * 100).toFixed(2) + "%");
+    bgGlow.style.setProperty("--my", ((cy / window.innerHeight) * 100).toFixed(2) + "%");
+  }
+  if (ts - lastMove > 300) {
+    curRunning = false;
+    return;
+  }
+  requestAnimationFrame(cursorLoop);
 }
-loop();
+requestAnimationFrame(cursorLoop);
 
 const scrollerEl = document.getElementById("page-scroll");
 const isMobileLayout = () => window.matchMedia("(max-width: 768px)").matches;
 
 function getScrollTop() {
-  return isMobileLayout()
+  return isMobileLayout() || !scrollerEl
     ? window.scrollY || document.documentElement.scrollTop
     : scrollerEl.scrollTop;
 }
 function getScrollMax() {
-  return isMobileLayout()
+  return isMobileLayout() || !scrollerEl
     ? document.documentElement.scrollHeight - window.innerHeight
     : scrollerEl.scrollHeight - scrollerEl.clientHeight;
 }
@@ -128,14 +140,14 @@ document.querySelectorAll(".r, .slide").forEach((el) => io.observe(el));
 
 function handleScroll() {
   // Nav backdrop
-  nav.classList.toggle("scrolled", getScrollTop() > 20);
+  if (nav) nav.classList.toggle("scrolled", getScrollTop() > 20);
   // Progress bar
   const max = getScrollMax();
-  bar.style.width = (max > 0 ? (getScrollTop() / max) * 100 : 0) + "%";
+  if (bar) bar.style.width = (max > 0 ? (getScrollTop() / max) * 100 : 0) + "%";
 }
 
 // Desktop: the cinema-frame container scrolls.
-scrollerEl.addEventListener("scroll", handleScroll, { passive: true });
+if (scrollerEl) scrollerEl.addEventListener("scroll", handleScroll, { passive: true });
 // Mobile: the window/document scrolls (see CSS @media max-width:768px,
 // where #page-scroll becomes position:static/overflow:visible).
 window.addEventListener("scroll", handleScroll, { passive: true });
@@ -146,7 +158,7 @@ window.addEventListener("resize", handleScroll, { passive: true });
 const hbg = document.getElementById("hbg");
 const drawer = document.getElementById("drawer");
 let openDrawerState = false;
-hbg.addEventListener("click", () => {
+if (hbg) hbg.addEventListener("click", () => {
   openDrawerState = !openDrawerState;
   drawer.classList.toggle("show", openDrawerState);
 });
@@ -245,7 +257,8 @@ document.querySelectorAll("img:not(.avatar-img)").forEach((img) => {
 
 const GSCRIPT =
   "https://script.google.com/macros/s/AKfycbwproNCkaC3CuSh0Go5i4bA9mLyuUNW2HYLRAeqFkvgElyaz_e7H4yemzxwC2CgOyit/exec";
-document.getElementById("cf").addEventListener("submit", (e) => {
+const cfEl = document.getElementById("cf");
+if (cfEl) cfEl.addEventListener("submit", (e) => {
   e.preventDefault();
   const btn = document.getElementById("sbtn");
   btn.disabled = true;
@@ -279,13 +292,15 @@ function updateImageWithEffect(newSrc) {
   }, 400);
 }
 
-photo.addEventListener("mouseover", () => {
-  updateImageWithEffect("assets/img/hehe1.png");
-});
+if (photo) {
+  photo.addEventListener("mouseover", () => {
+    updateImageWithEffect("assets/img/hehe1.png");
+  });
 
-photo.addEventListener("mouseout", () => {
-  updateImageWithEffect("assets/img/hehe.png");
-});
+  photo.addEventListener("mouseout", () => {
+    updateImageWithEffect("assets/img/hehe.png");
+  });
+}
 // 1. Fungsi untuk Counter Angka (0% -> target%)
 function animateCounter(el, target) {
   let current = 0;
@@ -331,16 +346,24 @@ function runSkillAnimations(card) {
   });
 }
 
-// 3. Observer yang Re-trigger
+// 3. Observer yang Re-trigger — card berjalan SEQUENTIAL (1 selesai → card berikutnya)
+const skTimers = new WeakMap();
+const skOrder = Array.from(document.querySelectorAll(".sk-card"));
+const SK_DUR = 1700; // durasi animasi per card (bar + counter + badge glow)
 const skillsObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
+  entries.forEach((entry) => {
+    const card = entry.target;
     if (entry.isIntersecting) {
-      // Panggil animasi untuk setiap card yang terlihat
-      runSkillAnimations(entry.target);
+      const t = setTimeout(
+        () => runSkillAnimations(card),
+        Math.max(0, skOrder.indexOf(card)) * SK_DUR,
+      );
+      skTimers.set(card, t);
     } else {
-      // Opsional: Reset saat keluar layar supaya saat scroll balik ke atas, dia play lagi
-      const bar = entry.target.querySelector(".sk-bar-fill");
-      bar.style.transform = `scaleX(0)`;
+      clearTimeout(skTimers.get(card));
+      skTimers.delete(card);
+      const bar = card.querySelector(".sk-bar-fill");
+      if (bar) bar.style.transform = "scaleX(0)";
     }
   });
 }, { threshold: 0.2 });
@@ -552,7 +575,7 @@ async function sendCustomMessage() {
 }
  
 // ── Template button click ─────────────────────────────────────
-chatOptions.forEach((btn) => {
+if (chatOptions) chatOptions.forEach((btn) => {
   btn.addEventListener("click", async () => {
     const qText = btn.textContent.trim();
     const qKey  = btn.dataset.q || "default";
@@ -611,21 +634,26 @@ chatOptions.forEach((btn) => {
 });
  
 // ── Event listeners ───────────────────────────────────────────
-chatFab.addEventListener("click", () => {
-  chatWindow.classList.add("open");
-  loadInitial();
-  ChatState.pollingTimer = setInterval(poll, 3000);
-});
- 
-closeChat.addEventListener("click", () => {
-  chatWindow.classList.remove("open");
-  clearInterval(ChatState.pollingTimer);
-});
- 
-sendChatBtn.addEventListener("click", sendCustomMessage);
-chatInput.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") sendCustomMessage();
-});
+if (chatFab) {
+  chatFab.addEventListener("click", () => {
+    chatWindow.classList.add("open");
+    loadInitial();
+    ChatState.pollingTimer = setInterval(poll, 3000);
+  });
+}
+
+if (closeChat) {
+  closeChat.addEventListener("click", () => {
+    chatWindow.classList.remove("open");
+    clearInterval(ChatState.pollingTimer);
+  });
+}
+
+if (sendChatBtn) sendChatBtn.addEventListener("click", sendCustomMessage);
+if (chatInput)
+  chatInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") sendCustomMessage();
+  });
  
 // Init
 initSession();
@@ -645,10 +673,10 @@ const typAcc = document.getElementById('typAcc');
 const typTimer = document.getElementById('typTimer');
 const typReset = document.getElementById('typReset');
 
-const originalText = typTarget.innerText;
+const originalText = typTarget ? typTarget.innerText : "";
 let startTime = null;
 let typingInterval = null;
-typInput.addEventListener("paste", (e) => {
+if (typInput) typInput.addEventListener("paste", (e) => {
   e.preventDefault();
   // Opsional: ganti text target sementara buat nge-troll yang copas
   typTarget.innerText = "Eits, dilarang copas! Ketik manual dong bos 😜";
@@ -663,12 +691,14 @@ if(wpmTrigger) {
     typInput.focus(); // Langsung auto focus ke input
   });
 }
-wpmClose.addEventListener('click', () => wpmModal.classList.remove('open'));
+if (wpmClose) wpmClose.addEventListener('click', () => wpmModal.classList.remove('open'));
 
 // Tutup modal kalo klik area luar box
-wpmModal.addEventListener('click', (e) => {
-  if (e.target === wpmModal) wpmModal.classList.remove('open');
-});
+if (wpmModal) {
+  wpmModal.addEventListener('click', (e) => {
+    if (e.target === wpmModal) wpmModal.classList.remove('open');
+  });
+}
 
 function calculateStats() {
   const typedText = typInput.value;
@@ -754,7 +784,7 @@ function calculateStats() {
   }
 }
 
-typInput.addEventListener('input', () => {
+if (typInput) typInput.addEventListener('input', () => {
   if (!startTime && typInput.value.length > 0) {
     startTime = Date.now();
     typingInterval = setInterval(() => {
@@ -765,7 +795,7 @@ typInput.addEventListener('input', () => {
   calculateStats();
 });
 
-typReset.addEventListener('click', () => {
+if (typReset) typReset.addEventListener('click', () => {
   clearInterval(typingInterval);
   startTime = null;
   typInput.value = '';
@@ -874,3 +904,269 @@ if (expModal) {
     if (e.target === expModal) expModal.classList.remove('open');
   });
 }
+
+// ── DRIFT WALL (ReactBits DriftWall — vanilla port) ──────────
+(function () {
+  const IMAGES = [
+    ["assets/img/b. Main Dashboard.png", "Main Dashboard"],
+    ["assets/img/a. Room Availability Tooltip.png", "Room Availability Tooltip"],
+    ["assets/img/c. Forecast Market Segment Dashboard.png", "Forecast Dashboard"],
+    ["assets/img/d. Market Segment 2 & 3.png", "Market Segment"],
+    ["assets/img/e. Dynamic Chart.png", "Dynamic Chart"],
+    ["assets/img/f. Role Based Access Control.png", "Role Based Access"],
+    ["assets/img/1. multiple-properties.png", "Multiple Properties"],
+    ["assets/img/2. dashboard-view.png", "Dashboard View"],
+    ["assets/img/3. dashboard-custom.png", "Custom Dashboard"],
+    ["assets/img/4. dashboard-intuitive.png", "Intuitive Dashboard"],
+    ["assets/img/5. folio-listing-frontdesk.png", "Front Desk Folio"],
+    ["assets/img/6. room-availability.png", "Room Availability"],
+    ["assets/img/7. room-availability-move-rsv-dragndrop.png", "Drag & Drop Booking"],
+    ["assets/img/8. floor-plan.png", "Floor Plan"],
+    ["assets/img/9. create-reservation.png", "Create Reservation"],
+    ["assets/img/10. edit-guest-profile.png", "Edit Guest Profile"],
+    ["assets/img/11. night-audit-precheck.png", "Night Audit"],
+    ["assets/img/12. housekeeping-shifting.png", "Housekeeping Shifting"],
+    ["assets/img/13. housekeeping-rosting.png", "Housekeeping Rostering"],
+    ["assets/img/14. housekeeping-room.png", "Housekeeping Room"],
+    ["assets/img/15. housekeeping-scheduler.png", "Housekeeping Scheduler"],
+    ["assets/img/16. housekeeping-scheduler-list.png", "Scheduler List"],
+    ["assets/img/17. rate-setup.png", "Rate Setup"],
+    ["assets/img/18. event-management-timeline.png", "Event Timeline"],
+    ["assets/img/19. booking-engine-analytics.png", "Booking Analytics"],
+    ["assets/img/20. role-management.png", "Role Management"],
+    ["assets/img/21. role-template.png", "Role Template"],
+    ["assets/img/mobs/1.png", "Mobile UI"],
+    ["assets/img/mobs/2.png", "Mobile UI"],
+    ["assets/img/mobs/3.png", "Mobile UI"],
+    ["assets/img/mobs/4.png", "Mobile UI"],
+    ["assets/img/mobs/5.png", "Mobile UI"],
+    ["assets/img/mobs/6.png", "Mobile UI"],
+    ["assets/img/mobs/7.png", "Mobile UI"],
+    ["assets/img/mobs/8.png", "Mobile UI"],
+    ["assets/img/mobs/9.png", "Mobile UI"],
+    ["assets/img/mobs/10.png", "Mobile UI"],
+    ["assets/img/mobs/11.png", "Mobile UI"],
+    ["assets/img/mainpage.png", "IanPlayer"],
+    ["assets/img/dashboard-expert.png", "Dashboard Expert"],
+    ["assets/img/proto.png", "Vape Thing UI"],
+    ["assets/img/whatsapp.png", "WhatsApp Redesign"],
+    ["assets/img/compas/Kompas.png", "Kompas Redesign"],
+    ["assets/img/calligraphsy/1. Landing Guest.png", "Calligraphy System"],
+  ];
+
+  const vw = window.innerWidth || 1200;
+  const CFG = {
+    columns: vw < 768 ? 4 : 9,
+    tileW: vw < 768 ? 122 : 200,
+    tileH: vw < 768 ? 82 : 134,
+    gap: vw < 768 ? 10 : 14,
+    radius: 12,
+    tilt: 16, turn: -14, roll: 0, perspective: 1200, depth: 120,
+    speed: 42, direction: "up", variance: 0.45, parallax: 0.6,
+    lift: 64, fade: 0.45, dim: 0.55, overlay: "#14161d",
+  };
+
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const host = document.querySelector("#gallery .wrap");
+  if (!host) return;
+
+  // Root + CSS vars
+  const root = document.createElement("div");
+  root.className = "drift-wall";
+  root.setAttribute("role", "group");
+  root.setAttribute("aria-label", "Drifting wall of project screenshots");
+  const vars = {
+    "--dw-tile-w": CFG.tileW + "px",
+    "--dw-tile-h": CFG.tileH + "px",
+    "--dw-gap": CFG.gap + "px",
+    "--dw-radius": CFG.radius + "px",
+    "--dw-perspective": CFG.perspective + "px",
+    "--dw-lift": CFG.lift + "px",
+    "--dw-dim": CFG.dim,
+    "--dw-gray": 0,
+    "--dw-overlay": CFG.overlay,
+    "--dw-edge": Math.max(0, (1 - CFG.fade) * 100) + "%",
+  };
+  Object.entries(vars).forEach(([k, v]) => root.style.setProperty(k, v));
+  const intro = host.querySelector(".gal-intro");
+  const anchor = intro ? intro.nextElementSibling : host.querySelector(".stats");
+  host.insertBefore(root, anchor);
+
+  // Columns
+  const cols = Array.from({ length: CFG.columns }, () => []);
+  IMAGES.forEach((it, i) => cols[i % CFG.columns].push(it));
+
+  const plane = document.createElement("div");
+  plane.className = "drift-wall__plane";
+  root.appendChild(plane);
+
+  const colEls = cols.map(() => {
+    const colEl = document.createElement("div");
+    colEl.className = "drift-wall__col";
+    const track = document.createElement("div");
+    track.className = "drift-wall__track";
+    colEl.appendChild(track);
+    plane.appendChild(colEl);
+    return track;
+  });
+
+  const unitH = CFG.tileH + CFG.gap;
+  const meta = cols.map((col) => ({
+    copyH: Math.max(unitH, col.length * unitH),
+    copies: 0,
+  }));
+
+  function buildTiles() {
+    cols.forEach((col, c) => {
+      const track = colEls[c];
+      track.innerHTML = "";
+      const m = meta[c];
+      for (let k = 0; k < m.copies; k++) {
+        col.forEach((it, i) => {
+          const id = c + "-" + k + "-" + i;
+          const tile = document.createElement("div");
+          tile.className = "drift-wall__tile";
+          tile.tabIndex = 0;
+          tile.setAttribute("role", "button");
+          tile.setAttribute("aria-label", it[1]);
+          tile.dataset.tileId = id;
+          tile.dataset.col = c;
+          tile.innerHTML =
+            '<span class="drift-wall__inner"><img src="' + it[0] + '" alt="' + it[1] +
+            '" loading="lazy" decoding="async" draggable="false"><span class="drift-wall__overlay" aria-hidden="true"></span></span>';
+          tile.addEventListener("click", () => openLb(it[0]));
+          tile.addEventListener("focus", () => activate(id, c));
+          tile.addEventListener("blur", release);
+          track.appendChild(tile);
+        });
+      }
+    });
+  }
+
+  let containerH = 600;
+  const ro = new ResizeObserver((es) => {
+    containerH = es[0].contentRect.height || 600;
+    meta.forEach((m, c) => {
+      m.copyH = Math.max(unitH, cols[c].length * unitH);
+      m.copies = Math.max(2, Math.ceil((containerH * 1.6) / m.copyH) + 1);
+    });
+    buildTiles();
+  });
+  ro.observe(root);
+
+  const baseV = cols.map((_, c) => {
+    const dirSign = CFG.direction === "up" ? 1 : -1;
+    const altSign = c % 2 === 0 ? 1 : -1;
+    const pseudo = ((c * 0.6180339887 + 0.35) % 1) * 2 - 1;
+    return CFG.speed * (1 + CFG.variance * pseudo) * dirSign * altSign;
+  });
+
+  const offsets = meta.map((m, c) => m.copyH * ((c * 0.37) % 1));
+  const velocities = cols.map(() => 0);
+  const pointer = { x: 0, y: 0 };
+  const damped = { x: 0, y: 0 };
+  let activeId = null;
+  let hoveredCol = -1;
+  let lastTs = null;
+  let hitPending = null;
+  let hitScheduled = false;
+
+  function activate(id, c) {
+    root
+      .querySelectorAll(".drift-wall__tile.is-active")
+      .forEach((t) => t.classList.remove("is-active"));
+    const tile = root.querySelector('[data-tile-id="' + id + '"]');
+    if (tile) tile.classList.add("is-active");
+    activeId = id;
+    hoveredCol = c;
+  }
+  function release() {
+    root
+      .querySelectorAll(".drift-wall__tile.is-active")
+      .forEach((t) => t.classList.remove("is-active"));
+    activeId = null;
+    hoveredCol = -1;
+  }
+
+  function applyPlane(px, py) {
+    plane.style.transform =
+      "translate(-50%, -50%) scale(1.18) rotateX(" + (CFG.tilt + py) +
+      "deg) rotateY(" + (CFG.turn + px) + "deg) rotateZ(" + CFG.roll +
+      "deg) translateZ(" + -CFG.depth + "px)";
+  }
+
+  root.addEventListener("pointermove", (e) => {
+    const rect = root.getBoundingClientRect();
+    if (!rect.width) return;
+    if (CFG.parallax > 0 && !reduced) {
+      pointer.x = (e.clientX - rect.left) / rect.width - 0.5;
+      pointer.y = (e.clientY - rect.top) / rect.height - 0.5;
+    }
+    hitPending = [e.clientX, e.clientY];
+    if (!hitScheduled) {
+      hitScheduled = true;
+      requestAnimationFrame(flushHit);
+    }
+  });
+  function flushHit() {
+    hitScheduled = false;
+    const p = hitPending;
+    hitPending = null;
+    if (!p) return;
+    const hit = document.elementFromPoint(p[0], p[1]);
+    const tile = hit && hit.closest ? hit.closest("[data-tile-id]") : null;
+    if (!tile) return;
+    const id = tile.dataset.tileId;
+    if (id !== activeId) activate(id, Number(tile.dataset.col));
+  }
+  root.addEventListener("pointerleave", () => {
+    pointer.x = 0;
+    pointer.y = 0;
+    release();
+  });
+
+  if (reduced) {
+    applyPlane(0, 0);
+    meta.forEach((m, c) => {
+      colEls[c].style.transform = "translate3d(0, " + -offsets[c] + "px, 0)";
+    });
+    return;
+  }
+
+  function frame(ts) {
+    if (lastTs === null) lastTs = ts;
+    const dt = Math.min(0.05, Math.max(0, (ts - lastTs) / 1000));
+    lastTs = ts;
+    const maxTilt = CFG.parallax * 8;
+    const damp = 1 - Math.exp(-dt / 0.12);
+    damped.x += (pointer.x * maxTilt - damped.x) * damp;
+    damped.y += (-pointer.y * maxTilt - damped.y) * damp;
+    applyPlane(damped.x, damped.y);
+    for (let c = 0; c < colEls.length; c++) {
+      const m = meta[c];
+      if (!m) continue;
+      const factor = hoveredCol === c ? 0 : 1;
+      const target = baseV[c] * factor;
+      const ease = 1 - Math.exp(-dt / (target === 0 ? 0.16 : 0.28));
+      velocities[c] += (target - velocities[c]) * ease;
+      let next = (offsets[c] + velocities[c] * dt) % m.copyH;
+      if (next < 0) next += m.copyH;
+      offsets[c] = next;
+      colEls[c].style.transform = "translate3d(0, " + -next + "px, 0)";
+    }
+    rafId = requestAnimationFrame(frame);
+  }
+  // Loop cuma jalan saat drift-wall kelihatan di layar; pause pas di-scroll keluar
+  let rafId = null;
+  const galleryIO = new IntersectionObserver((es) => {
+    if (es[0].isIntersecting && !rafId) {
+      lastTs = null;
+      rafId = requestAnimationFrame(frame);
+    } else if (!es[0].isIntersecting && rafId) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+  });
+  galleryIO.observe(root);
+})();
