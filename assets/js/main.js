@@ -198,26 +198,72 @@ function openLb(src) {
   document.body.appendChild(lb);
 }
 
-document.querySelectorAll(".flt").forEach((btn) => {
+// ── PORTFOLIO FILTER + PAGINATION ──
+const PORT_PAGE_SIZE = 6;
+let portFilter = "all";
+let portPage = 1;
+
+function portCards() {
+  return Array.from(document.querySelectorAll(".w-card"));
+}
+
+function portVisible(cards) {
+  return cards.filter((c) => portFilter === "all" || c.dataset.cat === portFilter);
+}
+
+function portTotalPages(count) {
+  return Math.max(1, Math.ceil(count / PORT_PAGE_SIZE));
+}
+
+function renderPortfolio() {
+  const all = portCards();
+  const visible = portVisible(all);
+  const total = portTotalPages(visible.length);
+  portPage = Math.min(portPage, total);
+
+  const start = (portPage - 1) * PORT_PAGE_SIZE;
+  const end = start + PORT_PAGE_SIZE;
+
+  all.forEach((c) => {
+    const match = visible.includes(c);
+    const inPage = match && visible.indexOf(c) >= start && visible.indexOf(c) < end;
+    if (inPage) {
+      c.classList.remove("hidden");
+      c.style.opacity = "1";
+      c.style.transform = "";
+    } else {
+      c.style.opacity = "0";
+      c.style.transform = "scale(0.9)";
+      setTimeout(() => c.classList.add("hidden"), 200);
+    }
+  });
+
+  const ind = document.getElementById("portInd");
+  const prev = document.getElementById("portPrev");
+  const next = document.getElementById("portNext");
+  if (ind) ind.textContent = `${portPage} / ${total}`;
+  if (prev) prev.disabled = portPage <= 1;
+  if (next) next.disabled = portPage >= total;
+}
+
+document.querySelectorAll(".flt[data-f]").forEach((btn) => {
   btn.addEventListener("click", () => {
-    document.querySelectorAll(".flt").forEach((b) => b.classList.remove("on"));
+    document.querySelectorAll(".flt[data-f]").forEach((b) => b.classList.remove("on"));
     btn.classList.add("on");
-    const f = btn.dataset.f;
-    document.querySelectorAll(".w-card").forEach((c) => {
-      if (f === "all" || c.dataset.cat === f) {
-        c.classList.remove("hidden");
-        setTimeout(() => {
-          c.style.opacity = "1";
-          c.style.transform = "";
-        }, 10);
-      } else {
-        c.style.opacity = "0";
-        c.style.transform = "scale(0.9)";
-        setTimeout(() => c.classList.add("hidden"), 200);
-      }
-    });
+    portFilter = btn.dataset.f;
+    portPage = 1;
+    renderPortfolio();
   });
 });
+
+document.getElementById("portPrev")?.addEventListener("click", () => {
+  if (portPage > 1) { portPage--; renderPortfolio(); }
+});
+document.getElementById("portNext")?.addEventListener("click", () => {
+  portPage++; renderPortfolio();
+});
+
+renderPortfolio(); // initial paint — page 1
 
 const cars = {};
 function initCar(id) {
@@ -256,7 +302,7 @@ document.querySelectorAll("img:not(.avatar-img)").forEach((img) => {
 });
 
 const GSCRIPT =
-  "https://script.google.com/macros/s/AKfycbwproNCkaC3CuSh0Go5i4bA9mLyuUNW2HYLRAeqFkvgElyaz_e7H4yemzxwC2CgOyit/exec";
+  "https://script.google.com/macros/s/AKfycbwll54I5R1uJKlv3jtM-thLKLiORc5K0aGqV_80bvxOaXq2n9H-c-wPHwDvG_ERgGRY/exec";
 const cfEl = document.getElementById("cf");
 if (cfEl) cfEl.addEventListener("submit", (e) => {
   e.preventDefault();

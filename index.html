@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Official portfolio of Dwi Rianto (ianocent), a Fullstack Developer from Indonesia specializing in Next.js, Laravel, DevOps, and UI/UX Design.">
+  <meta name="description" content="Official portfolio of Dwi Rianto (ianocent), a Fullstack Developer from Indonesia specializing in Next.js, Laravel, DevOps, and UI/UX Design. Includes Suzuki dealer websites in Tangerang & Serpong: promo Ertiga Hybrid, XL7, Fronx, Jimny, kredit DP ringan.">
+  <meta name="keywords" content="Dwi Rianto, ianocent, fullstack developer Indonesia, jasa pembuatan website, web developer Tangerang, SEO landing page, dealer suzuki tangerang, suzuki serpong, promo ertiga hybrid, suzuki xl7, suzuki fronx, kredit suzuki dp ringan, sales suzuki gading serpong">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="author" content="Dwi Rianto">
   <meta name="theme-color" content="#1e1e24">
@@ -382,18 +383,38 @@
           <!-- <div style="display:flex; justify-content:space-between; align-items:flex-end;"> -->
             <div class="port-header-row">
               <h2 class="h2 r" style="margin-bottom:1rem;">Recent Projects</h2>
-              <div class="port-filters r" style="margin-bottom:1.5rem;">
+              <!-- style inline -->
+              <div style="display: flex; justify-content: space-between;">
+                <div class="port-filters r" style="margin-bottom:1.5rem;">
+                  <button class="flt on" data-f="all">All</button>
+                  <button class="flt" data-f="web">Web</button>
+                  <button class="flt" data-f="mobile">Mobile</button>
+                  <button class="flt" data-f="design">Design</button>
+                </div>
+                <div class="port-pager r" style="display:flex;align-items:center;gap:.5rem;margin-bottom:1.5rem;">
+                  <button class="flt" id="portPrev" aria-label="Previous page"><i class="bx bx-chevron-left"></i> Prev</button>
+                  <span id="portInd" style="color:var(--text2);font-size:.8rem;min-width:3.6rem;text-align:center;">1 / 1</span>
+                  <button class="flt" id="portNext" aria-label="Next page">Next <i class="bx bx-chevron-right"></i></button>
+                </div>
+              </div>
+
+              <!-- <div class="port-filters r" style="margin-bottom:1.5rem;">
                 <button class="flt on" data-f="all">All</button>
                 <button class="flt" data-f="web">Web</button>
                 <button class="flt" data-f="mobile">Mobile</button>
                 <button class="flt" data-f="design">Design</button>
               </div>
+              <div class="port-pager r" style="display:flex;align-items:center;gap:.5rem;margin-bottom:1.5rem;">
+                <button class="flt" id="portPrev" aria-label="Previous page"><i class="bx bx-chevron-left"></i> Prev</button>
+                <span id="portInd" style="color:var(--text2);font-size:.8rem;min-width:3.6rem;text-align:center;">1 / 1</span>
+                <button class="flt" id="portNext" aria-label="Next page">Next <i class="bx bx-chevron-right"></i></button>
+              </div> -->
             </div>
           
           <div class="port-grid">
             <!-- Client -->
             <div class="w-card r" data-cat="web" style="transition-delay:.1s">
-              <img src="https://vira-suzukigadingserpong.com/assets/img/newPromo.jpeg" alt="Vira Suzuki Gading Serpong promo banner" class="w-thumb" loading="lazy"
+              <img src="https://vira-suzukigadingserpong.com/assets/img/vira suzuki gading serpong.jpeg" alt="Vira Suzuki Gading Serpong promo banner" class="w-thumb" loading="lazy"
               onerror="this.outerHTML='<div class=\'w-empty\'><i class=\'bx bx-image\'></i></div>'">
               <div class="w-body">
                 <!-- <div class="dash-grid" style="margin-bottom:.4rem;">
@@ -405,6 +426,26 @@
                 <div class="w-header"><h3>Vira Suzuki Gading Serpong</h3><span class="w-tag t-web">Client · Web</span></div>
                 <p>Official Suzuki dealer website I manage — Tangerang. Promo Ertiga Hybrid, XL7, Jimny, Fronx &amp; Carry, test drive booking, simulasi kredit, WhatsApp sales integration.</p>
                 <a href="https://vira-suzukigadingserpong.com" class="w-link" target="_blank" rel="noopener">Visit Website <i class="bx bx-right-arrow-alt"></i></a>
+              </div>
+            </div>
+            <!-- Kiki Suzuki Landing Page -->
+            <div class="w-card r" data-cat="web" style="transition-delay:.1s">
+              <img src="https://suzukibuanaindomobiltrada.com/assets/img/bukti4.jpg" alt="Kiki Suzuki Gading Serpong" class="w-thumb" loading="lazy"
+              onerror="this.outerHTML='<div class=\'w-empty\'><i class=\'bx bx-image\'></i></div>'">
+              <div class="w-body">
+                <div class="w-header"><h3>Kiki Suzuki Gading Serpong</h3><span class="w-tag t-web">Client · Web</span></div>
+                <p>Official Suzuki Gading Serpong Tangerang — Kiki Wulandari. Dealer suzuki gading serpong, promo Ertiga Hybrid/XL7/Fronx/Carry 2026, WhatsApp sales integration.</p>
+                <a href="https://suzukibuanaindomobiltrada.com" class="w-link" target="_blank" rel="noopener">Visit Website <i class="bx bx-right-arrow-alt"></i></a>
+              </div>
+            </div>
+            <!-- Cinta Suzuki Landing Page -->
+            <div class="w-card r" data-cat="web" style="transition-delay:.15s">
+              <img src="https://dealersuzukigadingserpong.com/assets/img/bukti4.jpg" alt="Cinta Suzuki Gading Serpong promo banner" class="w-thumb" loading="lazy"
+              onerror="this.outerHTML='<div class=\'w-empty\'><i class=\'bx bx-image\'></i></div>'">
+              <div class="w-body">
+                <div class="w-header"><h3>Cinta Suzuki Gading Serpong</h3><span class="w-tag t-web">Client · Web</span></div>
+                <p>Official Suzuki Gading Serpong & Tangsel — Salsa. Suzuki gading serpong, promo XL7 Facelift/Fronx/Ertiga Hybrid 2026, WhatsApp chat integration.</p>
+                <a href="https://dealersuzukigadingserpong.com" class="w-link" target="_blank" rel="noopener">Visit Website <i class="bx bx-right-arrow-alt"></i></a>
               </div>
             </div>
             <!-- 4 -->
@@ -485,6 +526,7 @@
                   <div class="fg"><input type="text" id="nama" name="nama" placeholder="Your name" required></div>
                   <div class="fg"><input type="email" id="email" name="email" placeholder="your@email.com" required></div>
                   <div class="fg"><textarea id="pesan" name="pesan" placeholder="Tell me about your project..." required></textarea></div>
+                  <div class="fg"><label for="attachment" style="display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--text2);margin-bottom:.4rem;cursor:pointer;"><i class="bx bx-paperclip"></i> Attachment (image optional — JPG/PNG/WebP, max 5MB)</label><input type="file" id="attachment" name="attachment" accept="image/jpeg,image/png,image/webp,image/gif" style="color:var(--text2);font-size:.8rem;width:100%;"></div>
                   <div><button type="submit" class="btn btn-p magnetic" id="sbtn"><i class="bx bx-send"></i> Send Message</button></div>
                   <p id="form-ok" style="transition-delay:.05s">✓ Message sent — I'll get back to you shortly.</p>
                 </form>
@@ -630,6 +672,83 @@
     </table>
   </div>
 </div>
+  <script>
+  // Contact image upload — intercept submit BEFORE main.js FormData handler
+  // (registered inline, runs before deferred main.js listener)
+  (function () {
+    var GSCRIPT_URL =
+      "https://script.google.com/macros/s/AKfycbwll54I5R1uJKlv3jtM-thLKLiORc5K0aGqV_80bvxOaXq2n9H-c-wPHwDvG_ERgGRY/exec";
+    var cf = document.getElementById("cf");
+    var fileIn = document.getElementById("attachment");
+    if (!cf || !fileIn) return;
+
+    cf.addEventListener("submit", function (e) {
+      var file = fileIn.files[0];
+      if (!file) return; // no image -> let main.js handle normally
+
+      e.preventDefault();
+      e.stopImmediatePropagation();
+
+      var btn = document.getElementById("sbtn");
+      var ok = document.getElementById("form-ok");
+      btn.disabled = true;
+      btn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Sending…';
+
+      var fr = new FileReader();
+      fr.onload = function () {
+        var img = new Image();
+        img.onload = function () {
+          var MAX = 1600;
+          var scale = Math.min(1, MAX / Math.max(img.width, img.height));
+          var cv = document.createElement("canvas");
+          cv.width = Math.round(img.width * scale);
+          cv.height = Math.round(img.height * scale);
+          cv.getContext("2d").drawImage(img, 0, 0, cv.width, cv.height);
+          var base64 = cv.toDataURL("image/jpeg", 0.82).split(",")[1];
+          var safeName = (file.name || "attachment.jpg").replace(/[^\w.\-]/g, "_");
+
+          var payload = {
+            action: "upload",
+            nama: document.getElementById("nama").value,
+            email: document.getElementById("email").value,
+            pesan: document.getElementById("pesan").value,
+            fileName: safeName,
+            fileType: file.type || "image/jpeg",
+            fileBase64: base64
+          };
+
+          fetch(GSCRIPT_URL, {
+            method: "POST",
+            body: JSON.stringify(payload)
+          })
+            .then(function (r) { return r.json(); })
+            .then(function (d) {
+              if (d && d.status === "success") {
+                ok.style.display = "block";
+                cf.reset();
+                fileIn.value = "";
+                setTimeout(function () { ok.style.display = "none"; }, 6000);
+              } else {
+                alert("Upload gagal: " + ((d && d.message) || "unknown error"));
+              }
+            })
+            .catch(function () { alert("Upload gagal — cek koneksi."); })
+            .finally(function () {
+              btn.disabled = false;
+              btn.innerHTML = '<i class="bx bx-send"></i> Send Message';
+            });
+        };
+        img.onerror = function () {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="bx bx-send"></i> Send Message';
+          alert("File bukan gambar valid.");
+        };
+        img.src = fr.result;
+      };
+      fr.readAsDataURL(file);
+    });
+  })();
+  </script>
   <script src="assets/js/main.js" defer></script>
 </body>
 </html>
