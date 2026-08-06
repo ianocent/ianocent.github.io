@@ -302,7 +302,7 @@ document.querySelectorAll("img:not(.avatar-img)").forEach((img) => {
 });
 
 const GSCRIPT =
-  "https://script.google.com/macros/s/AKfycbwll54I5R1uJKlv3jtM-thLKLiORc5K0aGqV_80bvxOaXq2n9H-c-wPHwDvG_ERgGRY/exec";
+  "https://script.google.com/macros/s/AKfycbwgIf3vi8t7ytRhMmvceOYm_cj9QzlT4Ll__n9IWYllqSKedbToITi57yTeTOAGa9hY/exec";
 const cfEl = document.getElementById("cf");
 if (cfEl) cfEl.addEventListener("submit", (e) => {
   e.preventDefault();

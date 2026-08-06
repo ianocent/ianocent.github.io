@@ -145,9 +145,20 @@ function handleJsonPost(e, ss) {
 }
 
 function getOrCreateFolder_(name) {
-  var it = DriveApp.getFoldersByName(name);
-  if (it.hasNext()) return it.next();
-  return DriveApp.createFolder(name);
+  // Cache folder ID di ScriptProperties — hindari getFoldersByName
+  // (butuh scope drive.readonly, sering gagal di project library)
+  var props = PropertiesService.getScriptProperties();
+  var id = props.getProperty('CONTACT_FOLDER_ID');
+  if (id) {
+    try {
+      return DriveApp.getFolderById(id);
+    } catch (err) {
+      // folder kehapus/diubah — bikin baru
+    }
+  }
+  var folder = DriveApp.createFolder(name);
+  props.setProperty('CONTACT_FOLDER_ID', folder.getId());
+  return folder;
 }
 
 function jsonRes(obj, code) {
@@ -158,12 +169,13 @@ function jsonRes(obj, code) {
 // Handle fungsi ngambil data (Load Chat & Load Leaderboard)
 function doGet(e) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var p = (e && e.parameter) ? e.parameter : {}; // aman kalo di-Run manual tanpa event
   
   // ── LOGIC CHAT HISTORY (Existing) ──
-  if (e.parameter.action === 'getChat') {
+  if (p.action === 'getChat') {
     var sheet = ss.getSheetByName(CHAT_SHEET_NAME);
     var data = sheet.getDataRange().getValues();
-    var sessionId = e.parameter.sessionId;
+    var sessionId = p.sessionId;
     var history = [];
 
     for (var i = 1; i < data.length; i++) {
@@ -178,7 +190,7 @@ function doGet(e) {
   }
   
   // ── TAMBAHAN LOGIC: AMBIL TOP 5 LEADERBOARD WPM ──
-  else if (e.parameter.action === 'get_leaderboard') {
+  else if (p.action === 'get_leaderboard') {
     var sheet = ss.getSheetByName("WpmLeaderboard");
     if (!sheet) return ContentService.createTextOutput(JSON.stringify([])).setMimeType(ContentService.MimeType.JSON);
     
