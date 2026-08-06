@@ -379,18 +379,29 @@ function runSkillAnimations(card) {
     bar.style.transform = `scaleX(${bar.dataset.w})`;
     animateCounter(label, targetVal);
   }, 200);
-
-  // Milestone Badge Highlight (Looping per item)
-  const items = card.querySelectorAll('.sk-row');
-  items.forEach((item, index) => {
-    const badge = item.querySelector('.badge');
-    const delay = 300 + (index * 150);
-    setTimeout(() => {
-      badge.classList.add('highlight');
-      setTimeout(() => badge.classList.remove('highlight'), 500);
-    }, delay);
-  });
 }
+
+// Badge glow — JALAN HANYA SAAT HOVER card (bukan otomatis pas scroll)
+document.querySelectorAll('.sk-card').forEach((card) => {
+  let badgeTimer = null;
+  card.addEventListener('mouseenter', () => {
+    const items = card.querySelectorAll('.sk-row');
+    let idx = 0;
+    const tick = () => {
+      items.forEach((it) => it.querySelector('.badge').classList.remove('highlight'));
+      if (idx < items.length) {
+        items[idx].querySelector('.badge').classList.add('highlight');
+        idx++;
+        badgeTimer = setTimeout(tick, 300);
+      }
+    };
+    tick();
+  });
+  card.addEventListener('mouseleave', () => {
+    clearTimeout(badgeTimer);
+    card.querySelectorAll('.badge').forEach((b) => b.classList.remove('highlight'));
+  });
+});
 
 // 3. Observer yang Re-trigger — card berjalan SEQUENTIAL (1 selesai → card berikutnya)
 const skTimers = new WeakMap();
