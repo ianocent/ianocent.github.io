@@ -526,7 +526,13 @@
                   <div class="fg"><input type="text" id="nama" name="nama" placeholder="Your name" required></div>
                   <div class="fg"><input type="email" id="email" name="email" placeholder="your@email.com" required></div>
                   <div class="fg"><textarea id="pesan" name="pesan" placeholder="Tell me about your project..." required></textarea></div>
-                  <div class="fg"><label for="attachment" style="display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--text2);margin-bottom:.4rem;cursor:pointer;"><i class="bx bx-paperclip"></i> Attachment (image optional — JPG/PNG/WebP, max 5MB)</label><input type="file" id="attachment" name="attachment" accept="image/jpeg,image/png,image/webp,image/gif" style="color:var(--text2);font-size:.8rem;width:100%;"></div>
+                  <div class="fg">
+  <label for="attachment" class="btn btn-o" style="display:inline-flex;align-items:center;gap:.5rem;font-size:.8rem;padding:.5rem 1rem;cursor:pointer;width:fit-content;margin-bottom:.4rem;">
+    <i class="bx bx-paperclip"></i> <span id="attachName">Choose File (image, max 5MB)</span>
+  </label>
+  <input type="file" id="attachment" name="attachment" accept="image/jpeg,image/png,image/webp,image/gif" style="display:none;">
+  <div style="font-size:.75rem;color:var(--text2);">Optional — JPG/PNG/WebP</div>
+</div>
                   <div><button type="submit" class="btn btn-p magnetic" id="sbtn"><i class="bx bx-send"></i> Send Message</button></div>
                   <p id="form-ok" style="transition-delay:.05s">✓ Message sent — I'll get back to you shortly.</p>
                 </form>
@@ -680,7 +686,15 @@
       "https://script.google.com/macros/s/AKfycbwgIf3vi8t7ytRhMmvceOYm_cj9QzlT4Ll__n9IWYllqSKedbToITi57yTeTOAGa9hY/exec";
     var cf = document.getElementById("cf");
     var fileIn = document.getElementById("attachment");
+    var attachName = document.getElementById("attachName");
     if (!cf || !fileIn) return;
+
+    // Tampilkan nama file di tombol custom
+    if (attachName && fileIn) {
+      fileIn.addEventListener("change", function () {
+        attachName.textContent = fileIn.files[0] ? "📎 " + fileIn.files[0].name : "Choose File (image, max 5MB)";
+      });
+    }
 
     cf.addEventListener("submit", function (e) {
       var file = fileIn.files[0];
@@ -727,6 +741,7 @@
                 ok.style.display = "block";
                 cf.reset();
                 fileIn.value = "";
+                if (attachName) attachName.textContent = "Choose File (image, max 5MB)";
                 setTimeout(function () { ok.style.display = "none"; }, 6000);
               } else {
                 alert("Upload gagal: " + ((d && d.message) || "unknown error"));

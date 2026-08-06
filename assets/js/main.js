@@ -1080,7 +1080,7 @@ if (expModal) {
           tile.dataset.col = c;
           tile.innerHTML =
             '<span class="drift-wall__inner"><img src="' + it[0] + '" alt="' + it[1] +
-            '" loading="lazy" decoding="async" draggable="false"><span class="drift-wall__overlay" aria-hidden="true"></span></span>';
+            '" decoding="async" draggable="false"><span class="drift-wall__overlay" aria-hidden="true"></span></span>';
           tile.addEventListener("click", () => openLb(it[0]));
           tile.addEventListener("focus", () => activate(id, c));
           tile.addEventListener("blur", release);
