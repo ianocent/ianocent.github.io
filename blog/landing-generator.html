@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Landing Page Generator — by Dwi Rianto (ianocent). Generate landing pages for any business (dealer, food, retail, service) from real client style templates. Live preview, single-file HTML or structured ZIP export with AGENTS.md.">
+  <meta name="description" content="Landing Page Generator — by Dwi Rianto (ianocent). Generate landing pages for any business from client style templates. Apply-based editing, drag-and-drop sections, grid columns, custom colors, image upload, ZIP export with AGENTS.md.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:title" content="Landing Page Generator — Dwi Rianto (ianocent)">
-  <meta property="og:description" content="Generate landing pages for any business from real client style templates. Live preview, HTML or ZIP export, AGENTS.md included.">
+  <meta property="og:description" content="Generate landing pages for any business from client style templates. Drag-and-drop sections, custom colors, image upload, ZIP export.">
   <meta property="og:image" content="https://ianocent.github.io/assets/img/logo.png">
   <meta property="og:url" content="https://ianocent.github.io/blog/landing-generator">
   <meta property="og:type" content="article">
@@ -17,7 +17,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@sinsproof_">
   <meta name="twitter:title" content="Landing Page Generator — Dwi Rianto (ianocent)">
-  <meta name="twitter:description" content="Generate landing pages for any business from real client style templates.">
+  <meta name="twitter:description" content="Generate landing pages for any business from client style templates.">
   <title>Landing Page Generator — Dwi Rianto (ianocent)</title>
   <link rel="icon" href="../assets/img/logo.png" type="image/x-icon">
   <link rel="canonical" href="https://ianocent.github.io/blog/landing-generator">
@@ -25,6 +25,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Geist:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
+  <style id="genScroll"></style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -40,21 +41,21 @@
     ::-webkit-scrollbar-track { background: var(--bg2); }
     ::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--accent) 55%, var(--card2)); border-radius: 100px; border: 2px solid var(--bg2); }
     ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-    ::-webkit-scrollbar-corner { background: var(--bg2); }
     * { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--accent) 55%, var(--card2)) var(--bg2); }
-    .wrap { max-width: 1240px; margin: 0 auto; padding: 2rem 1.5rem 3rem; }
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 2rem 1.5rem 3rem; }
     header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--line); margin-bottom: 1.5rem; }
     header a { color: var(--text2); text-decoration: none; font-size: 0.85rem; transition: color .2s; }
     header a:hover { color: var(--accent); }
     h1 { font-family: var(--serif); font-size: 2rem; font-weight: 400; font-style: italic; margin-bottom: .4rem; }
-    .subtitle { color: var(--text2); font-size: .92rem; margin-bottom: 1.8rem; max-width: 760px; }
+    .subtitle { color: var(--text2); font-size: .92rem; margin-bottom: 1.8rem; max-width: 780px; }
     .subtitle b { color: var(--accent); font-weight: 600; }
-    .grid { display: grid; grid-template-columns: 360px 1fr; gap: 1.4rem; align-items: start; }
-    @media (max-width: 960px) { .grid { grid-template-columns: 1fr; } }
-    .panel { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 1.1rem; }
-    .panel h3 { font-size: .8rem; text-transform: uppercase; letter-spacing: .12em; color: var(--text3); margin-bottom: .8rem; }
-    .field { margin-bottom: .7rem; }
-    .field label { display: block; font-size: .74rem; color: var(--text2); margin-bottom: .3rem; }
+    .grid { display: grid; grid-template-columns: 380px 1fr; gap: 1.4rem; align-items: start; }
+    @media (max-width: 980px) { .grid { grid-template-columns: 1fr; } }
+    .panel { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 1.1rem; margin-bottom: 1rem; }
+    .panel h3 { font-size: .78rem; text-transform: uppercase; letter-spacing: .12em; color: var(--text3); margin-bottom: .8rem; display: flex; align-items: center; gap: .45rem; }
+    .panel h3 i { color: var(--accent); }
+    .field { margin-bottom: .65rem; }
+    .field label { display: block; font-size: .73rem; color: var(--text2); margin-bottom: .3rem; }
     .field input, .field select { width: 100%; background: var(--bg2); border: 1px solid var(--line); color: var(--text); border-radius: 9px; padding: .55rem .7rem; font-family: var(--sans); font-size: .85rem; outline: none; transition: border .2s; }
     .field input:focus, .field select:focus { border-color: var(--accent); }
     .field input::placeholder { color: var(--text3); }
@@ -62,19 +63,25 @@
     .style-card { position: relative; background: var(--bg2); border: 1px solid var(--line); border-radius: 10px; padding: .65rem; cursor: pointer; transition: border .2s, transform .15s; }
     .style-card:hover { transform: translateY(-2px); }
     .style-card.on { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
-    .style-card .swatch { height: 26px; border-radius: 7px; margin-bottom: .45rem; display: flex; gap: 3px; padding: 4px; }
+    .style-card .swatch { height: 24px; border-radius: 7px; margin-bottom: .45rem; display: flex; gap: 3px; padding: 4px; }
     .style-card .swatch i { flex: 1; border-radius: 4px; }
     .style-card b { font-size: .8rem; font-weight: 600; display: block; }
     .style-card small { color: var(--text3); font-size: .68rem; }
-    .style-card a.repo { display: inline-block; margin-top: .4rem; font-size: .68rem; color: var(--text2); text-decoration: none; }
+    .style-card a.repo { display: inline-block; margin-top: .35rem; font-size: .68rem; color: var(--text2); text-decoration: none; }
     .style-card a.repo:hover { color: var(--accent); }
     .style-card a.repo i { margin-right: .2rem; }
+    .accent-row { display: flex; align-items: center; gap: .6rem; margin-top: .7rem; }
+    .accent-row input[type="color"] { width: 40px; height: 32px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg2); cursor: pointer; padding: 2px; }
+    .accent-row .btn { padding: .45rem .8rem; font-size: .74rem; }
     .btn { display: inline-flex; align-items: center; gap: .45rem; background: var(--accent); color: #141414; border: 0; border-radius: 9px; padding: .6rem 1rem; font-family: var(--sans); font-weight: 600; font-size: .82rem; cursor: pointer; transition: filter .2s, transform .15s; }
     .btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
     .btn.ghost { background: transparent; color: var(--text2); border: 1px solid var(--line); }
     .btn.ghost:hover { color: var(--accent); border-color: var(--accent); }
-    .btn-row { display: flex; gap: .6rem; margin-top: .4rem; flex-wrap: wrap; }
-    .chrome { background: var(--bg2); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+    .btn-row { display: flex; gap: .6rem; flex-wrap: wrap; }
+    .btn.apply { width: 100%; justify-content: center; padding: .8rem; font-size: .92rem; margin-bottom: 1rem; position: sticky; top: .6rem; z-index: 30; box-shadow: 0 8px 24px rgba(201,169,110,.25); }
+    .btn.apply.dirty { animation: pulse 1.2s infinite; }
+    @keyframes pulse { 0%,100% { box-shadow: 0 8px 24px rgba(201,169,110,.25); } 50% { box-shadow: 0 8px 30px rgba(201,169,110,.6); } }
+    .chrome { background: var(--bg2); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; position: sticky; top: .6rem; }
     .chrome-bar { display: flex; align-items: center; gap: .7rem; padding: .55rem .8rem; border-bottom: 1px solid var(--line); }
     .chrome-bar .dots { display: flex; gap: .35rem; }
     .chrome-bar .dots span { width: 10px; height: 10px; border-radius: 50%; }
@@ -83,14 +90,33 @@
     .chrome-bar .ch-tools { display: flex; gap: .5rem; }
     .chrome-bar .ch-tools i { color: var(--text3); font-size: 1rem; cursor: pointer; transition: color .2s; }
     .chrome-bar .ch-tools i:hover { color: var(--accent); }
-    #preview { width: 100%; height: 640px; border: 0; background: #fff; display: block; }
+    #preview { width: 100%; height: 720px; border: 0; background: #fff; display: block; }
     .hint { font-size: .72rem; color: var(--text3); margin-top: .6rem; }
     .hint i { color: var(--accent); }
-    .zip-tree { background: var(--bg2); border: 1px solid var(--line); border-radius: 10px; padding: .8rem 1rem; font-family: ui-monospace, 'Cascadia Code', Consolas, monospace; font-size: .74rem; color: var(--text2); line-height: 1.8; margin-top: .7rem; }
+    .zip-tree { background: var(--bg2); border: 1px solid var(--line); border-radius: 10px; padding: .8rem 1rem; font-family: ui-monospace, 'Cascadia Code', Consolas, monospace; font-size: .73rem; color: var(--text2); line-height: 1.8; margin-top: .7rem; }
     .zip-tree b { color: var(--accent); font-weight: 600; }
-    .phase-note { margin-top: 1.6rem; background: var(--card); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 10px; padding: .9rem 1rem; font-size: .8rem; color: var(--text2); }
-    .phase-note b { color: var(--accent); }
     .badge-live { position: absolute; top: .5rem; right: .5rem; font-size: .6rem; background: var(--accent); color: #141414; border-radius: 20px; padding: .15rem .5rem; font-weight: 700; }
+    .prod-row { background: var(--bg2); border: 1px solid var(--line); border-radius: 10px; padding: .7rem; margin-bottom: .6rem; }
+    .prod-row .frow { display: grid; grid-template-columns: 1fr 90px; gap: .5rem; margin-bottom: .45rem; }
+    .prod-row .frow input { width: 100%; background: var(--bg); border: 1px solid var(--line); color: var(--text); border-radius: 8px; padding: .45rem .6rem; font-size: .8rem; outline: none; }
+    .prod-row .frow input:focus { border-color: var(--accent); }
+    .prod-row textarea { width: 100%; background: var(--bg); border: 1px solid var(--line); color: var(--text); border-radius: 8px; padding: .45rem .6rem; font-size: .78rem; outline: none; resize: vertical; font-family: var(--sans); }
+    .prod-row textarea:focus { border-color: var(--accent); }
+    .prodidx { display: flex; justify-content: space-between; align-items: center; margin-bottom: .4rem; }
+    .prodidx b { font-size: .72rem; color: var(--text2); text-transform: uppercase; letter-spacing: .08em; }
+    .media-inline { display: flex; align-items: center; gap: .6rem; }
+    .media-inline img { width: 46px; height: 34px; object-fit: cover; border-radius: 6px; border: 1px solid var(--line); }
+    .media-inline .btn { padding: .35rem .7rem; font-size: .7rem; }
+    .chip-list { display: flex; flex-direction: column; gap: .4rem; }
+    .chip { display: flex; align-items: center; gap: .55rem; background: var(--bg2); border: 1px solid var(--line); border-radius: 9px; padding: .5rem .65rem; cursor: grab; user-select: none; }
+    .chip:active { cursor: grabbing; }
+    .chip.dragging { opacity: .4; }
+    .chip.drag-over { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+    .chip .handle { color: var(--text3); cursor: grab; }
+    .chip label { flex: 1; font-size: .8rem; color: var(--text); cursor: pointer; display: flex; align-items: center; gap: .5rem; }
+    .chip input[type="checkbox"] { accent-color: var(--accent); }
+    .chip.off label { color: var(--text3); text-decoration: line-through; }
+    .chip .k { font-size: .66rem; color: var(--text3); }
   </style>
 </head>
 <body>
@@ -101,10 +127,12 @@
     </header>
 
     <h1>Landing Page Generator</h1>
-    <p class="subtitle">Generate landing page buat <b>bisnis apa aja</b> — dealer, resto, toko, jasa — pakai template style dari project client nyata. Isi data, pilih style (Vira, Kiki, Cinta, Singgih), preview live, terus <b>export ZIP</b> yang rapi (assets/css/js/img terstruktur) plus <b>AGENTS.md</b> biar AI tau gaya desainnya.</p>
+    <p class="subtitle">Generate landing page buat bisnis apa aja. Ubah data, edit produk, atur tata letak (drag-and-drop), pilih kolom, custom warna, upload gambar — preview baru berubah pas klik <b>Apply</b>. Export ZIP terstruktur + <b>AGENTS.md</b> biar AI tau gaya desainnya.</p>
 
     <div class="grid">
       <div>
+        <button class="btn apply" id="btnApply"><i class="bx bx-check"></i> Apply — Terapkan Perubahan</button>
+
         <div class="panel">
           <h3><i class="bx bx-store"></i> Bisnis Data</h3>
           <div class="field">
@@ -114,19 +142,102 @@
               <option value="food">Restoran / Cafe</option>
               <option value="shop">Toko / Retail</option>
               <option value="service">Jasa / Salon / Bengkel</option>
+              <option value="spa">Massage / SPA</option>
+              <option value="hotel">Hotel / Penginapan</option>
               <option value="umkm">UMKM / Lainnya</option>
             </select>
           </div>
-          <div class="field"><label>Nama Bisnis / Sales</label><input id="f-name" value="Nama Bisnis" placeholder="cth: Warung Bahagia / Singgih Priambodo"></div>
-          <div class="field"><label>Area / Kota</label><input id="f-area" value="Gading Serpong Tangerang" placeholder="cth: Gading Serpong Tangerang"></div>
-          <div class="field"><label>Tagline</label><input id="f-tag" value="" placeholder="Kosongkan = otomatis dari kategori"></div>
-          <div class="field"><label>Nomor WhatsApp (62xxxx)</label><input id="f-wa" value="6281234567890" placeholder="cth: 6281234567890"></div>
-          <div class="field"><label>Domain (opsional)</label><input id="f-domain" value="" placeholder="cth: namabisnis.com"></div>
+          <div class="field"><label>Nama Bisnis / Sales</label><input id="f-name" placeholder="cth: Warung Bahagia / Singgih Priambodo"></div>
+          <div class="field"><label>Area / Kota</label><input id="f-area" placeholder="cth: Gading Serpong Tangerang"></div>
+          <div class="field"><label>Tagline</label><input id="f-tag" placeholder="Kosongkan = otomatis dari kategori"></div>
+          <div class="field"><label>Nomor WhatsApp (62xxxx)</label><input id="f-wa" placeholder="cth: 6281234567890"></div>
+          <div class="field"><label>Domain (opsional)</label><input id="f-domain" placeholder="cth: namabisnis.com"></div>
         </div>
 
-        <div class="panel" style="margin-top:1.1rem;">
-          <h3><i class="bx bx-palette"></i> Style Template</h3>
+        <div class="panel">
+          <h3><i class="bx bx-palette"></i> Style + Warna</h3>
           <div class="style-grid" id="styleGrid"></div>
+          <div class="accent-row">
+            <input type="color" id="f-accent" value="#c74343" title="Custom accent color">
+            <button class="btn ghost" id="btnAccentReset"><i class="bx bx-reset"></i> Warna Default</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3><i class="bx bx-cog"></i> Konfigurasi Umum</h3>
+          <div class="field">
+            <label>Topbar Info</label>
+            <select id="f-top">
+              <option value="auto" selected>Auto (default style)</option>
+              <option value="1">Tampilkan</option>
+              <option value="0">Sembunyikan</option>
+            </select>
+          </div>
+          <div class="field"><label>Teks Topbar Kiri</label><input id="f-topleft" placeholder="Kosongkan = auto dari kategori"></div>
+          <div class="field"><label>Teks Topbar Kanan</label><input id="f-topright" placeholder="Kosongkan = auto dari kategori"></div>
+          <div class="field"><label>Teks Footer / Copyright</label><input id="f-footer" placeholder="Kosongkan = auto: © 2026 Nama — Kategori Area"></div>
+          <div class="field">
+            <label>Kredit Generator di Footer</label>
+            <select id="f-credit"><option value="1">Tampilkan</option><option value="0">Sembunyikan</option></select>
+          </div>
+          <div class="row2">
+            <div class="field"><label>Warna Background</label><input type="color" id="f-bg"></div>
+            <div class="field">
+              <label>Max Width Konten</label>
+              <select id="f-maxw">
+                <option value="1040">1040px</option>
+                <option value="1120" selected>1120px</option>
+                <option value="1240">1240px</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3><i class="bx bx-edit-alt"></i> <span id="prodTitle">Produk / Menu Editor</span></h3>
+          <div id="prodRows"></div>
+        </div>
+
+        <div class="panel">
+          <h3><i class="bx bx-chat"></i> Testimoni Editor <span style="color:var(--text3);font-size:.68rem;text-transform:none;letter-spacing:0;">(aktifkan di Tata Letak)</span></h3>
+          <div id="testiRows"></div>
+        </div>
+
+        <div class="panel">
+          <h3><i class="bx bx-purchase-tag"></i> Harga / Paket Editor <span style="color:var(--text3);font-size:.68rem;text-transform:none;letter-spacing:0;">(aktifkan di Tata Letak)</span></h3>
+          <div id="priceRows"></div>
+        </div>
+
+        <div class="panel">
+          <h3><i class="bx bx-layout"></i> Tata Letak</h3>
+          <div class="field">
+            <label>Kolom Grid Produk</label>
+            <select id="f-cols">
+              <option value="2">2 kolom</option>
+              <option value="3" selected>3 kolom</option>
+              <option value="4">4 kolom</option>
+            </select>
+          </div>
+          <label style="display:block;font-size:.73rem;color:var(--text2);margin-bottom:.4rem;">Urutan Section (drag untuk pindah, centang untuk tampil)</label>
+          <div class="chip-list" id="chipList"></div>
+        </div>
+
+        <div class="panel">
+          <h3><i class="bx bx-image"></i> Media</h3>
+          <div class="field">
+            <label>Foto Hero (opsional)</label>
+            <div class="media-inline">
+              <img id="heroThumb" alt="">
+              <button class="btn ghost" id="btnHeroUpload"><i class="bx bx-upload"></i> Upload</button>
+              <input type="file" id="f-hero" accept="image/*" hidden>
+              <button class="btn ghost" id="btnHeroClear" style="display:none"><i class="bx bx-x"></i></button>
+            </div>
+          </div>
+          <div id="prodMedia"></div>
+          <div class="field" style="margin-top:.8rem;">
+            <label>Foto Galeri (maks 3)</label>
+            <div id="galMedia"></div>
+          </div>
         </div>
 
         <div class="btn-row">
@@ -141,9 +252,9 @@
           └─ assets/<br>
           &nbsp;&nbsp;&nbsp;├─ css/style.css<br>
           &nbsp;&nbsp;&nbsp;├─ js/main.js<br>
-          &nbsp;&nbsp;&nbsp;└─ img/logo.svg · README.txt
+          &nbsp;&nbsp;&nbsp;└─ img/logo.svg · hero.jpg · product-1.jpg…
         </div>
-        <p class="hint"><i class="bx bx-info-circle"></i> ZIP = folder terstruktur ala project client asli. Single HTML = satu file semua inline.</p>
+        <p class="hint"><i class="bx bx-info-circle"></i> Field teks: berubah setelah <b>Apply</b>. Drag, kolom, warna, media: langsung. ZIP = folder ala project client asli.</p>
       </div>
 
       <div class="chrome">
@@ -159,16 +270,11 @@
       </div>
     </div>
 
-    <div class="phase-note">
-      <b>Phase 2:</b> generator umum (bukan cuma sales) — 5 kategori bisnis, export ZIP terstruktur (index.html + AGENTS.md + assets/css/js/img), style tetap dari 4 project client.
-      <b>Phase 3 (rencana):</b> upload gambar sendiri, edit nama produk/menu, deploy langsung ke GitHub Pages.
-    </div>
-
     <p class="hint" style="margin-top:1.2rem; text-align:center;">© 2026 Dwi Rianto (ianocent). Built with <i class="bx bx-code-alt"></i></p>
   </div>
 
   <script>
-    // ── KATEGORI BISNIS — konten default per kategori ──
+    // ═══════════════ KATEGORI BISNIS ═══════════════
     const CATS = {
       dealer: {
         label: "Dealer / Sales", product: "Suzuki",
@@ -286,6 +392,64 @@
           ["Garansi Hasil", "Nggak puas, garap ulang"]
         ]
       },
+      spa: {
+        label: "Massage / SPA", product: "Perawatan",
+        badge: "Terapis Profesional",
+        topLeft: "Buka Setiap Hari 10.00–21.00 WIB",
+        topRight: "Booking via WhatsApp, walk-in terima",
+        tagline: "Relax total, harga transparan",
+        heroTitle: "Rileks & Pulih di {area}, {name} Massage & SPA",
+        heroSub: "Terapis berpengalaman, ruangan bersih & wangi, harga jelas tanpa biaya siluman. Booking sekarang, langsung dapat jadwal.",
+        ctaTitle: "Butuh Me-time? Booking {name} Sekarang",
+        waText: "Halo {name}, saya mau booking {product}",
+        productsTitle: "Paket Perawatan Kami",
+        productsSub: "Durasi 60–120 menit, pilih sesukamu.",
+        products: [
+          ["Massage Relaksasi 60'", "Best Seller", "#28a745", "Full body, minyak aromaterapi, harga mulai 150rb."],
+          ["SPA Premium 120'", "Promo", "#e91e63", "Sauna, scrub, massage + treatment wajah."],
+          ["Refleksi Kaki", "Populer", "#ffc107", "30-60 menit, area sepatu kerja pegal."]
+        ],
+        steps: [
+          ["1", "Chat WhatsApp", "Pilih paket & jam ke {name}."],
+          ["2", "Datang & Relaks", "Ruangan siap, terapis standby."],
+          ["3", "Pulih & Puas", "Badan ringan, mood naik."]
+        ],
+        feats: [
+          ["Terapis Ahli", "Sertifikasi & berpengalaman"],
+          ["Higienis", "Handuk sekali pakai"],
+          ["Harga Jelas", "Tanpa biaya siluman"],
+          ["Booking Cepat", "Langsung WA, tanpa antre"]
+        ]
+      },
+      hotel: {
+        label: "Hotel / Penginapan", product: "Kamar",
+        badge: "Nyaman & Bersih",
+        topLeft: "Check-in 14.00 · Check-out 12.00",
+        topRight: "Dekat pusat {area}",
+        tagline: "Menginap nyaman, harga bersahabat",
+        heroTitle: "Menginap Nyaman di {area}, Hotel {name}",
+        heroSub: "Kamar bersih, AC, WiFi kencang, sarapan. Booking via WhatsApp, bebas pilih tipe kamar.",
+        ctaTitle: "Mau Booking Kamar? Chat {name} Sekarang",
+        waText: "Halo {name}, saya mau booking {product}",
+        productsTitle: "Tipe Kamar Kami",
+        productsSub: "Semua kamar include sarapan + WiFi.",
+        products: [
+          ["Superior", "Best Seller", "#28a745", "Kamar 18m², 1 double bed, city view."],
+          ["Deluxe", "Populer", "#ffc107", "Kamar 24m², bathtub, breakfast."],
+          ["Family Suite", "Promo", "#e91e63", "2 kamar, cocok 4 orang."]
+        ],
+        steps: [
+          ["1", "Chat WhatsApp", "Tanya ketersediaan & harga."],
+          ["2", "Bayar DP", "Booking aman, DP 50%."],
+          ["3", "Check-in", "Sampai, tinggal ambil kunci."]
+        ],
+        feats: [
+          ["WiFi Kencang", "Gratis semua kamar"],
+          ["Sarapan", "Menu lokal + western"],
+          ["Laundry", "Layanan 24 jam"],
+          ["Parkir Luas", "Gratis untuk tamu"]
+        ]
+      },
       umkm: {
         label: "UMKM / Lainnya", product: "Produk",
         badge: "Kualitas Terjaga",
@@ -317,55 +481,127 @@
       }
     };
 
-    // ── STYLE REGISTRY — visual murni, dari repo client asli ──
+    // ═══════════════ STYLE REGISTRY ═══════════════
     const STYLES = {
       vira: {
-        label: "Style 1 — Vira", client: "Vira Suzuki", slug: "vira",
+        label: "Style 1", client: "Vira Suzuki", slug: "vira",
         repo: "https://github.com/ianocent/vira", domain: "vira-suzukigadingserpong.com",
         font: "Poppins", swatch: ["#1a1a1a", "#c74343", "#f8f8f8", "#28a745"],
-        vars: { primary: "#c74343", dark: "#1a1a1a", gray: "#666", light: "#f8f8f8" },
-        heroDark: true, topbar: false, float: false
+        accent: "#c74343", deep: "#a83636", gold: "#fbbf24", dark: "#1a1a1a", bg: "#f8f8f8", soft: "#f8f8f8",
+        heroDark: true, topbar: false, float: false, featsDefault: false
       },
       kiki: {
-        label: "Style 2 — Kiki", client: "Kiki Suzuki", slug: "kiki",
+        label: "Style 2", client: "Kiki Suzuki", slug: "kiki",
         repo: "https://github.com/ianocent/kiki", domain: "suzukibuanaindomobiltrada.com",
         font: "Plus Jakarta Sans", swatch: ["#134e4a", "#0f766e", "#fbbf24", "#faf9f5"],
-        vars: { teal: "#134e4a", tealSoft: "#0f766e", gold: "#fbbf24", cream: "#faf9f5", mist: "#eef2f1", ink: "#0f172a" },
-        heroDark: false, topbar: true, float: true
+        accent: "#134e4a", deep: "#0f766e", gold: "#fbbf24", dark: "#134e4a", bg: "#faf9f5", soft: "#eef2f1",
+        heroDark: false, topbar: true, float: true, featsDefault: true
       },
       cinta: {
-        label: "Style 3 — Cinta", client: "Cinta Suzuki", slug: "cinta",
+        label: "Style 3", client: "Cinta Suzuki", slug: "cinta",
         repo: "https://github.com/ianocent/cinta", domain: "dealersuzukigadingserpong.com",
         font: "Manrope", swatch: ["#1e3a8a", "#172554", "#fb923c", "#dbeafe"],
-        vars: { navy: "#1e3a8a", navyDeep: "#172554", orange: "#fb923c", sky: "#dbeafe", ink: "#0f172a", paper: "#ffffff", soft: "#f4f7fd" },
-        heroDark: false, topbar: false, float: true
+        accent: "#1e3a8a", deep: "#172554", gold: "#fb923c", dark: "#172554", bg: "#f4f7fd", soft: "#dbeafe",
+        heroDark: false, topbar: false, float: true, featsDefault: true
       },
       singgih: {
-        label: "Style 4 — Singgih", client: "Singgih Suzuki", slug: "singgih",
+        label: "Style 4", client: "Singgih Suzuki", slug: "singgih",
         repo: "https://github.com/ianocent/singgih", domain: "showroommobilsuzukigadingserpong.com",
         font: "Outfit", swatch: ["#0d3b2e", "#08251d", "#2f9e63", "#f2b705"],
-        vars: { pine: "#0d3b2e", pineDeep: "#08251d", leaf: "#2f9e63", sun: "#f2b705", sand: "#f6f4ec", mist: "#e9efe9", ink: "#14241c" },
-        heroDark: false, topbar: true, float: true
+        accent: "#0d3b2e", deep: "#2f9e63", gold: "#f2b705", dark: "#08251d", bg: "#f6f4ec", soft: "#e9efe9",
+        heroDark: false, topbar: true, float: false, featsDefault: false
       }
     };
 
+    const TAG_COLORS = [["#15803d", "#fff"], ["#92400e", "#fff"], ["#9f1239", "#fff"]];
+    const SEC_LABELS = { feats: "Keunggulan", produk: "Produk / Menu", proses: "Proses 3 Langkah", cta: "CTA WhatsApp", testimoni: "Testimoni", harga: "Harga / Paket", galeri: "Galeri" };
+
+    // ═══════════════ STATE ═══════════════
     let activeStyle = "vira";
+    const state = {
+      cat: "dealer", name: "Nama Bisnis", area: "Gading Serpong Tangerang", tag: "", wa: "6281234567890", domain: "",
+      accent: null, cols: 3, heroImg: null, bg: null, maxW: 1120,
+      showTop: "auto", topLeft: "", topRight: "", footer: "", credit: true,
+      products: [],
+      testimonials: [
+        { name: "Budi", role: "Pelanggan Setia", text: "Pelayanannya cepat, hasilnya memuaskan. Pasti balik lagi." },
+        { name: "Sari", role: "Langganan 2 Tahun", text: "Harga jujur, nggak ada biaya tambahan. Recommended!" },
+        { name: "Andi", role: "Pelanggan Baru", text: "Dari chat sampai selesai semua jelas. Gampang banget." }
+      ],
+      prices: [
+        { name: "Hemat", price: "150rb", note: "untuk mulai", feats: ["Fitur standar", "Durasi singkat", "Booking via WA"], hot: false },
+        { name: "Populer", price: "250rb", note: "paling laris", feats: ["Semua fitur hemat", "Durasi sedang", "Prioritas jadwal"], hot: true },
+        { name: "Premium", price: "400rb", note: "pengalaman maksimal", feats: ["Semua fitur populer", "Durasi panjang", "Free upgrade"], hot: false }
+      ],
+      gallery: [null, null, null],
+      sections: [
+        { k: "feats", on: false },
+        { k: "produk", on: true },
+        { k: "proses", on: true },
+        { k: "testimoni", on: false },
+        { k: "harga", on: false },
+        { k: "galeri", on: false },
+        { k: "cta", on: true }
+      ]
+    };
     const el = (id) => document.getElementById(id);
-    const cat = () => CATS[el("f-cat").value];
+    const style = () => STYLES[activeStyle];
+    const cat = () => CATS[state.cat];
+
+    function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+
+    // ═══════════════ APPLY ═══════════════
+    function applyData() {
+      state.cat = el("f-cat").value;
+      state.name = el("f-name").value.trim() || "Nama Bisnis";
+      state.area = el("f-area").value.trim() || "Kota Anda";
+      state.tag = el("f-tag").value.trim();
+      state.wa = el("f-wa").value.trim().replace(/[^0-9]/g, "") || "6281234567890";
+      state.domain = el("f-domain").value.trim();
+      state.cols = parseInt(el("f-cols").value, 10) || 3;
+      state.showTop = el("f-top").value;
+      state.topLeft = el("f-topleft").value.trim();
+      state.topRight = el("f-topright").value.trim();
+      state.footer = el("f-footer").value.trim();
+      state.credit = el("f-credit").value === "1";
+      state.maxW = parseInt(el("f-maxw").value, 10) || 1120;
+      state.products = Array.from(document.querySelectorAll(".prod-row")).map((r, i) => ({
+        name: r.querySelector(".pn").value.trim() || cat().products[i][0],
+        tag: r.querySelector(".pt").value.trim() || cat().products[i][1],
+        desc: r.querySelector(".pd").value.trim() || cat().products[i][3],
+        img: state.products[i] && state.products[i].img ? state.products[i].img : null
+      }));
+      state.testimonials = Array.from(document.querySelectorAll(".testi-row")).map((r) => ({
+        name: r.querySelector(".tn").value.trim() || "Pelanggan",
+        role: r.querySelector(".tr").value.trim(),
+        text: r.querySelector(".tt").value.trim() || "Keren banget!"
+      }));
+      state.prices = Array.from(document.querySelectorAll(".price-row")).map((r) => ({
+        name: r.querySelector(".prn").value.trim() || "Paket",
+        price: r.querySelector(".prp").value.trim() || "—",
+        note: r.querySelector(".pro").value.trim(),
+        feats: [r.querySelector(".pf1").value.trim(), r.querySelector(".pf2").value.trim(), r.querySelector(".pf3").value.trim()].filter(Boolean),
+        hot: r.querySelector(".ph").checked
+      }));
+      renderProducts();
+      renderTesti();
+      renderPrices();
+      renderMedia();
+      refresh();
+      markClean();
+    }
 
     function fmt(s) {
-      const v = {
-        name: el("f-name").value.trim() || "Nama Bisnis",
-        area: el("f-area").value.trim() || "Kota Anda",
-        tag: (el("f-tag").value.trim() || cat().tagline),
-        wa: el("f-wa").value.trim().replace(/[^0-9]/g, "") || "6281234567890",
-        product: cat().product
-      };
-      return s.replace(/\{name\}/g, v.name).replace(/\{area\}/g, v.area).replace(/\{tag\}/g, v.tag).replace(/\{product\}/g, v.product);
+      return s.replace(/\{name\}/g, state.name).replace(/\{area\}/g, state.area)
+        .replace(/\{tag\}/g, state.tag || cat().tagline).replace(/\{product\}/g, cat().product);
     }
-    function waLink() { return "https://wa.me/" + (el("f-wa").value.trim().replace(/[^0-9]/g, "") || "6281234567890") + "?text=" + encodeURIComponent(fmt(cat().waText)); }
+    function waLink() {
+      return "https://wa.me/" + state.wa + "?text=" + encodeURIComponent(fmt(cat().waText));
+    }
+    function markDirty() { el("btnApply").classList.add("dirty"); }
+    function markClean() { el("btnApply").classList.remove("dirty"); }
 
-    // ── STYLE CARDS ──
+    // ═══════════════ PANEL RENDERS ═══════════════
     function renderStyleGrid() {
       const g = el("styleGrid");
       g.innerHTML = Object.values(STYLES).map((s) => `
@@ -377,285 +613,501 @@
           <a class="repo" href="${s.repo}" target="_blank" rel="noopener"><i class="bx bxl-github"></i> repo</a>
         </div>`).join("");
       g.querySelectorAll(".style-card").forEach((c) => {
-        c.addEventListener("click", () => { activeStyle = c.dataset.k; refresh(); });
+        c.addEventListener("click", () => {
+          activeStyle = c.dataset.k;
+          state.accent = null;
+          renderStyleGrid();
+          refresh();
+        });
+      });
+      el("f-accent").value = state.accent || style().accent;
+    }
+
+    function renderProducts() {
+      el("prodTitle").textContent = (cat().product || "Produk") + " / Menu Editor";
+      el("prodRows").innerHTML = state.products.map((p, i) => `
+        <div class="prod-row" data-i="${i}">
+          <div class="prodidx"><b>Item ${i + 1}</b></div>
+          <div class="frow">
+            <input class="pn" value="${esc(p.name)}" placeholder="Nama">
+            <input class="pt" value="${esc(p.tag)}" placeholder="Tag">
+          </div>
+          <textarea class="pd" rows="2" placeholder="Deskripsi">${esc(p.desc)}</textarea>
+        </div>`).join("");
+    }
+
+    function renderTesti() {
+      el("testiRows").innerHTML = state.testimonials.map((t, i) => `
+        <div class="testi-row" data-i="${i}">
+          <div class="frow">
+            <input class="tn" value="${esc(t.name)}" placeholder="Nama">
+            <input class="tr" value="${esc(t.role)}" placeholder="Role / status">
+          </div>
+          <textarea class="tt" rows="2" placeholder="Isi testimoni">${esc(t.text)}</textarea>
+        </div>`).join("");
+    }
+
+    function renderPrices() {
+      el("priceRows").innerHTML = state.prices.map((p, i) => `
+        <div class="price-row" data-i="${i}">
+          <div class="frow">
+            <input class="prn" value="${esc(p.name)}" placeholder="Nama paket">
+            <input class="prp" value="${esc(p.price)}" placeholder="Harga (cth: 250rb)">
+            <input class="pro" value="${esc(p.note)}" placeholder="Catatan singkat">
+          </div>
+          <div class="frow">
+            <input class="pf1" value="${esc(p.feats[0] || "")}" placeholder="Fitur 1">
+            <input class="pf2" value="${esc(p.feats[1] || "")}" placeholder="Fitur 2">
+            <input class="pf3" value="${esc(p.feats[2] || "")}" placeholder="Fitur 3">
+          </div>
+          <label class="frow hotline"><input type="checkbox" class="ph" ${p.hot ? "checked" : ""}> Paket paling populer</label>
+        </div>`).join("");
+    }
+
+    function renderGallery() {
+      const holder = el("galMedia");
+      holder.innerHTML = state.gallery.map((g, i) => `
+        <div class="field">
+          <label>Foto Galeri ${i + 1} (opsional)</label>
+          <div class="media-inline">
+            <img src="${g || ""}" alt="" style="${g ? "" : "display:none"}">
+            <button class="btn ghost" data-gu="${i}"><i class="bx bx-upload"></i> Upload</button>
+            <button class="btn ghost" data-gx="${i}" style="${g ? "" : "display:none"}"><i class="bx bx-x"></i></button>
+          </div>
+        </div>`).join("");
+      holder.querySelectorAll("[data-gu]").forEach((b) => b.addEventListener("click", () => fileInputs.gal[b.dataset.gu].click()));
+      holder.querySelectorAll("[data-gx]").forEach((b) => b.addEventListener("click", () => {
+        state.gallery[b.dataset.gx] = null;
+        renderGallery();
+        refresh();
+      }));
+    }
+
+    function renderMedia() {
+      const holder = el("prodMedia");
+      holder.innerHTML = state.products.map((p, i) => `
+        <div class="field">
+          <label>Foto Item ${i + 1} (opsional)</label>
+          <div class="media-inline">
+            <img src="${p.img || ""}" alt="" style="${p.img ? "" : "display:none"}">
+            <button class="btn ghost" data-u="${i}"><i class="bx bx-upload"></i> Upload</button>
+            <button class="btn ghost" data-x="${i}" style="${p.img ? "" : "display:none"}"><i class="bx bx-x"></i></button>
+          </div>
+        </div>`).join("");
+      el("heroThumb").src = state.heroImg || "";
+      el("heroThumb").style.display = state.heroImg ? "" : "none";
+      el("btnHeroClear").style.display = state.heroImg ? "" : "none";
+      holder.querySelectorAll("[data-u]").forEach((b) => b.addEventListener("click", () => fileInputs.prod[b.dataset.u].click()));
+      holder.querySelectorAll("[data-x]").forEach((b) => b.addEventListener("click", () => {
+        state.products[b.dataset.x].img = null;
+        renderMedia();
+        refresh();
+      }));
+    }
+
+    function renderChips() {
+      el("chipList").innerHTML = state.sections.map((s) => `
+        <div class="chip ${s.on ? "" : "off"}" data-k="${s.k}" draggable="true">
+          <i class="bx bx-dots-vertical-rounded handle"></i>
+          <label><input type="checkbox" ${s.on ? "checked" : ""}> ${SEC_LABELS[s.k]}</label>
+          <span class="k">${s.k}</span>
+        </div>`).join("");
+    }
+
+    function initChips() {
+      const list = el("chipList");
+      let dragIdx = null;
+      list.addEventListener("dragstart", (e) => {
+        const chip = e.target.closest(".chip");
+        if (!chip) return;
+        dragIdx = state.sections.findIndex((s) => s.k === chip.dataset.k);
+        chip.classList.add("dragging");
+        e.dataTransfer.effectAllowed = "move";
+      });
+      list.addEventListener("dragend", (e) => {
+        const chip = e.target.closest(".chip");
+        if (chip) chip.classList.remove("dragging");
+        list.querySelectorAll(".chip").forEach((c) => c.classList.remove("drag-over"));
+        dragIdx = null;
+      });
+      list.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        const chip = e.target.closest(".chip");
+        list.querySelectorAll(".chip").forEach((c) => c.classList.remove("drag-over"));
+        if (chip && dragIdx !== null) chip.classList.add("drag-over");
+      });
+      list.addEventListener("drop", (e) => {
+        e.preventDefault();
+        const chip = e.target.closest(".chip");
+        if (chip === null || dragIdx === null) return;
+        const overIdx = state.sections.findIndex((s) => s.k === chip.dataset.k);
+        if (dragIdx !== overIdx) {
+          const moved = state.sections.splice(dragIdx, 1)[0];
+          state.sections.splice(overIdx, 0, moved);
+        }
+        renderChips();
+        refresh();
+      });
+      list.addEventListener("change", (e) => {
+        if (e.target.type === "checkbox") {
+          const chip = e.target.closest(".chip");
+          const sec = state.sections.find((s) => s.k === chip.dataset.k);
+          sec.on = e.target.checked;
+          renderChips();
+          refresh();
+        }
       });
     }
 
-    // ── FULL STYLESHEET (dipakai preview + export css) ──
-    function buildCSS(s) {
-      const v = s.vars;
-      const c = cat();
+    // ═══════════════ CSS GENERATOR ═══════════════
+    function cssAccent() {
+      const s = style();
+      const accent = state.accent || s.accent;
+      const deep = state.accent ? `color-mix(in srgb, ${state.accent} 62%, #000)` : s.deep;
+      return { accent, deep };
+    }
+
+    function buildCSS(s, split) {
+      const { accent, deep } = cssAccent();
+      const heroBg = split
+        ? "url('assets/img/hero.jpg')"
+        : (state.heroImg ? `url('${state.heroImg}')` : "url('assets/img/hero.jpg')");
       let css = `
 /* ============================================
    ${s.label} — generated by Landing Page Generator
    https://ianocent.github.io/blog/landing-generator
-   Palette & font dipakai dari project client: ${s.client}
+   Style asli: ${s.client} (repo: ${s.repo})
    ============================================ */
 :root {
-  --accent: ${v.primary || v.teal || v.navy || v.pine};
-  --accent-soft: ${v.tealSoft || v.leaf || "#0f766e"};
-  --bg: ${v.cream || v.sand || "#ffffff"};
-  --ink: ${v.ink || "#333333"};
-  --mute: ${v.gray || "#666666"};
-  --dark: ${v.dark || v.navyDeep || v.pineDeep || v.teal || v.pine || "#1a1a1a"};
-  --gold: ${v.gold || v.sun || "#fbbf24"};
+  --accent: ${accent};
+  --deep: ${deep};
+  --gold: ${s.gold};
+  --dark: ${s.dark};
+  --bg: ${state.bg || s.bg};
+  --soft: ${s.soft};
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { font-family: '${s.font}', sans-serif; line-height: 1.65; color: var(--ink); background: var(--bg); }
+body { font-family: '${s.font}', sans-serif; line-height: 1.65; color: #2a323c; background: #fff; }
 a { text-decoration: none; color: inherit; }
 img { max-width: 100%; display: block; }
-.wrap { max-width: 1120px; margin: 0 auto; padding: 0 1.4rem; }
-.btn { display: inline-block; padding: .85rem 1.6rem; border-radius: 50px; font-weight: 600; transition: .25s; border: 0; cursor: pointer; }
+.wrap { max-width: ${state.maxW}px; margin: 0 auto; padding: 0 1.4rem; }
+.btn { display: inline-block; padding: .85rem 1.7rem; border-radius: 50px; font-weight: 600; transition: .25s; border: 0; cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,.12); }
+.btn:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(0,0,0,.18); }
 .btn-wa { background: #25d366; color: #fff; }
-h1, h2 { line-height: 1.2; }
-.hero-media { position: relative; }
-.hero-body { display: flex; flex-direction: column; align-items: flex-start; }
-.r { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
+h1, h2 { line-height: 1.18; }
+.r { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
 .r.v { opacity: 1; transform: none; }
-.badge { display: inline-block; font-size: .75rem; padding: .4rem .9rem; border-radius: 30px; margin-bottom: 1rem; font-weight: 600; }
-.burger { display: none; background: none; border: 0; font-size: 1.6rem; color: var(--ink); cursor: pointer; }
+.badge { display: inline-block; font-size: .72rem; font-weight: 700; letter-spacing: .05em; padding: .42rem 1rem; border-radius: 30px; margin-bottom: 1rem; }
+.burger { display: none; background: none; border: 0; font-size: 1.6rem; color: #222; cursor: pointer; }
+.eyebrow { display: block; text-align: center; text-transform: uppercase; letter-spacing: .16em; font-size: .7rem; color: var(--deep); font-weight: 700; margin-bottom: .6rem; }
+.sec-head { text-align: center; margin-bottom: 2.6rem; }
+.sec-head h2 { font-size: clamp(1.5rem, 3vw, 1.9rem); }
+.sec-head .sub { color: #6b7280; margin-top: .5rem; font-size: .92rem; }
+.cards { display: grid; grid-template-columns: repeat(${state.cols}, 1fr); gap: 1.5rem; }
 @media (max-width: 760px) {
+  .cards { grid-template-columns: 1fr; }
   .menu { display: none; }
-  .menu.open { display: flex; flex-direction: column; gap: 1rem; position: absolute; top: 100%; left: 0; right: 0; background: var(--bg); border-bottom: 1px solid #eee; padding: 1rem 1.4rem; z-index: 10; }
+  .menu.open { display: flex; flex-direction: column; gap: 1rem; position: absolute; top: 100%; left: 0; right: 0; background: #fff; border-bottom: 1px solid #eee; padding: 1rem 1.4rem; z-index: 10; }
   .burger { display: block; }
 }
 `;
       if (s.slug === "vira") css += `
+nav { position: sticky; top: 0; background: rgba(10, 10, 10, .92); backdrop-filter: blur(8px); padding: .9rem 0; z-index: 5; }
+.nav-in { display: flex; justify-content: space-between; align-items: center; }
+.brand { font-weight: 800; color: #fff; }
+.brand i { color: var(--accent); }
+nav ul { display: flex; gap: 1.3rem; list-style: none; color: #d6d6d6; font-size: .9rem; align-items: center; }
+nav ul a:hover { color: var(--accent); }
 .topbar { background: var(--dark); color: #fff; padding: .9rem 0; }
-.topbar .wrap { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.topbar .wrap { display: flex; justify-content: space-between; align-items: center; gap: 1rem; font-size: .85rem; }
 .topbar .brand i { color: var(--accent); }
-.topbar ul { display: flex; gap: 1.4rem; list-style: none; font-size: .9rem; }
+.topbar ul { display: flex; gap: 1.4rem; list-style: none; }
 .topbar ul a:hover { color: var(--accent); }
 .topbar .cta-btn { background: var(--accent); color: #fff !important; padding: .5rem 1.2rem; border-radius: 50px; }
-.hero { padding: 110px 0 90px; background: linear-gradient(rgba(0,0,0,.78), rgba(0,0,0,.78)), url('assets/img/hero.jpg') center/cover; color: #fff; text-align: center; }
-.hero h1 { font-size: clamp(1.8rem, 4.4vw, 2.6rem); margin-bottom: 1rem; }
+.hero { padding: 130px 0 110px; background: linear-gradient(rgba(0,0,0,.78), rgba(0,0,0,.78)), ${heroBg} center/cover; color: #fff; text-align: center; position: relative; }
+.hero h1 { font-size: clamp(1.9rem, 4.6vw, 2.8rem); margin-bottom: 1.1rem; text-shadow: 0 2px 24px rgba(0,0,0,.4); }
 .hero h1 span { color: var(--accent); }
-.hero p { max-width: 56ch; margin: 0 auto 1.8rem; color: #ddd; }
+.hero p { max-width: 56ch; margin: 0 auto 2rem; color: #d6d6d6; font-size: 1.02rem; }
 .hero .hero-body { align-items: center; }
-.badge { background: var(--accent); color: #fff; }
 .btn-p { background: var(--accent); color: #fff; }
-.btn-s { border: 2px solid #fff; color: #fff; margin-left: .6rem; }
-.sec { padding: 70px 0; }
-.sec h2 { font-size: clamp(1.5rem, 3vw, 1.9rem); text-align: center; margin-bottom: .6rem; }
-.sec .sub { text-align: center; color: var(--mute); margin-bottom: 2.4rem; }
-.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
-.card { border: 1px solid #eee; border-radius: 14px; padding: 1.4rem; background: #f8f8f8; }
-.card .tag { display: inline-block; font-size: .7rem; color: #fff; background: var(--mute); border-radius: 20px; padding: .2rem .7rem; margin-bottom: .8rem; }
-.card h3 { margin-bottom: .4rem; }
-.card p { font-size: .86rem; color: var(--mute); }
-.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; text-align: center; }
-.steps b { display: block; font-size: 2rem; color: var(--accent); }
-.steps h3 { margin: .3rem 0; }
-.steps p { color: var(--mute); font-size: .88rem; max-width: 30ch; margin: 0 auto; }
-.feats { background: var(--dark); color: #fff; padding: 1.7rem 0; text-align: center; }
-.feats .wrap { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
-.feats b { display: block; color: var(--accent); margin-bottom: .15rem; }
-.feats span { font-size: .78rem; color: #ccc; }
-.cta { background: var(--dark); color: #fff; text-align: center; padding: 70px 0; }
-.cta h2 { margin-bottom: 1.2rem; }
-footer { background: #111; color: #888; text-align: center; padding: 1.6rem; font-size: .82rem; }
-@media (max-width: 760px) { .cards, .steps, .feats .wrap { grid-template-columns: 1fr; } .topbar ul { display: none; } .btn-s { margin-left: 0; margin-top: .6rem; } }
+.btn-s { border: 2px solid #fff; color: #fff; margin-left: .6rem; background: rgba(255,255,255,.06); }
+.sec { padding: 80px 0; }
+.card { border: 1px solid #ececec; border-radius: 16px; padding: 1.5rem; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,.04); transition: .25s; }
+.card:hover { transform: translateY(-4px); box-shadow: 0 14px 34px rgba(0,0,0,.09); }
+.card .tag { display: inline-block; font-size: .68rem; font-weight: 700; color: #fff; border-radius: 20px; padding: .25rem .8rem; margin-bottom: .9rem; }
+.card h3 { margin-bottom: .45rem; }
+.card p { font-size: .87rem; color: #666; }
+.c-img { height: 150px; width: calc(100% + 3rem); margin: -1.5rem -1.5rem 1.1rem; object-fit: cover; border-radius: 16px 16px 0 0; }
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.6rem; text-align: center; }
+.steps b { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; background: var(--accent); color: #fff; margin: 0 auto .7rem; font-size: 1.05rem; box-shadow: 0 6px 16px rgba(0,0,0,.18); }
+.steps h3 { margin-bottom: .35rem; }
+.steps p { color: #6b7280; font-size: .87rem; max-width: 30ch; margin: 0 auto; }
+.feats { background: var(--dark); color: #fff; padding: 2rem 0; }
+.feats .wrap { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; text-align: center; }
+.feats b { display: block; color: var(--gold); margin-bottom: .15rem; font-size: 1.02rem; }
+.feats span { font-size: .78rem; color: #c9c9c9; }
+.cta { background: var(--dark); color: #fff; text-align: center; padding: 80px 0; }
+.cta h2 { max-width: 24ch; margin: 0 auto 1.4rem; }
+footer { background: #0e0e0e; color: #8b8b8b; text-align: center; padding: 1.7rem; font-size: .8rem; }
+@media (max-width: 760px) { .steps, .feats .wrap { grid-template-columns: 1fr; } .topbar ul { display: none; } .btn-s { margin-left: 0; margin-top: .6rem; } }
 `;
       if (s.slug === "kiki") css += `
 .topbar { background: var(--accent); color: #fff; font-size: .8rem; padding: .55rem 0; }
 .topbar .wrap { display: flex; justify-content: space-between; gap: .5rem; }
-nav { position: sticky; top: 0; background: rgba(250, 249, 245, .94); border-bottom: 1px solid #e7e5de; padding: .9rem 0; z-index: 5; }
+nav { position: sticky; top: 0; background: rgba(250, 249, 245, .94); border-bottom: 1px solid #e7e5de; padding: .9rem 0; z-index: 5; backdrop-filter: blur(8px); }
 .nav-in { display: flex; justify-content: space-between; align-items: center; }
-.brand { font-weight: 800; color: var(--ink); }
-.brand i { color: var(--accent-soft); }
+.brand { font-weight: 800; color: #0f172a; }
+.brand i { color: var(--deep); }
 nav ul { display: flex; gap: 1.3rem; list-style: none; color: #52606d; font-size: .9rem; align-items: center; }
-nav ul a:hover { color: var(--accent-soft); }
+nav ul a:hover { color: var(--deep); }
 .cta-btn { background: var(--accent); color: #fff !important; padding: .5rem 1.1rem; border-radius: 30px; }
-.hero { padding: 90px 0 100px; background: var(--bg); position: relative; }
-.hero .wrap { display: grid; grid-template-columns: 1.15fr .85fr; gap: 2rem; align-items: center; }
-.badge { display: inline-block; background: var(--accent-soft); color: var(--accent); font-size: .75rem; padding: .4rem .9rem; border-radius: 30px; margin-bottom: 1rem; font-weight: 600; }
-.hero h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); font-weight: 800; color: var(--ink); margin-bottom: 1rem; }
-.hero h1 span { color: var(--accent-soft); }
-.hero p { color: #52606d; max-width: 52ch; margin-bottom: 1.6rem; }
-.btn-ghost { border: 2px solid var(--accent); color: var(--accent); margin-left: .6rem; }
+.hero { padding: 90px 0 100px; background: var(--bg); }
+.hero .wrap { display: grid; grid-template-columns: 1.12fr .88fr; gap: 2.4rem; align-items: center; }
+.badge { background: var(--soft); color: var(--accent); }
+.hero h1 { font-size: clamp(1.9rem, 4.2vw, 2.5rem); font-weight: 800; color: #0f172a; margin-bottom: 1rem; }
+.hero h1 span { color: var(--deep); }
+.hero p { color: #52606d; max-width: 52ch; margin-bottom: 1.7rem; font-size: 1rem; }
+.btn-ghost { border: 2px solid var(--accent); color: var(--accent); margin-left: .6rem; background: transparent; box-shadow: none; }
 .btn-ghost:hover { background: var(--accent); color: #fff; }
-.hero-media { position: relative; background: var(--accent-soft); border-radius: 18px; height: 260px; display: grid; place-items: center; color: var(--accent-soft); font-size: 4rem; }
-.float { position: absolute; left: -1rem; bottom: 1.2rem; background: #fff; border-radius: 12px; padding: .8rem 1.1rem; box-shadow: 0 10px 30px rgba(15, 23, 42, .12); }
+.hero-media { position: relative; background: var(--soft); border-radius: 20px; height: 280px; display: grid; place-items: center; color: var(--deep); font-size: 4.2rem; overflow: hidden; }
+.hero-media img { width: 100%; height: 100%; object-fit: cover; }
+.float { position: absolute; left: -1rem; bottom: 1.4rem; background: #fff; border-radius: 14px; padding: .85rem 1.2rem; box-shadow: 0 12px 32px rgba(15, 23, 42, .16); }
 .float b { font-size: 1.15rem; color: var(--accent); }
-.float small { color: #64748b; font-size: .75rem; }
-.feats { background: var(--accent); color: #fff; padding: 1.7rem 0; text-align: center; }
-.feats .wrap { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.float small { color: #64748b; font-size: .76rem; }
+.sec { padding: 80px 0; background: #fff; }
+.sec-head h2 { color: #0f172a; font-weight: 800; }
+.card { border: 1px solid var(--soft); border-radius: 18px; padding: 1.5rem; background: var(--bg); transition: .25s; }
+.card:hover { transform: translateY(-4px); box-shadow: 0 14px 34px rgba(19, 78, 74, .12); }
+.card .tag { display: inline-block; font-size: .68rem; font-weight: 700; color: var(--accent); background: var(--soft); border-radius: 20px; padding: .25rem .8rem; margin-bottom: .9rem; }
+.card h3 { margin-bottom: .45rem; color: #0f172a; }
+.card p { font-size: .86rem; color: #52606d; }
+.c-img { height: 150px; width: calc(100% + 3rem); margin: -1.5rem -1.5rem 1.1rem; object-fit: cover; border-radius: 18px 18px 0 0; }
+.cta { background: var(--bg); text-align: center; padding: 80px 0; }
+.cta h2 { color: #0f172a; }
+.feats { background: var(--accent); color: #fff; padding: 2.1rem 0; }
+.feats .wrap { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; text-align: center; }
 .feats b { display: block; color: var(--gold); margin-bottom: .15rem; }
 .feats span { font-size: .78rem; color: #d7ecea; }
-.sec { padding: 70px 0; background: #fff; }
-.sec h2 { font-size: clamp(1.4rem, 3vw, 1.7rem); text-align: center; color: var(--ink); margin-bottom: 2.4rem; font-weight: 800; }
-.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
-.card { border: 1px solid var(--accent-soft); border-radius: 16px; padding: 1.4rem; background: var(--bg); }
-.card .tag { display: inline-block; font-size: .7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 20px; padding: .25rem .7rem; margin-bottom: .8rem; }
-.card h3 { margin-bottom: .4rem; color: var(--ink); }
-.card p { font-size: .85rem; color: #52606d; }
-.cta { background: var(--bg); text-align: center; padding: 70px 0; }
-.cta h2 { color: var(--ink); margin-bottom: 1.2rem; }
-footer { background: var(--accent); color: #d7ecea; text-align: center; padding: 1.6rem; font-size: .82rem; }
-@media (max-width: 760px) { .hero .wrap { grid-template-columns: 1fr; } .cards { grid-template-columns: 1fr; } nav ul { display: none; } .btn-ghost { margin-left: 0; margin-top: .6rem; } .topbar .wrap { flex-direction: column; gap: .2rem; } }
+footer { background: var(--accent); color: #d7ecea; text-align: center; padding: 1.7rem; font-size: .8rem; }
+@media (max-width: 760px) { .hero .wrap { grid-template-columns: 1fr; } .steps, .feats .wrap { grid-template-columns: 1fr; } nav ul { display: none; } .btn-ghost { margin-left: 0; margin-top: .6rem; } .topbar .wrap { flex-direction: column; gap: .2rem; } }
 `;
       if (s.slug === "cinta") css += `
 nav { position: sticky; top: 0; background: var(--dark); color: #fff; padding: .9rem 0; z-index: 5; }
 .nav-in { display: flex; justify-content: space-between; align-items: center; }
 .brand b { color: var(--gold); }
 nav ul { display: flex; gap: 1.3rem; list-style: none; color: #cdd7ee; font-size: .9rem; align-items: center; }
+nav ul a:hover { color: var(--gold); }
 .cta-btn { background: var(--gold); color: #fff !important; padding: .5rem 1.1rem; border-radius: 8px; font-weight: 700; }
-.hero { padding: 90px 0; background: var(--accent-soft); color: var(--ink); }
-.hero .wrap { display: grid; grid-template-columns: 1.15fr .85fr; gap: 2rem; align-items: center; }
-.badge { display: inline-block; background: var(--bg); color: var(--accent); font-size: .75rem; font-weight: 700; padding: .4rem .9rem; border-radius: 8px; margin-bottom: 1rem; }
-.hero h1 { font-size: clamp(1.8rem, 4vw, 2.3rem); font-weight: 800; color: var(--accent); margin-bottom: 1rem; }
-.hero p { color: #5b6b7b; max-width: 56ch; margin-bottom: 1.6rem; }
-.btn-p { background: var(--accent); color: #fff; border-radius: 8px; }
-.btn-ghost { border: 2px solid var(--accent); color: var(--accent); margin-left: .6rem; border-radius: 8px; }
+.hero { padding: 90px 0; background: var(--bg); }
+.hero .wrap { display: grid; grid-template-columns: 1.12fr .88fr; gap: 2.4rem; align-items: center; }
+.badge { background: #fff; color: var(--accent); border: 1px solid var(--soft); }
+.hero h1 { font-size: clamp(1.9rem, 4.2vw, 2.4rem); font-weight: 800; color: var(--accent); margin-bottom: 1rem; }
+.hero h1 span { color: var(--deep); }
+.hero p { color: #5b6b7b; max-width: 56ch; margin-bottom: 1.7rem; font-size: 1rem; }
+.btn-p { background: var(--accent); color: #fff; border-radius: 10px; }
+.btn-ghost { border: 2px solid var(--accent); color: var(--accent); margin-left: .6rem; border-radius: 10px; background: transparent; box-shadow: none; }
 .btn-ghost:hover { background: var(--accent); color: #fff; }
-.hero-media { position: relative; background: var(--bg); border-radius: 14px; height: 240px; display: grid; place-items: center; color: var(--accent); font-size: 4rem; }
-.float { position: absolute; left: -.8rem; bottom: 1.2rem; background: #fff; border-radius: 10px; padding: .7rem 1rem; box-shadow: 0 10px 30px rgba(15, 23, 42, .15); }
+.hero-media { position: relative; background: var(--soft); border-radius: 16px; height: 260px; display: grid; place-items: center; color: var(--accent); font-size: 4rem; overflow: hidden; }
+.hero-media img { width: 100%; height: 100%; object-fit: cover; }
+.float { position: absolute; left: -.8rem; bottom: 1.3rem; background: #fff; border-radius: 12px; padding: .75rem 1.1rem; box-shadow: 0 12px 32px rgba(15, 23, 42, .16); }
 .float b { font-size: 1.05rem; color: var(--accent); }
-.float small { color: #5b6b7b; font-size: .74rem; }
-.feats { background: var(--dark); color: #fff; padding: 1.7rem 0; }
+.float small { color: #5b6b7b; font-size: .75rem; }
+.feats { background: var(--dark); color: #fff; padding: 2rem 0; }
 .feats .wrap { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; text-align: center; }
 .feats b { display: block; color: var(--gold); margin-bottom: .15rem; }
 .feats span { font-size: .78rem; color: #cdd7ee; }
-.sec { padding: 70px 0; background: #fff; }
-.sec h2 { font-size: clamp(1.4rem, 3vw, 1.7rem); text-align: center; color: var(--accent); margin-bottom: 2.4rem; font-weight: 800; }
-.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
-.card { border: 1px solid #e6ecf8; border-radius: 12px; padding: 1.4rem; background: var(--accent-soft); }
-.card .tag { display: inline-block; font-size: .7rem; font-weight: 700; color: var(--gold); background: #fff; border: 1px solid var(--bg); border-radius: 6px; padding: .25rem .7rem; margin-bottom: .8rem; }
-.card h3 { margin-bottom: .4rem; color: var(--ink); }
-.card p { font-size: .85rem; color: #5b6b7b; }
-.cta { background: var(--accent); color: #fff; text-align: center; padding: 70px 0; }
-.cta h2 { margin-bottom: 1.2rem; }
-footer { background: var(--dark); color: #a9b8dc; text-align: center; padding: 1.6rem; font-size: .82rem; }
-@media (max-width: 760px) { .hero .wrap { grid-template-columns: 1fr; } .cards, .feats .wrap { grid-template-columns: 1fr; } nav ul { display: none; } .btn-ghost { margin-left: 0; margin-top: .6rem; } }
+.sec { padding: 80px 0; background: #fff; }
+.sec-head h2 { color: var(--accent); font-weight: 800; }
+.card { border: 1px solid #e6ecf8; border-radius: 14px; padding: 1.5rem; background: var(--bg); transition: .25s; }
+.card:hover { transform: translateY(-4px); box-shadow: 0 14px 34px rgba(30, 58, 138, .12); }
+.card .tag { display: inline-block; font-size: .68rem; font-weight: 700; color: var(--gold); background: #fff; border: 1px solid var(--soft); border-radius: 8px; padding: .25rem .8rem; margin-bottom: .9rem; }
+.card h3 { margin-bottom: .45rem; color: #0f172a; }
+.card p { font-size: .86rem; color: #5b6b7b; }
+.c-img { height: 150px; width: calc(100% + 3rem); margin: -1.5rem -1.5rem 1.1rem; object-fit: cover; border-radius: 14px 14px 0 0; }
+.cta { background: var(--accent); color: #fff; text-align: center; padding: 80px 0; }
+footer { background: var(--dark); color: #a9b8dc; text-align: center; padding: 1.7rem; font-size: .8rem; }
+@media (max-width: 760px) { .hero .wrap { grid-template-columns: 1fr; } .steps, .feats .wrap { grid-template-columns: 1fr; } nav ul { display: none; } .btn-ghost { margin-left: 0; margin-top: .6rem; } }
 `;
-      if (s.slug === "singgih") css += `
-.topbar { background: var(--accent); color: #d8f0e3; font-size: .8rem; padding: .55rem 0; }
+      if (s.slug === "singgih") css += `.topbar { background: var(--accent); color: #d8f0e3; font-size: .8rem; padding: .55rem 0; }
 .topbar .wrap { display: flex; justify-content: space-between; gap: .5rem; }
 .topbar b { color: var(--gold); }
-nav { position: sticky; top: 0; background: rgba(246, 244, 236, .94); border-bottom: 1px solid var(--accent-soft); padding: .9rem 0; z-index: 5; }
+nav { position: sticky; top: 0; background: rgba(246, 244, 236, .94); border-bottom: 1px solid var(--soft); padding: .9rem 0; z-index: 5; backdrop-filter: blur(8px); }
 .nav-in { display: flex; justify-content: space-between; align-items: center; }
-.brand { font-weight: 800; color: var(--ink); }
-.brand i { color: var(--accent-soft); }
+.brand { font-weight: 800; color: #14241c; }
+.brand i { color: var(--deep); }
 nav ul { display: flex; gap: 1.3rem; list-style: none; color: #5c6f63; font-size: .9rem; align-items: center; }
-.cta-btn { background: var(--accent-soft); color: #fff !important; padding: .5rem 1.1rem; border-radius: 30px; font-weight: 700; }
-.hero { padding: 90px 0 100px; background: var(--bg); position: relative; }
-.hero .wrap { display: grid; grid-template-columns: 1.15fr .85fr; gap: 2rem; align-items: center; }
-.badge { display: inline-block; background: var(--accent-soft); color: var(--accent); font-size: .75rem; padding: .4rem .9rem; border-radius: 30px; margin-bottom: 1rem; font-weight: 600; }
-.hero h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); font-weight: 800; color: var(--ink); margin-bottom: 1rem; }
-.hero h1 span { color: var(--accent-soft); }
-.hero p { color: #5c6f63; max-width: 52ch; margin-bottom: 1.6rem; }
-.btn-ghost { border: 2px solid var(--accent); color: var(--accent); margin-left: .6rem; }
+nav ul a:hover { color: var(--deep); }
+.cta-btn { background: var(--deep); color: #fff !important; padding: .5rem 1.1rem; border-radius: 30px; font-weight: 700; }
+.hero { padding: 90px 0 100px; background: var(--bg); }
+.hero .wrap { display: grid; grid-template-columns: 1.12fr .88fr; gap: 2.4rem; align-items: center; }
+.badge { background: var(--soft); color: var(--accent); }
+.hero h1 { font-size: clamp(1.9rem, 4.2vw, 2.5rem); font-weight: 800; color: #14241c; margin-bottom: 1rem; }
+.hero h1 span { color: var(--deep); }
+.hero p { color: #5c6f63; max-width: 52ch; margin-bottom: 1.7rem; font-size: 1rem; }
+.btn-ghost { border: 2px solid var(--accent); color: var(--accent); margin-left: .6rem; background: transparent; box-shadow: none; }
 .btn-ghost:hover { background: var(--accent); color: #fff; }
-.hero-media { position: relative; background: var(--accent-soft); border-radius: 18px; height: 260px; display: grid; place-items: center; color: var(--accent-soft); font-size: 4rem; }
-.sec { padding: 70px 0; background: #fff; }
-.sec h2 { font-size: clamp(1.4rem, 3vw, 1.7rem); text-align: center; color: var(--ink); margin-bottom: 2.4rem; font-weight: 800; }
-.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
-.card { border: 1px solid var(--accent-soft); border-radius: 16px; padding: 1.4rem; background: var(--bg); }
-.card .tag { display: inline-block; font-size: .7rem; font-weight: 700; color: var(--gold); background: var(--accent); border-radius: 20px; padding: .25rem .7rem; margin-bottom: .8rem; }
-.card h3 { margin-bottom: .4rem; color: var(--ink); }
-.card p { font-size: .85rem; color: #5c6f63; }
-.cta { background: var(--dark); color: #fff; text-align: center; padding: 70px 0; }
-.cta h2 { margin-bottom: 1.2rem; }
-footer { background: var(--dark); color: #a8c8b8; text-align: center; padding: 1.6rem; font-size: .82rem; }
-@media (max-width: 760px) { .hero .wrap { grid-template-columns: 1fr; } .cards { grid-template-columns: 1fr; } nav ul { display: none; } .btn-ghost { margin-left: 0; margin-top: .6rem; } .topbar .wrap { flex-direction: column; gap: .2rem; } }
+.hero-media { position: relative; background: var(--soft); border-radius: 20px; height: 280px; display: grid; place-items: center; color: var(--deep); font-size: 4.2rem; overflow: hidden; }
+.hero-media img { width: 100%; height: 100%; object-fit: cover; }
+.sec { padding: 80px 0; background: #fff; }
+.sec-head h2 { color: #14241c; font-weight: 800; }
+.card { border: 1px solid var(--soft); border-radius: 18px; padding: 1.5rem; background: var(--bg); transition: .25s; }
+.card:hover { transform: translateY(-4px); box-shadow: 0 14px 34px rgba(13, 59, 46, .12); }
+.card .tag { display: inline-block; font-size: .68rem; font-weight: 700; color: var(--gold); background: var(--accent); border-radius: 20px; padding: .25rem .8rem; margin-bottom: .9rem; }
+.card h3 { margin-bottom: .45rem; color: #14241c; }
+.card p { font-size: .86rem; color: #5c6f63; }
+.c-img { height: 150px; width: calc(100% + 3rem); margin: -1.5rem -1.5rem 1.1rem; object-fit: cover; border-radius: 18px 18px 0 0; }
+.cta { background: var(--dark); color: #fff; text-align: center; padding: 80px 0; }
+.feats { background: var(--dark); color: #fff; padding: 2rem 0; }
+.feats .wrap { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; text-align: center; }
+.feats b { display: block; color: var(--gold); margin-bottom: .15rem; }
+.feats span { font-size: .78rem; color: #a8c8b8; }
+footer { background: var(--dark); color: #a8c8b8; text-align: center; padding: 1.7rem; font-size: .8rem; }
+@media (max-width: 760px) { .hero .wrap { grid-template-columns: 1fr; } .steps, .feats .wrap { grid-template-columns: 1fr; } nav ul { display: none; } .btn-ghost { margin-left: 0; margin-top: .6rem; } .topbar .wrap { flex-direction: column; gap: .2rem; } }
+`;
+      css += `
+/* ─── Section: Testimoni ─── */
+.t-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.t-card { background: #fff; border: 1px solid var(--soft); border-radius: 18px; padding: 1.6rem; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+.t-card .t-quote { font-size: 2.2rem; color: var(--accent); margin-bottom: .6rem; }
+.t-card .t-text { font-size: .9rem; color: #52606d; margin-bottom: 1rem; }
+.t-card .t-who b { display: block; color: #0f172a; }
+.t-card .t-who span { font-size: .78rem; color: #94a3b8; }
+.t-card .t-stars { color: var(--gold); margin-top: .5rem; letter-spacing: 2px; font-size: .9rem; }
+/* ─── Section: Harga / Paket ─── */
+.p-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; align-items: stretch; }
+.p-card { background: #fff; border: 1px solid var(--soft); border-radius: 18px; padding: 2rem 1.6rem; text-align: center; position: relative; display: flex; flex-direction: column; gap: .9rem; box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+.p-card.hot { border: 2px solid var(--accent); box-shadow: 0 12px 34px rgba(0,0,0,.1); }
+.p-badge { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #fff; font-size: .68rem; font-weight: 700; letter-spacing: .05em; padding: .3rem 1rem; border-radius: 30px; white-space: nowrap; }
+.p-price { font-size: 2rem; font-weight: 800; color: var(--deep); }
+.p-price small { display: block; font-size: .75rem; font-weight: 400; color: #94a3b8; }
+.p-card ul { list-style: none; text-align: left; margin: 0 auto; display: flex; flex-direction: column; gap: .45rem; }
+.p-card ul li { font-size: .85rem; color: #52606d; }
+.p-card ul i { color: var(--accent); margin-right: .4rem; }
+.p-card .btn { margin-top: auto; }
+/* ─── Section: Galeri ─── */
+.g-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+.g-item { border-radius: 14px; overflow: hidden; aspect-ratio: 4/3; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+.g-item img { width: 100%; height: 100%; object-fit: cover; transition: .3s; }
+.g-item:hover img { transform: scale(1.05); }
+.g-ph { width: 100%; height: 100%; display: grid; place-items: center; background: var(--soft); color: var(--deep); font-size: 2.4rem; }
+/* ─── Proses: vertikal center ─── */
+.steps { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 2rem !important; text-align: center !important; }
+.steps > div { max-width: 44ch; }
+.steps > div p { margin: 0 auto !important; }
+@media (max-width: 760px) {
+  .t-grid, .p-grid, .g-grid { grid-template-columns: 1fr; }
+}
 `;
       return css;
     }
 
-    // ── MAIN.JS — dipakai di export ZIP ──
+    // ═══════════════ MAIN.JS (export) ═══════════════
     function buildJS() {
       return `/* Generated by Landing Page Generator — https://ianocent.github.io/blog/landing-generator */
-// Burger menu mobile
 const burger = document.querySelector(".burger");
 const menu = document.querySelector(".menu");
 if (burger && menu) {
   burger.addEventListener("click", () => menu.classList.toggle("open"));
 }
-// Reveal on scroll
 const io = new IntersectionObserver((entries) => {
   entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("v"); });
-}, { threshold: 0.15 });
+}, { threshold: 0.12 });
 document.querySelectorAll(".r").forEach((el) => io.observe(el));
-// Smooth anchor scroll
 document.querySelectorAll('a[href^="#"]').forEach((a) => {
   a.addEventListener("click", (e) => {
     const t = document.querySelector(a.getAttribute("href"));
     if (t) { e.preventDefault(); t.scrollIntoView({ behavior: "smooth" }); }
   });
 });
-// Footer year
 const yr = document.querySelector("[data-year]");
 if (yr) yr.textContent = new Date().getFullYear();
 `;
     }
 
-    // ── AGENTS.MD — panduan gaya buat AI ──
+    // ═══════════════ AGENTS.MD ═══════════════
     function buildAGENTS(s) {
       const c = cat();
-      const v = s.vars;
-      const palette = (s.slug === "vira" ? `#c74343 (accent), #1a1a1a (dark), #f8f8f8 (light), #666 (mute)` :
-        s.slug === "kiki" ? `${v.teal} (teal/accent), ${v.tealSoft} (teal-soft), ${v.gold} (gold), ${v.cream} (bg), ${v.mist} (mist)` :
-        s.slug === "cinta" ? `${v.navy} (navy/accent), ${v.navyDeep} (navy-deep), ${v.orange} (orange/gold), ${v.sky} (sky), ${v.soft} (bg)` :
-        `${v.pine} (pine/accent), ${v.pineDeep} (pine-deep), ${v.leaf} (leaf), ${v.sun} (sun/gold), ${v.sand} (bg), ${v.mist} (mist)`);
-      const accent = v.primary || v.teal || v.navy || v.pine;
-      return `# ${el("f-name").value.trim() || "Nama Bisnis"} — Landing Page
+      const { accent, deep } = cssAccent();
+      return `# ${state.name} — Landing Page
 
 Generated by Landing Page Generator (https://ianocent.github.io/blog/landing-generator).
-Style template: **${s.label}** (referensi asli: ${s.client}, repo: ${s.repo}).
+Style: **${s.label}** (referensi: ${s.client}, repo: ${s.repo}).
 
 ## Design System
 
-- Font: **${s.font}** (Google Fonts). Headings & body pakai font ini, weight 400-800.
-- Accent color: **${accent}** — dipakai untuk tombol utama, highlight, tag badge.
-- Dark color: **var(--dark)** — dipakai untuk topbar/hero gelap, CTA band, footer.
-- Palette: ${palette}.
-- Semua token warna didefinisikan di \`assets/css/style.css\` blok \`:root\`. JANGAN hardcode warna di luar file CSS.
+- Font: **${s.font}** (Google Fonts), weight 400-800.
+- Accent: **${accent}** — tombol utama, highlight, tag, angka proses.
+- Deep: **${deep}** — teks highlight (span), hover.
+- Gold: **${s.gold}** — aksen di atas background gelap.
+- Dark: **${s.dark}** — navbar gelap, band CTA, footer.
+- Background: **${s.bg}**, soft: **${s.soft}**.
+- Semua warna via CSS custom properties di :root (assets/css/style.css). JANGAN hardcode warna di HTML.
 
-## Struktur Halaman (single-page scroll)
+## Struktur Halaman
 
-1. Topbar (info singkat: jam buka / promo) — opsional per style.
-2. Navbar sticky: logo + menu (#beranda, #produk, #proses, CTA WhatsApp).
-3. Hero: badge kategori, H1 dengan kata kunci di <span> (warna accent), sub deskripsi, 2 tombol (WhatsApp utama + tombol sekunder).
-4. Feats strip (4 kolom keunggulan) — hanya style tertentu.
-5. Section produk/menu/layanan: grid 3 kartu, tiap kartu = tag badge + nama + deskripsi.
-6. Section proses: 3 langkah bernomor.
-7. CTA band gelap: ajakan chat WhatsApp.
-8. Footer: copyright + credit generator.
+Urutan section saat ini:
+${state.sections.filter((x) => x.on).map((x) => `- **${SEC_LABELS[x.k]}** (#${x.k})`).join("\n")}
 
-## Aturan Edit (wajib dipatuhi AI)
+Pola umum:
+1. Hero: badge, H1 (keyword dalam <span> warna deep), deskripsi, 2 tombol (WhatsApp + sekunder).
+2. Produk/menu: grid ${state.cols} kolom, tiap kartu = tag badge + nama + deskripsi + foto opsional.
+3. Proses: 3 langkah bernomor (lingkaran accent), tampil vertikal terpusat.
+4. Testimoni: 3 kartu quote (nama, role, bintang gold) — opsional.
+5. Harga/paket: 3 kartu, paket tengah bertanda "Paling Populer" (border accent) — opsional.
+6. Galeri: grid foto 4:3, placeholder ikon kalau belum ada foto — opsional.
+7. CTA band gelap + footer.
 
-- Stack: vanilla HTML/CSS/JS, tanpa build step, tanpa framework. Jangan tambah React/Vue.
-- File: \`index.html\`, \`assets/css/style.css\`, \`assets/js/main.js\`, gambar di \`assets/img/\`.
-- Tambah section baru: tiru pattern section yang ada (\`<section class="sec">\`), isi konten \`<div class="wrap">\`.
-- Tombol WhatsApp WAJIB pakai format \`https://wa.me/<nomor>?text=<pesan-urlencoded>\`.
-- Semua gambar dari \`assets/img/\` (path relatif). Ganti \`hero.jpg\` placeholder dengan foto asli bisnis.
-- SEO: pertahankan title/description/canonical di <head>. Update keyword sesuai bisnis.
-- Mobile-first: navbar burger diaktifkan lewat \`.menu.open\` di \`assets/js/main.js\` (sudah ada, jangan dihapus).
-- Reveal animasi: class \`.r\` + \`.r.v\` via IntersectionObserver (sudah ada di main.js).
-- Bahasa konten: Indonesia. Nada: ramah, langsung, tanpa basa-basi.
+Konfigurasi umum di generator: topbar (auto/on/off + teks kiri-kanan), footer custom, kredit generator on/off, warna background, lebar konten (1040/1120/1240).
+
+## Aturan Edit (wajib)
+
+- Stack vanilla HTML/CSS/JS. Tanpa build step, tanpa framework. Jangan tambah React/Vue.
+- File: index.html, assets/css/style.css, assets/js/main.js, gambar di assets/img/.
+- Tombol WhatsApp wajib https://wa.me/<nomor>?text=<urlencoded>.
+- Gambar: path relatif assets/img/. Hero bg di CSS .hero pakai url('assets/img/hero.jpg').
+- SEO: title/description/canonical di <head> — update keyword sesuai bisnis.
+- Mobile: burger menu (class .menu.open, di main.js), grid collapse 1 kolom.
+- Reveal animasi: class .r + .r.v via IntersectionObserver (sudah di main.js).
+- Bahasa: Indonesia, nada ramah langsung.
 
 ## Konten Saat Ini
 
-- Kategori: ${c.label}
-- Nama: ${el("f-name").value.trim()}
-- Area: ${el("f-area").value.trim()}
-- WhatsApp: ${el("f-wa").value.trim()}
+- Kategori: ${c.label} | Nama: ${state.name} | Area: ${state.area} | WA: ${state.wa}
+- Produk: ${state.products.map((p) => p.name).join(", ")}
 `;
     }
 
-    // ── BODY HTML (dipakai preview + export) ──
-    function heroHTML(s, imgPrefix) {
+    // ═══════════════ BODY HTML ═══════════════
+    function imgSrc(p, i, split) {
+      if (!p.img) return "";
+      return split ? `assets/img/product-${i + 1}.jpg` : p.img;
+    }
+    function heroImgSrc(split) {
+      if (!state.heroImg) return "";
+      return split ? "assets/img/hero.jpg" : state.heroImg;
+    }
+    function imgSrcGal(g, i, split) {
+      return split ? `assets/img/galeri-${i + 1}.jpg` : g;
+    }
+
+    function heroHTML(s, split) {
       const c = cat();
       const heroTitle = fmt(c.heroTitle.includes("{name}")
         ? c.heroTitle.replace("{name}", "<span>{name}</span>")
         : c.heroTitle.replace("{area}", "<span>{area}</span>"));
-      const media = s.float ? `
-        <div class="hero-media"><i class="bx bx-store"></i>
-          <div class="float"><b>${fmt(c.feats[0][0])}</b><small>${fmt(c.feats[0][1])}</small></div>
-        </div>` : "";
+      const hi = heroImgSrc(split);
+      let media;
+      if (s.heroDark) {
+        media = "";
+      } else if (hi) {
+        media = `<div class="hero-media"><img src="${hi}" alt="${esc(state.name)}"></div>`;
+      } else {
+        media = `<div class="hero-media"><i class="bx bx-store"></i>${s.float ? `<div class="float"><b>${fmt(c.feats[0][0])}</b><small>${fmt(c.feats[0][1])}</small></div>` : ""}</div>`;
+      }
+      const heroStyle = (s.heroDark && hi) ? ` style="background:linear-gradient(rgba(0,0,0,.78), rgba(0,0,0,.78)), url('${hi}') center/cover"` : "";
       return `
-        <section class="hero r">
+        <section class="hero r"${heroStyle}>
           <div class="wrap">
             <div class="hero-body">
               <span class="badge">${c.badge}</span>
@@ -671,54 +1123,130 @@ Style template: **${s.label}** (referensi asli: ${s.client}, repo: ${s.repo}).
         </section>`;
     }
 
-    function bodyHTML(s) {
+    function sectionHTML(k, split) {
       const c = cat();
-      const cards = c.products.map((p) => `
-        <div class="card r"><span class="tag" style="background:${p[2]}">${p[1]}</span><h3>${p[0]}</h3><p>${p[3]}</p></div>`).join("");
-      const steps = c.steps.map((st) => `
-        <div class="r"><b>${st[0]}</b><h3>${st[1]}</h3><p>${st[2].replace("{name}", fmt("{name}"))}</p></div>`).join("");
-      const feats = (s.slug === "kiki" || s.slug === "cinta") ? `
-        <div class="feats r"><div class="wrap">${c.feats.map((f) => `<div><b>${f[0]}</b><span>${f[1]}</span></div>`).join("")}</div></div>` : "";
-      const stepsBg = s.heroDark ? "#f8f8f8" : (s.vars.cream || s.vars.sand || "#fff");
-      return `
-        ${feats}
-        <section class="sec" id="produk">
-          <div class="wrap">
-            <h2 class="r">${c.productsTitle.replace("{name}", fmt("{name}"))}</h2>
-            <p class="sub r">${c.productsSub}</p>
-            <div class="cards">${cards}</div>
-          </div>
-        </section>
-        <section class="sec" id="proses" style="background:${stepsBg}">
-          <div class="wrap">
-            <h2 class="r">Proses Gampang, 3 Langkah</h2>
-            <div class="steps">${steps}</div>
-          </div>
-        </section>
-        <section class="cta r">
-          <div class="wrap">
-            <h2>${fmt(c.ctaTitle)}</h2>
-            <a class="btn ${s.heroDark ? "btn-p" : "btn-wa"}" href="${waLink()}" target="_blank" rel="noopener">Chat WhatsApp ${fmt("{name}")}</a>
-          </div>
-        </section>`;
+      const s = style();
+      if (k === "feats") {
+        return `<div class="feats r"><div class="wrap">${c.feats.map((f) => `<div><b>${fmt(f[0])}</b><span>${fmt(f[1])}</span></div>`).join("")}</div></div>`;
+      }
+      if (k === "produk") {
+        const cards = state.products.map((p, i) => `
+          <div class="card r">
+            ${p.img ? `<img class="c-img" src="${imgSrc(p, i, split)}" alt="${esc(p.name)}">` : ""}
+            <span class="tag" style="background:${TAG_COLORS[i % 3][0]};color:${TAG_COLORS[i % 3][1]}">${esc(p.tag)}</span>
+            <h3>${esc(p.name)}</h3>
+            <p>${esc(p.desc)}</p>
+          </div>`).join("");
+        return `
+          <section class="sec" id="produk">
+            <div class="wrap">
+              <div class="sec-head r">
+                <span class="eyebrow">${c.product}</span>
+                <h2>${fmt(c.productsTitle)}</h2>
+                <p class="sub">${c.productsSub}</p>
+              </div>
+              <div class="cards">${cards}</div>
+            </div>
+          </section>`;
+      }
+      if (k === "proses") {
+        const stepsBg = s.heroDark ? "#f8f8f8" : s.bg;
+        const steps = c.steps.map((st) => `
+          <div class="r"><b>${st[0]}</b><h3>${st[1]}</h3><p>${fmt(st[2])}</p></div>`).join("");
+        return `
+          <section class="sec" id="proses" style="background:${stepsBg}">
+            <div class="wrap">
+              <div class="sec-head r">
+                <span class="eyebrow">Cara Kerja</span>
+                <h2>Proses Gampang, 3 Langkah</h2>
+              </div>
+              <div class="steps">${steps}</div>
+            </div>
+          </section>`;
+      }
+      if (k === "cta") {
+        return `
+          <section class="cta r">
+            <div class="wrap">
+              <h2>${fmt(c.ctaTitle)}</h2>
+              <a class="btn ${s.heroDark ? "btn-p" : "btn-wa"}" href="${waLink()}" target="_blank" rel="noopener">Chat WhatsApp ${fmt("{name}")}</a>
+            </div>
+          </section>`;
+      }
+      if (k === "testimoni") {
+        const items = state.testimonials.map((t) => `
+          <div class="t-card r">
+            <div class="t-quote"><i class="bx bxs-quote-alt-left"></i></div>
+            <p class="t-text">${esc(t.text)}</p>
+            <div class="t-who"><b>${esc(t.name)}</b><span>${esc(t.role)}</span></div>
+            <div class="t-stars">${"★".repeat(5)}</div>
+          </div>`).join("");
+        return `
+          <section class="sec" id="testimoni">
+            <div class="wrap">
+              <div class="sec-head r">
+                <span class="eyebrow">Kata Mereka</span>
+                <h2>Testimoni Pelanggan</h2>
+              </div>
+              <div class="t-grid">${items}</div>
+            </div>
+          </section>`;
+      }
+      if (k === "harga") {
+        const cards = state.prices.map((p) => `
+          <div class="p-card r ${p.hot ? "hot" : ""}">
+            ${p.hot ? `<span class="p-badge">Paling Populer</span>` : ""}
+            <h3>${esc(p.name)}</h3>
+            <div class="p-price">${esc(p.price)}<small>${esc(p.note)}</small></div>
+            <ul>${p.feats.map((f) => `<li><i class="bx bx-check"></i> ${esc(f)}</li>`).join("")}</ul>
+            <a class="btn ${s.heroDark ? "btn-p" : "btn-wa"}" href="${waLink()}">Pilih Paket</a>
+          </div>`).join("");
+        return `
+          <section class="sec" id="harga" style="background:${s.heroDark ? "#f8f8f8" : s.bg}">
+            <div class="wrap">
+              <div class="sec-head r">
+                <span class="eyebrow">Paket & Harga</span>
+                <h2>Pilih Sesuai Kebutuhan</h2>
+              </div>
+              <div class="p-grid">${cards}</div>
+            </div>
+          </section>`;
+      }
+      if (k === "galeri") {
+        const items = state.gallery.map((g, i) => `
+          <div class="g-item r">${g ? `<img src="${imgSrcGal(g, i, split)}" alt="Galeri ${i + 1}">` : `<div class="g-ph"><i class="bx bx-image"></i></div>`}</div>`).join("");
+        return `
+          <section class="sec" id="galeri">
+            <div class="wrap">
+              <div class="sec-head r">
+                <span class="eyebrow">Dokumentasi</span>
+                <h2>Galeri Kami</h2>
+              </div>
+              <div class="g-grid">${items}</div>
+            </div>
+          </section>`;
+      }
+      return "";
     }
 
+    // ═══════════════ INDEX BUILDER ═══════════════
     function buildIndex(s, split) {
       const c = cat();
-      const title = `${fmt("{name}")} — ${c.label} ${fmt("{area}")}`;
-      const desc = `${fmt("{name}")} — ${c.label} ${fmt("{area}")}. ${fmt(c.tagline)}. Chat WhatsApp ${el("f-wa").value.trim()}.`;
-      const domain = el("f-domain").value.trim() || s.domain;
+      const title = `${state.name} — ${c.label} ${state.area}`;
+      const desc = `${state.name} — ${c.label} ${state.area}. ${fmt(c.tagline)}. Chat WhatsApp ${state.wa}.`;
+      const domain = state.domain || s.domain;
+      const bodySections = state.sections.filter((x) => x.on).map((x) => sectionHTML(x.k, split)).join("\n");
       const head = `<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${title}</title>
-  <meta name="description" content="${desc}">
-  <meta property="og:title" content="${title}" />
-  <meta property="og:description" content="${desc}" />
+  <title>${esc(title)}</title>
+  <meta name="description" content="${esc(desc)}">
+  <meta property="og:title" content="${esc(title)}" />
+  <meta property="og:description" content="${esc(desc)}" />
   <meta property="og:type" content="website" />
-  <meta name="keywords" content="${fmt("{name}")}, ${fmt("{area}")}, ${c.label.toLowerCase()}, promo 2026, whatsapp" />
+  <meta name="keywords" content="${esc(state.name)}, ${esc(state.area)}, ${c.label.toLowerCase()}, promo 2026, whatsapp" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="${domain}" />
   <link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
@@ -726,38 +1254,59 @@ Style template: **${s.label}** (referensi asli: ${s.client}, repo: ${s.repo}).
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=${s.font.replace(/ /g, "+")}:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-  ${split ? `<link rel="stylesheet" href="assets/css/style.css">` : `<style>${buildCSS(s)}</style>`}
+  ${split ? `<link rel="stylesheet" href="assets/css/style.css">` : `<style>${buildCSS(s, split)}</style>`}
 </head>`;
       const body = `<body>
-${s.topbar ? `<div class="topbar"><div class="wrap"><span>${fmt(c.topLeft)}</span><span>${fmt(c.topRight)}</span></div></div>` : ""}
-<nav><div class="wrap nav-in"><a class="brand" href="#beranda"><i class="bx bx-store"></i> ${fmt("{name}")}</a><ul class="menu"><li><a href="#beranda">Beranda</a></li><li><a href="#produk">${c.product}</a></li><li><a href="#proses">Proses</a></li><li><a class="cta-btn" href="${waLink()}">Hubungi Kami</a></li></ul><button class="burger" aria-label="Menu">☰</button></div></nav>
-<section id="beranda">${heroHTML(s)}</section>
-${bodyHTML(s)}
-<footer><div class="wrap">© <span data-year>2026</span> ${fmt("{name}")} — ${c.label} ${fmt("{area}")}. Dibuat dengan <a href="https://ianocent.github.io/blog/landing-generator" style="color:inherit;text-decoration:underline">Landing Page Generator</a> by ianocent.</div></footer>
-${split ? `<script src="assets/js/main.js"></script>` : `<script>${buildJS()}</script>`}
+${topbarHTML()}
+<nav><div class="wrap nav-in"><a class="brand" href="#beranda"><i class="bx bx-store"></i> ${esc(state.name)}</a><ul class="menu"><li><a href="#beranda">Beranda</a></li><li><a href="#produk">${c.product}</a></li><li><a href="#proses">Proses</a></li><li><a class="cta-btn" href="${waLink()}">Hubungi Kami</a></li></ul><button class="burger" aria-label="Menu">☰</button></div></nav>
+<section id="beranda">${heroHTML(s, split)}</section>
+${bodySections}
+${footerHTML()}
+${split ? `<script src="assets/js/main.js"><\/script>` : `<script>${buildJS()}<\/script>`}
 </body>
 </html>`;
       return head + body;
     }
 
-    function buildLogo(svgColor) {
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="${svgColor}"/><text x="32" y="42" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#fff" text-anchor="middle">${(el("f-name").value.trim() || "B")[0].toUpperCase()}</text></svg>`;
+    function topbarHTML() {
+      const s = style();
+      const on = state.showTop === "auto" ? s.topbar : state.showTop === "1";
+      if (!on) return "";
+      return `<div class="topbar"><div class="wrap"><span>${fmt(state.topLeft || cat().topLeft)}</span><span>${fmt(state.topRight || cat().topRight)}</span></div></div>`;
     }
 
-    // ── EXPORT ──
+    function footerHTML() {
+      const credit = state.credit ? ` Dibuat dengan <a href="https://ianocent.github.io/blog/landing-generator" style="color:inherit;text-decoration:underline">Landing Page Generator</a> by ianocent.` : "";
+      const base = state.footer || `© <span data-year>2026</span> ${state.name} — ${cat().label} ${state.area}.`;
+      return `<footer><div class="wrap">${fmt(base)}${credit}</div></footer>`;
+    }
+
+    function buildLogo(accent) {
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="${accent}"/><text x="32" y="42" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#fff" text-anchor="middle">${(state.name || "B")[0].toUpperCase()}</text></svg>`;
+    }
+
+    // ═══════════════ EXPORT ═══════════════
     function exportZip() {
       if (typeof JSZip === "undefined") { alert("JSZip gagal dimuat — cek koneksi internet, coba refresh."); return; }
-      const s = STYLES[activeStyle];
-      const slug = fmt("{name}").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "landing";
+      const s = style();
+      const slug = state.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "landing";
       const zip = new JSZip();
       const root = zip.folder(slug);
-      const accent = s.vars.primary || s.vars.teal || s.vars.navy || s.vars.pine;
+      const { accent } = cssAccent();
       root.file("index.html", buildIndex(s, true));
       root.file("AGENTS.md", buildAGENTS(s));
-      root.folder("assets").folder("css").file("style.css", buildCSS(s));
+      root.folder("assets").folder("css").file("style.css", buildCSS(s, true));
       root.folder("assets").folder("js").file("main.js", buildJS());
-      root.folder("assets").folder("img").file("logo.svg", buildLogo(accent));
-      root.folder("assets").folder("img").file("README.txt", `Letakkan semua gambar di folder ini (hero.jpg, produk.jpg, dll).\nReferensi: project client asli (${s.client}) juga pakai struktur assets/img.\nPath di index.html: assets/img/<nama-file>.\n\nGanti placeholder hero background:\n- Vira style: css .hero pakai url('assets/img/hero.jpg')\n- Style lain: hero-media bisa diisi <img src="assets/img/hero.jpg">\n`);
+      const img = root.folder("assets").folder("img");
+      img.file("logo.svg", buildLogo(accent));
+      img.file("README.txt", "Letakkan semua gambar di folder ini (hero.jpg, product-1.jpg, dll).\nReferensi project client asli juga pakai struktur assets/img.\nPath di index.html: assets/img/<nama-file>.\n\n- Hero: Style Vira pakai url('assets/img/hero.jpg') di CSS .hero.\n- Style lain: hero-media bisa diisi <img src=\"assets/img/hero.jpg\">.\n");
+      if (state.heroImg) img.file("hero.jpg", state.heroImg.split(",")[1], { base64: true });
+      state.products.forEach((p, i) => {
+        if (p.img) img.file(`product-${i + 1}.jpg`, p.img.split(",")[1], { base64: true });
+      });
+      state.gallery.forEach((g, i) => {
+        if (g) img.file(`galeri-${i + 1}.jpg`, g.split(",")[1], { base64: true });
+      });
       zip.generateAsync({ type: "blob" }).then((blob) => {
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
@@ -767,46 +1316,182 @@ ${split ? `<script src="assets/js/main.js"></script>` : `<script>${buildJS()}</s
       });
     }
 
-    // ── PREVIEW ──
+    // ═══════════════ PREVIEW ═══════════════
     function refresh() {
-      const s = STYLES[activeStyle];
+      const s = style();
+      const { accent } = cssAccent();
+      el("genScroll").textContent = `
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-thumb { background: ${accent}; border-radius: 8px; border: 2px solid var(--bg2); }
+::-webkit-scrollbar-thumb:hover { background: ${accent}; }
+* { scrollbar-width: thin; scrollbar-color: ${accent} var(--bg2); }
+`;
       el("preview").srcdoc = buildIndex(s, false);
-      el("previewUrl").textContent = "https://" + (el("f-domain").value.trim() || s.domain) + "/";
+      el("previewUrl").textContent = "https://" + (state.domain || s.domain) + "/";
       document.querySelectorAll(".style-card").forEach((c) => c.classList.toggle("on", c.dataset.k === activeStyle));
     }
 
-    // ── EVENTS ──
-    ["f-cat", "f-name", "f-area", "f-tag", "f-wa", "f-domain"].forEach((id) => {
-      el(id).addEventListener("input", () => refresh());
-    });
-    el("f-cat").addEventListener("change", () => refresh());
-    el("btnRefresh").addEventListener("click", refresh);
-    el("btnFull").addEventListener("click", () => {
-      const w = window.open("", "_blank");
-      w.document.write(buildIndex(STYLES[activeStyle], false));
-      w.document.close();
-    });
-    el("btnZip").addEventListener("click", exportZip);
-    el("btnHtml").addEventListener("click", () => {
-      const blob = new Blob([buildIndex(STYLES[activeStyle], false)], { type: "text/html;charset=utf-8" });
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = fmt("{name}").toLowerCase().replace(/[^a-z0-9]+/g, "-") + ".html";
-      a.click();
-      URL.revokeObjectURL(a.href);
-    });
-    el("btnReset").addEventListener("click", () => {
-      el("f-cat").value = "dealer";
-      el("f-name").value = "Nama Bisnis";
-      el("f-area").value = "Gading Serpong Tangerang";
-      el("f-tag").value = "";
-      el("f-wa").value = "6281234567890";
-      el("f-domain").value = "";
-      refresh();
-    });
+    // ═══════════════ EVENTS ═══════════════
+    const fileInputs = { hero: null, prod: [], gal: [] };
 
+    function initEvents() {
+      el("btnApply").addEventListener("click", applyData);
+
+      ["f-name", "f-area", "f-tag", "f-wa", "f-domain", "f-topleft", "f-topright", "f-footer"].forEach((id) => {
+        el(id).addEventListener("input", markDirty);
+      });
+      ["f-top", "f-credit", "f-maxw"].forEach((id) => {
+        el(id).addEventListener("change", markDirty);
+      });
+      ["prodRows", "testiRows", "priceRows"].forEach((id) => {
+        el(id).addEventListener("input", (e) => {
+          if (e.target.matches("input, textarea")) markDirty();
+        });
+      });
+      el("f-bg").addEventListener("input", () => {
+        state.bg = el("f-bg").value;
+        refresh();
+      });
+      el("f-cat").addEventListener("change", () => {
+        state.cat = el("f-cat").value;
+        state.products = CATS[state.cat].products.map((p) => ({ name: p[0], tag: p[1], desc: p[3], img: null }));
+      renderProducts();
+      renderTesti();
+      renderPrices();
+      renderGallery();
+      renderMedia();
+        markDirty();
+      });
+      el("f-cols").addEventListener("change", () => {
+        state.cols = parseInt(el("f-cols").value, 10) || 3;
+        refresh();
+      });
+      el("f-accent").addEventListener("input", () => {
+        state.accent = el("f-accent").value;
+        refresh();
+      });
+      el("btnAccentReset").addEventListener("click", () => {
+        state.accent = null;
+        el("f-accent").value = style().accent;
+        refresh();
+      });
+
+      el("btnRefresh").addEventListener("click", refresh);
+      el("btnFull").addEventListener("click", () => {
+        const w = window.open("", "_blank");
+        w.document.write(buildIndex(style(), false));
+        w.document.close();
+      });
+      el("btnZip").addEventListener("click", exportZip);
+      el("btnHtml").addEventListener("click", () => {
+        const blob = new Blob([buildIndex(style(), false)], { type: "text/html;charset=utf-8" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = state.name.toLowerCase().replace(/[^a-z0-9]+/g, "-") + ".html";
+        a.click();
+        URL.revokeObjectURL(a.href);
+      });
+      el("btnReset").addEventListener("click", () => {
+        activeStyle = "vira";
+        state.accent = null; state.heroImg = null;
+        state.cols = 3; state.bg = null; state.maxW = 1120;
+        state.showTop = "auto"; state.topLeft = ""; state.topRight = ""; state.footer = ""; state.credit = true;
+        state.sections = [
+          { k: "feats", on: false },
+          { k: "produk", on: true },
+          { k: "proses", on: true },
+          { k: "testimoni", on: false },
+          { k: "harga", on: false },
+          { k: "galeri", on: false },
+          { k: "cta", on: true }
+        ];
+        state.testimonials = [
+          { name: "Budi", role: "Pelanggan Setia", text: "Pelayanannya cepat, hasilnya memuaskan. Pasti balik lagi." },
+          { name: "Sari", role: "Langganan 2 Tahun", text: "Harga jujur, nggak ada biaya tambahan. Recommended!" },
+          { name: "Andi", role: "Pelanggan Baru", text: "Dari chat sampai selesai semua jelas. Gampang banget." }
+        ];
+        state.prices = [
+          { name: "Hemat", price: "150rb", note: "untuk mulai", feats: ["Fitur standar", "Durasi singkat", "Booking via WA"], hot: false },
+          { name: "Populer", price: "250rb", note: "paling laris", feats: ["Semua fitur hemat", "Durasi sedang", "Prioritas jadwal"], hot: true },
+          { name: "Premium", price: "400rb", note: "pengalaman maksimal", feats: ["Semua fitur populer", "Durasi panjang", "Free upgrade"], hot: false }
+        ];
+        state.gallery = [null, null, null];
+        el("f-cat").value = "dealer";
+        el("f-name").value = ""; el("f-area").value = ""; el("f-tag").value = "";
+        el("f-wa").value = "6281234567890"; el("f-domain").value = "";
+        el("f-cols").value = "3";
+        el("f-top").value = "auto"; el("f-topleft").value = ""; el("f-topright").value = "";
+        el("f-footer").value = ""; el("f-credit").value = "1"; el("f-bg").value = "#ffffff"; el("f-maxw").value = "1120";
+        state.products = CATS.dealer.products.map((p) => ({ name: p[0], tag: p[1], desc: p[3], img: null }));
+        renderStyleGrid(); renderProducts(); renderTesti(); renderPrices(); renderGallery(); renderMedia(); renderChips();
+        applyData();
+      });
+
+      // media
+      el("btnHeroUpload").addEventListener("click", () => fileInputs.hero.click());
+      el("btnHeroClear").addEventListener("click", () => {
+        state.heroImg = null;
+        renderMedia();
+        refresh();
+      });
+      fileInputs.hero = el("f-hero");
+      fileInputs.hero.addEventListener("change", (e) => {
+        const f = e.target.files[0];
+        if (!f) return;
+        const r = new FileReader();
+        r.onload = () => { state.heroImg = r.result; renderMedia(); refresh(); };
+        r.readAsDataURL(f);
+        e.target.value = "";
+      });
+      state.products.forEach((p, i) => {
+        const inp = document.createElement("input");
+        inp.type = "file";
+        inp.accept = "image/*";
+        inp.hidden = true;
+        inp.addEventListener("change", (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          const r = new FileReader();
+          r.onload = () => { state.products[i].img = r.result; renderMedia(); refresh(); };
+          r.readAsDataURL(f);
+          e.target.value = "";
+        });
+        document.body.appendChild(inp);
+        fileInputs.prod[i] = inp;
+      });
+      state.gallery.forEach((g, i) => {
+        const inp = document.createElement("input");
+        inp.type = "file";
+        inp.accept = "image/*";
+        inp.hidden = true;
+        inp.addEventListener("change", (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          const r = new FileReader();
+          r.onload = () => { state.gallery[i] = r.result; renderGallery(); refresh(); };
+          r.readAsDataURL(f);
+          e.target.value = "";
+        });
+        document.body.appendChild(inp);
+        fileInputs.gal[i] = inp;
+      });
+    }
+
+    // ═══════════════ INIT ═══════════════
+    state.products = CATS[state.cat].products.map((p) => ({ name: p[0], tag: p[1], desc: p[3], img: null }));
+    state.sections.find((s) => s.k === "feats").on = STYLES[activeStyle].featsDefault;
+    el("f-accent").value = STYLES[activeStyle].accent;
     renderStyleGrid();
-    refresh();
+    renderProducts();
+    renderTesti();
+    renderPrices();
+    renderGallery();
+    renderMedia();
+    renderChips();
+    initChips();
+    initEvents();
+    applyData();
   </script>
 </body>
 </html>
