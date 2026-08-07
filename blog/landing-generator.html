@@ -409,6 +409,8 @@ img { max-width: 100%; display: block; }
 .btn { display: inline-block; padding: .85rem 1.6rem; border-radius: 50px; font-weight: 600; transition: .25s; border: 0; cursor: pointer; }
 .btn-wa { background: #25d366; color: #fff; }
 h1, h2 { line-height: 1.2; }
+.hero-media { position: relative; }
+.hero-body { display: flex; flex-direction: column; align-items: flex-start; }
 .r { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
 .r.v { opacity: 1; transform: none; }
 .badge { display: inline-block; font-size: .75rem; padding: .4rem .9rem; border-radius: 30px; margin-bottom: 1rem; font-weight: 600; }
@@ -430,6 +432,7 @@ h1, h2 { line-height: 1.2; }
 .hero h1 { font-size: clamp(1.8rem, 4.4vw, 2.6rem); margin-bottom: 1rem; }
 .hero h1 span { color: var(--accent); }
 .hero p { max-width: 56ch; margin: 0 auto 1.8rem; color: #ddd; }
+.hero .hero-body { align-items: center; }
 .badge { background: var(--accent); color: #fff; }
 .btn-p { background: var(--accent); color: #fff; }
 .btn-s { border: 2px solid #fff; color: #fff; margin-left: .6rem; }
@@ -510,7 +513,8 @@ nav ul { display: flex; gap: 1.3rem; list-style: none; color: #cdd7ee; font-size
 .float { position: absolute; left: -.8rem; bottom: 1.2rem; background: #fff; border-radius: 10px; padding: .7rem 1rem; box-shadow: 0 10px 30px rgba(15, 23, 42, .15); }
 .float b { font-size: 1.05rem; color: var(--accent); }
 .float small { color: #5b6b7b; font-size: .74rem; }
-.feats { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--dark); color: #fff; padding: 1.7rem 0; text-align: center; }
+.feats { background: var(--dark); color: #fff; padding: 1.7rem 0; }
+.feats .wrap { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; text-align: center; }
 .feats b { display: block; color: var(--gold); margin-bottom: .15rem; }
 .feats span { font-size: .78rem; color: #cdd7ee; }
 .sec { padding: 70px 0; background: #fff; }
@@ -523,7 +527,7 @@ nav ul { display: flex; gap: 1.3rem; list-style: none; color: #cdd7ee; font-size
 .cta { background: var(--accent); color: #fff; text-align: center; padding: 70px 0; }
 .cta h2 { margin-bottom: 1.2rem; }
 footer { background: var(--dark); color: #a9b8dc; text-align: center; padding: 1.6rem; font-size: .82rem; }
-@media (max-width: 760px) { .hero .wrap { grid-template-columns: 1fr; } .cards, .feats { grid-template-columns: 1fr; } nav ul { display: none; } .btn-ghost { margin-left: 0; margin-top: .6rem; } }
+@media (max-width: 760px) { .hero .wrap { grid-template-columns: 1fr; } .cards, .feats .wrap { grid-template-columns: 1fr; } nav ul { display: none; } .btn-ghost { margin-left: 0; margin-top: .6rem; } }
 `;
       if (s.slug === "singgih") css += `
 .topbar { background: var(--accent); color: #d8f0e3; font-size: .8rem; padding: .55rem 0; }
@@ -653,7 +657,7 @@ Style template: **${s.label}** (referensi asli: ${s.client}, repo: ${s.repo}).
       return `
         <section class="hero r">
           <div class="wrap">
-            ${s.heroDark ? `<div style="grid-column:1/-1">` : ""}
+            <div class="hero-body">
               <span class="badge">${c.badge}</span>
               <h1>${heroTitle}</h1>
               <p>${fmt(c.heroSub)}</p>
@@ -661,7 +665,8 @@ Style template: **${s.label}** (referensi asli: ${s.client}, repo: ${s.repo}).
                 <a class="btn ${s.heroDark ? "btn-p" : "btn-wa"}" href="${waLink()}" target="_blank" rel="noopener">Chat WhatsApp</a>
                 <a class="btn ${s.heroDark ? "btn-s" : "btn-ghost"}" href="#produk">Lihat ${c.product}</a>
               </div>
-            ${s.heroDark ? `</div>` : media}
+            </div>
+            ${s.heroDark ? "" : media}
           </div>
         </section>`;
     }
@@ -774,6 +779,7 @@ ${split ? `<script src="assets/js/main.js"></script>` : `<script>${buildJS()}</s
     ["f-cat", "f-name", "f-area", "f-tag", "f-wa", "f-domain"].forEach((id) => {
       el(id).addEventListener("input", () => refresh());
     });
+    el("f-cat").addEventListener("change", () => refresh());
     el("btnRefresh").addEventListener("click", refresh);
     el("btnFull").addEventListener("click", () => {
       const w = window.open("", "_blank");
