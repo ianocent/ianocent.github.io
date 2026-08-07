@@ -96,12 +96,15 @@
     .zip-tree { background: var(--bg2); border: 1px solid var(--line); border-radius: 10px; padding: .8rem 1rem; font-family: ui-monospace, 'Cascadia Code', Consolas, monospace; font-size: .73rem; color: var(--text2); line-height: 1.8; margin-top: .7rem; }
     .zip-tree b { color: var(--accent); font-weight: 600; }
     .badge-live { position: absolute; top: .5rem; right: .5rem; font-size: .6rem; background: var(--accent); color: #141414; border-radius: 20px; padding: .15rem .5rem; font-weight: 700; }
-    .prod-row { background: var(--bg2); border: 1px solid var(--line); border-radius: 10px; padding: .7rem; margin-bottom: .6rem; }
-    .prod-row .frow { display: grid; grid-template-columns: 1fr 90px; gap: .5rem; margin-bottom: .45rem; }
-    .prod-row .frow input { width: 100%; background: var(--bg); border: 1px solid var(--line); color: var(--text); border-radius: 8px; padding: .45rem .6rem; font-size: .8rem; outline: none; }
-    .prod-row .frow input:focus { border-color: var(--accent); }
-    .prod-row textarea { width: 100%; background: var(--bg); border: 1px solid var(--line); color: var(--text); border-radius: 8px; padding: .45rem .6rem; font-size: .78rem; outline: none; resize: vertical; font-family: var(--sans); }
-    .prod-row textarea:focus { border-color: var(--accent); }
+    .prod-row, .testi-row, .price-row { background: var(--bg2); border: 1px solid var(--line); border-radius: 10px; padding: .7rem; margin-bottom: .6rem; }
+    .prod-row .frow, .testi-row .frow, .price-row .frow { display: grid; grid-template-columns: 1fr 90px; gap: .5rem; margin-bottom: .45rem; }
+    .price-row .frow { grid-template-columns: repeat(3, 1fr); }
+    .prod-row .frow input, .testi-row .frow input, .price-row .frow input { width: 100%; background: var(--bg); border: 1px solid var(--line); color: var(--text); border-radius: 8px; padding: .45rem .6rem; font-size: .8rem; outline: none; }
+    .prod-row .frow input:focus, .testi-row .frow input:focus, .price-row .frow input:focus { border-color: var(--accent); }
+    .prod-row textarea, .testi-row textarea { width: 100%; background: var(--bg); border: 1px solid var(--line); color: var(--text); border-radius: 8px; padding: .45rem .6rem; font-size: .78rem; outline: none; resize: vertical; font-family: var(--sans); }
+    .prod-row textarea:focus, .testi-row textarea:focus { border-color: var(--accent); }
+    .price-row .hotline { display: flex !important; align-items: center; gap: .5rem; font-size: .78rem; color: var(--text2); cursor: pointer; }
+    .price-row .hotline input { width: auto; accent-color: var(--accent); cursor: pointer; }
     .prodidx { display: flex; justify-content: space-between; align-items: center; margin-bottom: .4rem; }
     .prodidx b { font-size: .72rem; color: var(--text2); text-transform: uppercase; letter-spacing: .08em; }
     .media-inline { display: flex; align-items: center; gap: .6rem; }
