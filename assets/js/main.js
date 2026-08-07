@@ -127,10 +127,6 @@ const io = new IntersectionObserver(
         }, 30);
       });
 
-      // Skill bars
-      el.querySelectorAll(".sk-bar-fill").forEach((bar) => {
-        bar.style.transform = `scaleX(${bar.dataset.w})`;
-      });
     });
   },
   { threshold: 0.15, rootMargin: "0px 0px -10% 0px" },
@@ -381,10 +377,11 @@ function runSkillAnimations(card) {
   }, 200);
 }
 
-// Badge glow — JALAN HANYA SAAT HOVER card (bukan otomatis pas scroll)
+// Badge glow + progress bar — JALAN HANYA SAAT HOVER card (bukan otomatis pas scroll)
 document.querySelectorAll('.sk-card').forEach((card) => {
   let badgeTimer = null;
   card.addEventListener('mouseenter', () => {
+    runSkillAnimations(card);
     const items = card.querySelectorAll('.sk-row');
     let idx = 0;
     const tick = () => {
@@ -400,33 +397,14 @@ document.querySelectorAll('.sk-card').forEach((card) => {
   card.addEventListener('mouseleave', () => {
     clearTimeout(badgeTimer);
     card.querySelectorAll('.badge').forEach((b) => b.classList.remove('highlight'));
-  });
-});
-
-// 3. Observer yang Re-trigger — card berjalan SEQUENTIAL (1 selesai → card berikutnya)
-const skTimers = new WeakMap();
-const skOrder = Array.from(document.querySelectorAll(".sk-card"));
-const SK_DUR = 1700; // durasi animasi per card (bar + counter + badge glow)
-const skillsObserver = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    const card = entry.target;
-    if (entry.isIntersecting) {
-      const t = setTimeout(
-        () => runSkillAnimations(card),
-        Math.max(0, skOrder.indexOf(card)) * SK_DUR,
-      );
-      skTimers.set(card, t);
-    } else {
-      clearTimeout(skTimers.get(card));
-      skTimers.delete(card);
-      const bar = card.querySelector(".sk-bar-fill");
-      if (bar) bar.style.transform = "scaleX(0)";
+    const bar = card.querySelector(".sk-bar-fill");
+    if (bar) {
+      bar.style.transform = "scaleX(0)";
+      const label = card.querySelector(".sk-bar-label span:last-child");
+      if (label) label.textContent = "0%";
     }
   });
-}, { threshold: 0.2 });
-
-// Observe setiap card
-document.querySelectorAll('.sk-card').forEach(card => skillsObserver.observe(card));
+});
 
 // ── State terpusat ────────────────────────────────────────────
 const ChatState = {
