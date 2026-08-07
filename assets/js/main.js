@@ -989,6 +989,53 @@ if (expModal) {
     ["assets/img/calligraphsy/1. Landing Guest.png", "Calligraphy System"],
   ];
 
+  const THUMBS = {
+    "assets/img/b. Main Dashboard.png": "assets/img/dw/b-main-dashboard.webp",
+    "assets/img/a. Room Availability Tooltip.png": "assets/img/dw/a-room-tooltip.webp",
+    "assets/img/c. Forecast Market Segment Dashboard.png": "assets/img/dw/c-forecast.webp",
+    "assets/img/d. Market Segment 2 & 3.png": "assets/img/dw/d-market-segment.webp",
+    "assets/img/e. Dynamic Chart.png": "assets/img/dw/e-dynamic-chart.webp",
+    "assets/img/f. Role Based Access Control.png": "assets/img/dw/f-role-access.webp",
+    "assets/img/1. multiple-properties.png": "assets/img/dw/1. multiple-properties.webp",
+    "assets/img/2. dashboard-view.png": "assets/img/dw/2. dashboard-view.webp",
+    "assets/img/3. dashboard-custom.png": "assets/img/dw/3. dashboard-custom.webp",
+    "assets/img/4. dashboard-intuitive.png": "assets/img/dw/4. dashboard-intuitive.webp",
+    "assets/img/5. folio-listing-frontdesk.png": "assets/img/dw/5. folio-listing-frontdesk.webp",
+    "assets/img/6. room-availability.png": "assets/img/dw/6. room-availability.webp",
+    "assets/img/7. room-availability-move-rsv-dragndrop.png": "assets/img/dw/7. room-availability-move-rsv-dragndrop.webp",
+    "assets/img/8. floor-plan.png": "assets/img/dw/8. floor-plan.webp",
+    "assets/img/9. create-reservation.png": "assets/img/dw/9. create-reservation.webp",
+    "assets/img/10. edit-guest-profile.png": "assets/img/dw/10. edit-guest-profile.webp",
+    "assets/img/11. night-audit-precheck.png": "assets/img/dw/11. night-audit-precheck.webp",
+    "assets/img/12. housekeeping-shifting.png": "assets/img/dw/12. housekeeping-shifting.webp",
+    "assets/img/13. housekeeping-rosting.png": "assets/img/dw/13. housekeeping-rosting.webp",
+    "assets/img/14. housekeeping-room.png": "assets/img/dw/14. housekeeping-room.webp",
+    "assets/img/15. housekeeping-scheduler.png": "assets/img/dw/15. housekeeping-scheduler.webp",
+    "assets/img/16. housekeeping-scheduler-list.png": "assets/img/dw/16. housekeeping-scheduler-list.webp",
+    "assets/img/17. rate-setup.png": "assets/img/dw/17. rate-setup.webp",
+    "assets/img/18. event-management-timeline.png": "assets/img/dw/18. event-management-timeline.webp",
+    "assets/img/19. booking-engine-analytics.png": "assets/img/dw/19. booking-engine-analytics.webp",
+    "assets/img/20. role-management.png": "assets/img/dw/20. role-management.webp",
+    "assets/img/21. role-template.png": "assets/img/dw/21. role-template.webp",
+    "assets/img/mobs/1.png": "assets/img/dw/mobs-1.webp",
+    "assets/img/mobs/2.png": "assets/img/dw/mobs-2.webp",
+    "assets/img/mobs/3.png": "assets/img/dw/mobs-3.webp",
+    "assets/img/mobs/4.png": "assets/img/dw/mobs-4.webp",
+    "assets/img/mobs/5.png": "assets/img/dw/mobs-5.webp",
+    "assets/img/mobs/6.png": "assets/img/dw/mobs-6.webp",
+    "assets/img/mobs/7.png": "assets/img/dw/mobs-7.webp",
+    "assets/img/mobs/8.png": "assets/img/dw/mobs-8.webp",
+    "assets/img/mobs/9.png": "assets/img/dw/mobs-9.webp",
+    "assets/img/mobs/10.png": "assets/img/dw/mobs-10.webp",
+    "assets/img/mobs/11.png": "assets/img/dw/mobs-11.webp",
+    "assets/img/mainpage.png": "assets/img/dw/mainpage.webp",
+    "assets/img/dashboard-expert.png": "assets/img/dw/dashboard-expert.webp",
+    "assets/img/proto.png": "assets/img/dw/proto.webp",
+    "assets/img/whatsapp.png": "assets/img/dw/whatsapp.webp",
+    "assets/img/compas/Kompas.png": "assets/img/dw/kompas.webp",
+    "assets/img/calligraphsy/1. Landing Guest.png": "assets/img/dw/calligraphsy-landing-guest.webp",
+  };
+
   const vw = window.innerWidth || 1200;
   const CFG = {
     columns: vw < 768 ? 4 : 9,
@@ -1068,7 +1115,7 @@ if (expModal) {
           tile.dataset.tileId = id;
           tile.dataset.col = c;
           tile.innerHTML =
-            '<span class="drift-wall__inner"><img src="' + it[0] + '" alt="' + it[1] +
+            '<span class="drift-wall__inner"><img src="' + (THUMBS[it[0]] || it[0]) + '" alt="' + it[1] +
             '" decoding="async" draggable="false"><span class="drift-wall__overlay" aria-hidden="true"></span></span>';
           tile.addEventListener("click", () => openLb(it[0]));
           tile.addEventListener("focus", () => activate(id, c));
