@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Landing Page Generator — by Dwi Rianto (ianocent). Pick a client style (Vira, Kiki, Cinta, Singgih), fill in sales data, preview live, and export a ready-to-deploy single-file landing page.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="Landing Page Generator — Dwi Rianto (ianocent)">
+  <meta property="og:description" content="Generate dealer/sales landing pages from real client style templates. Live preview + one-click HTML export.">
+  <meta property="og:image" content="https://ianocent.github.io/assets/img/logo.png">
+  <meta property="og:url" content="https://ianocent.github.io/blog/landing-generator">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Dwi Rianto (ianocent)">
+  <meta property="og:locale" content="en_US">
+  <meta property="article:published_time" content="2026-08-07">
+  <meta property="article:tag" content="Generator">
+  <meta property="article:tag" content="Landing Page">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@sinsproof_">
+  <meta name="twitter:title" content="Landing Page Generator — Dwi Rianto (ianocent)">
+  <meta name="twitter:description" content="Generate dealer/sales landing pages from real client style templates.">
+  <title>Landing Page Generator — Dwi Rianto (ianocent)</title>
+  <link rel="icon" href="../assets/img/logo.png" type="image/x-icon">
+  <link rel="canonical" href="https://ianocent.github.io/blog/landing-generator">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Geist:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --accent: #c9a96e; --accent-soft: rgba(201,169,110,.12);
+      --bg: #0f1115; --bg2: #15181f; --card: #191d26; --card2: #1f242f;
+      --line: rgba(255,255,255,.07); --text: #eef0f4; --text2: #9aa1af; --text3: #5b6270;
+      --serif: 'Playfair Display', Georgia, serif; --sans: 'Geist', 'Inter', system-ui, sans-serif;
+      --r: 14px;
+    }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 14px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: var(--bg2); }
+    ::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--accent) 55%, var(--card2)); border-radius: 100px; border: 2px solid var(--bg2); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+    ::-webkit-scrollbar-corner { background: var(--bg2); }
+    * { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--accent) 55%, var(--card2)) var(--bg2); }
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 2rem 1.5rem 3rem; }
+    header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--line); margin-bottom: 1.5rem; }
+    header a { color: var(--text2); text-decoration: none; font-size: 0.85rem; transition: color .2s; }
+    header a:hover { color: var(--accent); }
+    h1 { font-family: var(--serif); font-size: 2rem; font-weight: 400; font-style: italic; margin-bottom: .4rem; }
+    .subtitle { color: var(--text2); font-size: .92rem; margin-bottom: 1.8rem; max-width: 720px; }
+    .subtitle b { color: var(--accent); font-weight: 600; }
+    .grid { display: grid; grid-template-columns: 360px 1fr; gap: 1.4rem; align-items: start; }
+    @media (max-width: 960px) { .grid { grid-template-columns: 1fr; } }
+    .panel { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 1.1rem; }
+    .panel h3 { font-size: .8rem; text-transform: uppercase; letter-spacing: .12em; color: var(--text3); margin-bottom: .8rem; }
+    .field { margin-bottom: .7rem; }
+    .field label { display: block; font-size: .74rem; color: var(--text2); margin-bottom: .3rem; }
+    .field input { width: 100%; background: var(--bg2); border: 1px solid var(--line); color: var(--text); border-radius: 9px; padding: .55rem .7rem; font-family: var(--sans); font-size: .85rem; outline: none; transition: border .2s; }
+    .field input:focus { border-color: var(--accent); }
+    .field input::placeholder { color: var(--text3); }
+    .style-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+    .style-card { position: relative; background: var(--bg2); border: 1px solid var(--line); border-radius: 10px; padding: .65rem; cursor: pointer; transition: border .2s, transform .15s; }
+    .style-card:hover { transform: translateY(-2px); }
+    .style-card.on { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+    .style-card .swatch { height: 26px; border-radius: 7px; margin-bottom: .45rem; display: flex; gap: 3px; padding: 4px; }
+    .style-card .swatch i { flex: 1; border-radius: 4px; }
+    .style-card b { font-size: .8rem; font-weight: 600; display: block; }
+    .style-card small { color: var(--text3); font-size: .68rem; }
+    .style-card a.repo { display: inline-block; margin-top: .4rem; font-size: .68rem; color: var(--text2); text-decoration: none; }
+    .style-card a.repo:hover { color: var(--accent); }
+    .style-card a.repo i { margin-right: .2rem; }
+    .btn { display: inline-flex; align-items: center; gap: .45rem; background: var(--accent); color: #141414; border: 0; border-radius: 9px; padding: .6rem 1rem; font-family: var(--sans); font-weight: 600; font-size: .82rem; cursor: pointer; transition: filter .2s, transform .15s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    .btn.ghost { background: transparent; color: var(--text2); border: 1px solid var(--line); }
+    .btn.ghost:hover { color: var(--accent); border-color: var(--accent); }
+    .btn-row { display: flex; gap: .6rem; margin-top: .4rem; flex-wrap: wrap; }
+    .chrome { background: var(--bg2); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+    .chrome-bar { display: flex; align-items: center; gap: .7rem; padding: .55rem .8rem; border-bottom: 1px solid var(--line); }
+    .chrome-bar .dots { display: flex; gap: .35rem; }
+    .chrome-bar .dots span { width: 10px; height: 10px; border-radius: 50%; }
+    .chrome-bar .dots span:nth-child(1){ background:#ff5f57; } .chrome-bar .dots span:nth-child(2){ background:#febc2e; } .chrome-bar .dots span:nth-child(3){ background:#28c840; }
+    .chrome-url { flex: 1; background: var(--card); border: 1px solid var(--line); color: var(--text3); font-size: .72rem; border-radius: 7px; padding: .3rem .6rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .chrome-bar .ch-tools { display: flex; gap: .5rem; }
+    .chrome-bar .ch-tools i { color: var(--text3); font-size: 1rem; cursor: pointer; transition: color .2s; }
+    .chrome-bar .ch-tools i:hover { color: var(--accent); }
+    #preview { width: 100%; height: 640px; border: 0; background: #fff; display: block; }
+    .hint { font-size: .72rem; color: var(--text3); margin-top: .6rem; }
+    .hint i { color: var(--accent); }
+    .phase-note { margin-top: 1.6rem; background: var(--card); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 10px; padding: .9rem 1rem; font-size: .8rem; color: var(--text2); }
+    .phase-note b { color: var(--accent); }
+    .badge-live { position: absolute; top: .5rem; right: .5rem; font-size: .6rem; background: var(--accent); color: #141414; border-radius: 20px; padding: .15rem .5rem; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a href="../index.html"><i class="bx bx-arrow-back"></i> ianocent.dev</a>
+      <a href="index.html">Blog</a>
+    </header>
+
+    <h1>Landing Page Generator</h1>
+    <p class="subtitle">Tool buat generate landing page dealer/sales Suzuki — pakai template dari project client nyata. Isi data, pilih style (Vira, Kiki, Cinta, Singgih), lihat preview live, terus <b>export</b> jadi file HTML siap deploy.</p>
+
+    <div class="grid">
+      <div>
+        <div class="panel">
+          <h3><i class="bx bx-user-pin"></i> Sales Data</h3>
+          <div class="field"><label>Nama Sales</label><input id="f-name" value="Nama Sales" placeholder="cth: Singgih Priambodo"></div>
+          <div class="field"><label>Area / Kota</label><input id="f-area" value="Gading Serpong Tangerang" placeholder="cth: Gading Serpong Tangerang"></div>
+          <div class="field"><label>Tagline</label><input id="f-tag" value="Beli Suzuki tanpa ribet — DP ringan, kredit cepat, semua leasing" placeholder="Tagline promo"></div>
+          <div class="field"><label>Nomor WhatsApp (62xxxx)</label><input id="f-wa" value="6281234567890" placeholder="cth: 6281234567890"></div>
+          <div class="field"><label>Domain (opsional)</label><input id="f-domain" value="namasales-suzukigadingserpong.com" placeholder="cth: namasales.com"></div>
+        </div>
+
+        <div class="panel" style="margin-top:1.1rem;">
+          <h3><i class="bx bx-palette"></i> Style Template</h3>
+          <div class="style-grid" id="styleGrid"></div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn" id="btnExport"><i class="bx bx-download"></i> Export HTML</button>
+          <button class="btn ghost" id="btnReset"><i class="bx bx-reset"></i> Reset</button>
+        </div>
+        <p class="hint"><i class="bx bx-info-circle"></i> Export = satu file HTML standalone siap hosting (mirip file asli client).</p>
+      </div>
+
+      <div class="chrome">
+        <div class="chrome-bar">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div class="chrome-url" id="previewUrl">https://…</div>
+          <div class="ch-tools">
+            <i class="bx bx-refresh" id="btnRefresh" title="Refresh preview"></i>
+            <i class="bx bx-fullscreen" id="btnFull" title="Open preview in new tab"></i>
+          </div>
+        </div>
+        <iframe id="preview" title="Landing page live preview"></iframe>
+      </div>
+    </div>
+
+    <div class="phase-note">
+      <b>Phase 1:</b> generator core — 4 style client (Vira, Kiki, Cinta, Singgih), form data, live preview, export HTML, link repo per style.
+      <b>Phase 2 (rencana):</b> section editor (tambah/hapus section: galeri, simulasi kredit, testimoni), upload gambar, deploy langsung ke GitHub Pages.
+    </div>
+
+    <p class="hint" style="margin-top:1.2rem; text-align:center;">© 2026 Dwi Rianto (ianocent). Built with <i class="bx bx-code-alt"></i></p>
+  </div>
+
+  <script>
+    // ── STYLE REGISTRY — dari repo asli di Downloads/suzuki-bit ──
+    const STYLES = {
+      vira: {
+        label: "Style 1 — Vira", client: "Vira Suzuki Gading Serpong", slug: "vira",
+        repo: "https://github.com/ianocent/vira", domain: "vira-suzukigadingserpong.com",
+        font: "Poppins", swatch: ["#1a1a1a", "#c74343", "#f8f8f8", "#28a745"],
+        vars: { primary: "#c74343", dark: "#1a1a1a", gray: "#666", light: "#f8f8f8" },
+        navDark: true, heroDark: true, topbar: false, strip: false, float: false,
+        heroTitle: "Dealer Resmi Suzuki {area} — Promo DP Ringan 2026",
+        heroSub: "Harga terbaik, proses kredit cepat, unit ready. Konsultasi gratis sama {name} sekarang.",
+        waText: "Halo {name}, saya mau info promo Suzuki {area} 2026",
+        cta: "Chat WhatsApp Sales", cta2: "Lihat Estimasi DP"
+      },
+      kiki: {
+        label: "Style 2 — Kiki", client: "Kiki Suzuki Gading Serpong", slug: "kiki",
+        repo: "https://github.com/ianocent/kiki", domain: "suzukibuanaindomobiltrada.com",
+        font: "Plus Jakarta Sans", swatch: ["#134e4a", "#0f766e", "#fbbf24", "#faf9f5"],
+        vars: { teal: "#134e4a", tealSoft: "#0f766e", gold: "#fbbf24", cream: "#faf9f5", mist: "#eef2f1", ink: "#0f172a" },
+        navDark: false, heroDark: false, topbar: true, strip: true, float: true,
+        heroTitle: "Beli Suzuki di {area} Tanpa Ribet, Bersama Sales {name}",
+        heroSub: "DP ringan, proses 1-3 hari, semua leasing. Chat langsung sama sales resmi buat skema kredit paling pas.",
+        waText: "Halo Kak {name}, saya mau info promo Suzuki {area} 2026",
+        cta: "Chat WhatsApp Sales", cta2: "Lihat Estimasi DP"
+      },
+      cinta: {
+        label: "Style 3 — Cinta", client: "Cinta Suzuki Gading Serpong", slug: "cinta",
+        repo: "https://github.com/ianocent/cinta", domain: "dealersuzukigadingserpong.com",
+        font: "Manrope", swatch: ["#1e3a8a", "#172554", "#fb923c", "#dbeafe"],
+        vars: { navy: "#1e3a8a", navyDeep: "#172554", orange: "#fb923c", sky: "#dbeafe", ink: "#0f172a", paper: "#ffffff", soft: "#f4f7fd" },
+        navDark: true, heroDark: false, topbar: false, strip: false, float: true, feats: true,
+        heroTitle: "Beli Suzuki {area} — Promo XL7 Facelift, Fronx & Ertiga Hybrid 2026",
+        heroSub: "Bareng {name}, sales resmi Suzuki {area}. Konsultasi gratis, simulasi kredit cepat, unit bisa diantar.",
+        waText: "Halo Kak {name}, saya mau tanya promo Suzuki {area} 2026",
+        cta: "Chat WhatsApp Sales", cta2: "Lihat Semua Promo"
+      },
+      singgih: {
+        label: "Style 4 — Singgih", client: "Singgih Suzuki Gading Serpong", slug: "singgih",
+        repo: "https://github.com/ianocent/singgih", domain: "showroommobilsuzukigadingserpong.com",
+        font: "Outfit", swatch: ["#0d3b2e", "#08251d", "#2f9e63", "#f2b705"],
+        vars: { pine: "#0d3b2e", pineDeep: "#08251d", leaf: "#2f9e63", sun: "#f2b705", sand: "#f6f4ec", mist: "#e9efe9", ink: "#14241c" },
+        navDark: false, heroDark: false, topbar: true, strip: false, float: false,
+        heroTitle: "Beli Suzuki di {area} Tanpa Drama, Bareng Sales {name}",
+        heroSub: "Sales aktif yang ngerti semua varian Suzuki dan bantu cari skema kredit paling pas buat kantongmu.",
+        waText: "Halo Kak {name}, saya mau info promo Suzuki {area} 2026",
+        cta: "Chat WhatsApp Sales", cta2: "Lihat Estimasi DP"
+      }
+    };
+
+    const MODELS = [
+      { name: "Ertiga Hybrid", tag: "Best Seller", badge: "#28a745", desc: "MPV 7-seater hybrid irit, promo DP ringan 2026." },
+      { name: "XL7", tag: "Populer", badge: "#ffc107", desc: "SUV stylish, mesin responsif, kredit cepat cair." },
+      { name: "Fronx", tag: "Promo", badge: "#e91e63", desc: "SUV compact terbaru, harga OTR bersaing." }
+    ];
+
+    const STEPS = [
+      { n: "1", t: "Chat WhatsApp", d: "Kirim pesan ke {name}, langsung dibalas tanpa antre." },
+      { n: "2", t: "Simulasi Kredit", d: "Hitung DP & cicilan semua leasing, transparan di depan." },
+      { n: "3", t: "Serah Terima", d: "Unit diantar atau diambil di dealer {area}. Cek fisik dulu." }
+    ];
+
+    let activeStyle = "vira";
+    const el = (id) => document.getElementById(id);
+
+    function fmt(s) {
+      const v = {
+        name: el("f-name").value.trim() || "Nama Sales",
+        area: el("f-area").value.trim() || "Gading Serpong Tangerang",
+        tag: el("f-tag").value.trim() || "Promo DP ringan 2026",
+        wa: el("f-wa").value.trim().replace(/[^0-9]/g, "") || "6281234567890"
+      };
+      return s.replace(/\{name\}/g, v.name).replace(/\{area\}/g, v.area).replace(/\{tag\}/g, v.tag);
+    }
+    function waLink() { return "https://wa.me/" + (el("f-wa").value.trim().replace(/[^0-9]/g, "") || "6281234567890") + "?text=" + encodeURIComponent(fmt("Halo {name}, saya mau info promo Suzuki {area} 2026")); }
+
+    // ── STYLE CARDS ──
+    function renderStyleGrid() {
+      const g = el("styleGrid");
+      g.innerHTML = Object.values(STYLES).map((s) => `
+        <div class="style-card" data-k="${s.slug}">
+          <span class="badge-live">live</span>
+          <div class="swatch">${s.swatch.map((c) => `<i style="background:${c}"></i>`).join("")}</div>
+          <b>${s.label}</b>
+          <small>${s.client} · ${s.font}</small><br>
+          <a class="repo" href="${s.repo}" target="_blank" rel="noopener"><i class="bx bxl-github"></i> repo</a>
+        </div>`).join("");
+      g.querySelectorAll(".style-card").forEach((c) => {
+        c.addEventListener("click", () => { activeStyle = c.dataset.k; refresh(); });
+      });
+    }
+
+    // ── PREVIEW (iframe srcdoc) ──
+    function cssFor(s) {
+      const v = s.vars;
+      const base = `
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'${s.font}',sans-serif;line-height:1.6;color:#333;background:#fff}
+        a{text-decoration:none;color:inherit}
+        .wrap{max-width:1120px;margin:0 auto;padding:0 1.4rem}
+        .btn{display:inline-block;padding:.85rem 1.6rem;border-radius:50px;font-weight:600;transition:.25s}
+        h1,h2{line-height:1.2}`;
+      if (s.slug === "vira") return base + `
+        .top{background:${v.dark};padding:.9rem 0;color:#fff}
+        .top .wrap{display:flex;justify-content:space-between;align-items:center}
+        .top b{color:${v.primary}}
+        .top ul{display:flex;gap:1.4rem;list-style:none}
+        .hero{padding:110px 0 90px;background:linear-gradient(rgba(0,0,0,.78),rgba(0,0,0,.78)),url('https://vira-suzukigadingserpong.com/assets/img/jimny.png') center/cover;color:#fff;text-align:center}
+        .hero h1{font-size:2.5rem;margin-bottom:1rem}
+        .hero p{max-width:56ch;margin:0 auto 1.8rem;color:#ddd}
+        .btn-p{background:${v.primary};color:#fff}
+        .btn-s{border:2px solid #fff;color:#fff;margin-left:.6rem}
+        .sec{padding:70px 0}
+        .sec h2{font-size:1.9rem;text-align:center;margin-bottom:.6rem}
+        .sec .sub{text-align:center;color:${v.gray};margin-bottom:2.4rem}
+        .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+        .card{border:1px solid #eee;border-radius:14px;padding:1.4rem;background:${v.light}}
+        .card .tag{display:inline-block;font-size:.7rem;color:#fff;background:${v.gray};border-radius:20px;padding:.2rem .7rem;margin-bottom:.8rem}
+        .card h3{margin-bottom:.4rem}.card p{font-size:.86rem;color:${v.gray}}
+        .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;text-align:center}
+        .steps b{display:block;font-size:2rem;color:${v.primary}}
+        .cta{background:${v.dark};color:#fff;text-align:center;padding:70px 0}
+        .cta h2{margin-bottom:1.2rem}
+        footer{background:#111;color:#888;text-align:center;padding:1.6rem;font-size:.82rem}
+        @media(max-width:760px){.cards,.steps{grid-template-columns:1fr}.top ul{display:none}.btn-s{margin-left:0;margin-top:.6rem}}`;
+      if (s.slug === "kiki") return base + `
+        .topbar{background:${v.teal};color:#fff;font-size:.8rem;padding:.55rem 0}
+        .topbar .wrap{display:flex;justify-content:space-between}
+        nav{position:sticky;top:0;background:rgba(250,249,245,.94);border-bottom:1px solid #e7e5de;padding:.9rem 0;z-index:5}
+        .nav-in{display:flex;justify-content:space-between;align-items:center}
+        .brand{font-weight:800;color:${v.ink}}
+        .brand i{color:${v.tealSoft}}
+        nav ul{display:flex;gap:1.3rem;list-style:none;color:#52606d;font-size:.9rem}
+        .cta-btn{background:${v.teal};color:#fff!important;padding:.5rem 1.1rem;border-radius:30px}
+        .hero{padding:90px 0 100px;background:${v.cream};position:relative}
+        .hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:2rem;align-items:center}
+        .badge{display:inline-block;background:${v.mist};color:${v.teal};font-size:.75rem;padding:.4rem .9rem;border-radius:30px;margin-bottom:1rem;font-weight:600}
+        .hero h1{font-size:2.4rem;font-weight:800;color:${v.ink};margin-bottom:1rem}
+        .hero h1 span{color:${v.tealSoft}}
+        .hero p{color:#52606d;max-width:52ch;margin-bottom:1.6rem}
+        .btn-wa{background:#25d366;color:#fff}
+        .btn-ghost{border:2px solid ${v.teal};color:${v.teal};margin-left:.6rem}
+        .btn-ghost:hover{background:${v.teal};color:#fff}
+        .hero-media{position:relative;background:${v.mist};border-radius:18px;height:260px;display:grid;place-items:center;color:${v.tealSoft};font-size:4rem}
+        .float{position:absolute;left:-1rem;bottom:1.2rem;background:#fff;border-radius:12px;padding:.8rem 1.1rem;box-shadow:0 10px 30px rgba(15,23,42,.12)}
+        .float b{font-size:1.15rem;color:${v.teal}}
+        .float small{color:#64748b;font-size:.75rem}
+        .strip{background:${v.teal};color:#fff;padding:2.2rem 0;text-align:center}
+        .strip b{font-size:1.5rem;color:${v.gold}}
+        .sec{padding:70px 0;background:#fff}
+        .sec h2{font-size:1.7rem;text-align:center;color:${v.ink};margin-bottom:2.4rem;font-weight:800}
+        .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+        .card{border:1px solid ${v.mist};border-radius:16px;padding:1.4rem;background:${v.cream}}
+        .card .tag{display:inline-block;font-size:.7rem;font-weight:700;color:${v.teal};background:${v.mist};border-radius:20px;padding:.25rem .7rem;margin-bottom:.8rem}
+        .card h3{margin-bottom:.4rem;color:${v.ink}}
+        .card p{font-size:.85rem;color:#52606d}
+        .cta{background:${v.cream};text-align:center;padding:70px 0}
+        .cta h2{color:${v.ink};margin-bottom:1.2rem}
+        footer{background:${v.teal};color:#d7ecea;text-align:center;padding:1.6rem;font-size:.82rem}
+        @media(max-width:760px){.hero .wrap{grid-template-columns:1fr}.cards{grid-template-columns:1fr}nav ul{display:none}.btn-ghost{margin-left:0;margin-top:.6rem}.topbar .wrap{flex-direction:column;gap:.2rem}}`;
+      if (s.slug === "cinta") return base + `
+        nav{position:sticky;top:0;background:${v.navyDeep};color:#fff;padding:.9rem 0;z-index:5}
+        .nav-in{display:flex;justify-content:space-between;align-items:center}
+        .brand b{color:${v.orange}}
+        nav ul{display:flex;gap:1.3rem;list-style:none;color:#cdd7ee;font-size:.9rem}
+        .cta-btn{background:${v.orange};color:#fff!important;padding:.5rem 1.1rem;border-radius:8px;font-weight:700}
+        .hero{padding:90px 0;background:${v.soft};color:${v.ink}}
+        .hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:2rem;align-items:center;text-align:left;max-width:1120px}
+        .hero-media{position:relative;background:${v.sky};border-radius:14px;height:240px;display:grid;place-items:center;color:${v.navy};font-size:4rem}
+        .float{position:absolute;left:-.8rem;bottom:1.2rem;background:#fff;border-radius:10px;padding:.7rem 1rem;box-shadow:0 10px 30px rgba(15,23,42,.15)}
+        .float b{font-size:1.05rem;color:${v.navy}}
+        .float small{color:#5b6b7b;font-size:.74rem}
+        .feats{display:grid;grid-template-columns:repeat(4,1fr);background:${v.navyDeep};color:#fff;padding:1.7rem 0;text-align:center}
+        .feats b{display:block;color:${v.orange};margin-bottom:.15rem}
+        .feats span{font-size:.78rem;color:#cdd7ee}
+        .badge{display:inline-block;background:${v.sky};color:${v.navy};font-size:.75rem;font-weight:700;padding:.4rem .9rem;border-radius:8px;margin-bottom:1rem}
+        .hero h1{font-size:2.3rem;font-weight:800;color:${v.navy};margin-bottom:1rem}
+        .hero p{color:#5b6b7b;max-width:56ch;margin:0 auto 1.6rem}
+        .btn-wa{background:${v.navy};color:#fff;border-radius:8px}
+        .btn-ghost{border:2px solid ${v.navy};color:${v.navy};margin-left:.6rem;border-radius:8px}
+        .btn-ghost:hover{background:${v.navy};color:#fff}
+        .sec{padding:70px 0;background:#fff}
+        .sec h2{font-size:1.7rem;text-align:center;color:${v.navy};margin-bottom:2.4rem;font-weight:800}
+        .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+        .card{border:1px solid #e6ecf8;border-radius:12px;padding:1.4rem;background:${v.soft}}
+        .card .tag{display:inline-block;font-size:.7rem;font-weight:700;color:${v.orange};background:#fff;border:1px solid ${v.sky};border-radius:6px;padding:.25rem .7rem;margin-bottom:.8rem}
+        .card h3{margin-bottom:.4rem;color:${v.ink}}
+        .card p{font-size:.85rem;color:#5b6b7b}
+        .cta{background:${v.navy};color:#fff;text-align:center;padding:70px 0}
+        .cta h2{margin-bottom:1.2rem}
+        footer{background:${v.navyDeep};color:#a9b8dc;text-align:center;padding:1.6rem;font-size:.82rem}
+        @media(max-width:760px){.cards{grid-template-columns:1fr}nav ul{display:none}.btn-ghost{margin-left:0;margin-top:.6rem}}`;
+      if (s.slug === "singgih") return base + `
+        .topbar{background:${v.pine};color:#d8f0e3;font-size:.8rem;padding:.55rem 0}
+        .topbar .wrap{display:flex;justify-content:space-between}
+        .topbar b{color:${v.sun}}
+        nav{position:sticky;top:0;background:rgba(246,244,236,.94);border-bottom:1px solid ${v.mist};padding:.9rem 0;z-index:5}
+        .nav-in{display:flex;justify-content:space-between;align-items:center}
+        .brand{font-weight:800;color:${v.ink}}
+        .brand i{color:${v.leaf}}
+        nav ul{display:flex;gap:1.3rem;list-style:none;color:#5c6f63;font-size:.9rem}
+        .cta-btn{background:${v.leaf};color:#fff!important;padding:.5rem 1.1rem;border-radius:30px;font-weight:700}
+        .hero{padding:90px 0 100px;background:${v.sand};position:relative}
+        .hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:2rem;align-items:center}
+        .badge{display:inline-block;background:${v.mist};color:${v.pine};font-size:.75rem;padding:.4rem .9rem;border-radius:30px;margin-bottom:1rem;font-weight:600}
+        .hero h1{font-size:2.4rem;font-weight:800;color:${v.ink};margin-bottom:1rem}
+        .hero h1 span{color:${v.leaf}}
+        .hero p{color:#5c6f63;max-width:52ch;margin-bottom:1.6rem}
+        .btn-wa{background:${v.leaf};color:#fff}
+        .btn-ghost{border:2px solid ${v.pine};color:${v.pine};margin-left:.6rem}
+        .btn-ghost:hover{background:${v.pine};color:#fff}
+        .hero-media{position:relative;background:${v.mist};border-radius:18px;height:260px;display:grid;place-items:center;color:${v.leaf};font-size:4rem}
+        .sec{padding:70px 0;background:#fff}
+        .sec h2{font-size:1.7rem;text-align:center;color:${v.ink};margin-bottom:2.4rem;font-weight:800}
+        .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+        .card{border:1px solid ${v.mist};border-radius:16px;padding:1.4rem;background:${v.sand}}
+        .card .tag{display:inline-block;font-size:.7rem;font-weight:700;color:${v.sun};background:${v.pine};border-radius:20px;padding:.25rem .7rem;margin-bottom:.8rem}
+        .card h3{margin-bottom:.4rem;color:${v.ink}}
+        .card p{font-size:.85rem;color:#5c6f63}
+        .cta{background:${v.pineDeep};color:#fff;text-align:center;padding:70px 0}
+        .cta h2{margin-bottom:1.2rem}
+        footer{background:${v.pineDeep};color:#a8c8b8;text-align:center;padding:1.6rem;font-size:.82rem}
+        @media(max-width:760px){.hero .wrap{grid-template-columns:1fr}.cards{grid-template-columns:1fr}nav ul{display:none}.btn-ghost{margin-left:0;margin-top:.6rem}.topbar .wrap{flex-direction:column;gap:.2rem}}`;
+    }
+
+    function heroHTML(s) {
+      const v = s.vars;
+      const media = `
+        <div class="hero-media"><i class="bx bx-car"></i>
+          ${s.float ? `<div class="float"><b>DP Ringan</b><small>mulai promo 2026</small></div>` : ""}
+        </div>`;
+      const heroTitle = fmt(s.heroTitle.includes("{name}")
+        ? s.heroTitle.replace("{name}", "<span>{name}</span>")
+        : s.heroTitle.replace("{area}", "<span>{area}</span>"));
+      const heroInner = `
+        <span class="badge">Sales Resmi Suzuki ${fmt("{area}")}</span>
+        <h1>${heroTitle}</h1>
+        <p>${fmt(s.heroSub)}</p>
+        <div>
+          <a class="btn ${s.heroDark ? "btn-p btn-s" : "btn-wa btn-ghost"}" href="${waLink()}" target="_blank" rel="noopener">${s.cta}</a>
+          <a class="btn ${s.heroDark ? "btn-s" : "btn-ghost"}" href="#model">${s.cta2}</a>
+        </div>`;
+      return `
+        <section class="hero"><div class="wrap">
+          ${s.heroDark ? `<div style="grid-column:1/-1">${heroInner}</div>` : `${heroInner}${media}`}
+        </div></section>`;
+    }
+
+    function bodyHTML(s) {
+      const cards = MODELS.map((m) => `
+        <div class="card"><span class="tag">${m.tag}</span><h3>${m.name}</h3><p>${m.desc}</p></div>`).join("");
+      const steps = STEPS.map((st) => `
+        <div><b>${st.n}</b><h3>${st.t}</h3><p>${st.d.replace("{name}", fmt("{name}"))}</p></div>`).join("");
+      const strip = s.strip ? `<div class="strip"><div class="wrap"><b>DP Ringan · Proses 1-3 Hari · Semua Leasing</b><div>Promo Ertiga Hybrid / XL7 / Fronx / Carry 2026</div></div></div>` : "";
+      const feats = s.feats ? `<div class="feats"><div class="wrap" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem">${["Proses Kilat|Pengajuan dibantu 1-3 hari, semua leasing", "DP Fleksibel|Mulai 5 jutaan, tenor 1-6 tahun", "Tukar Tambah|Mobil lama dihargai adil", "Banyak Bonus|Kaca film, karpet, servis berkala"].map((f) => { const [b, d] = f.split("|"); return `<div><b>${b}</b><span>${d}</span></div>`; }).join("")}</div></div>` : "";
+      return `
+        ${feats}
+        <section class="sec" id="model">
+          <div class="wrap">
+            <h2>Pilih Model Suzuki ${fmt("{area}")}</h2>
+            <p class="sub">Semua varian ready, harga transparan, garansi dealer resmi.</p>
+            <div class="cards">${cards}</div>
+          </div>
+        </section>
+        ${strip}
+        <section class="sec" id="proses" style="background:${s.slug === "vira" || s.slug === "cinta" ? "#f8f8f8" : s.vars.cream || s.vars.sand || "#fff"}">
+          <div class="wrap">
+            <h2>Proses Gampang, 3 Langkah</h2>
+            <div class="steps">${steps}</div>
+          </div>
+        </section>
+        <section class="cta">
+          <div class="wrap">
+            <h2>Mau Beli Suzuki ${fmt("{area}")}? Langsung Omong Sama ${fmt("{name}")}</h2>
+            <a class="btn ${s.heroDark ? "btn-p" : "btn-wa"}" href="${waLink()}" target="_blank" rel="noopener">Chat WhatsApp ${fmt("{name}")}</a>
+          </div>
+        </section>`;
+    }
+
+    function pageDoc(s, full) {
+      const title = `Sales Suzuki ${fmt("{area}")} - ${fmt("{name}")}`;
+      const desc = `Sales Suzuki ${fmt("{area}")} resmi - ${fmt("{name}")}. Info promo DP ringan Ertiga Hybrid, XL7, Fronx, Carry 2026. Chat WA ${el("f-wa").value.trim()}.`;
+      const css = cssFor(s) + `
+        .sec p.sub{text-align:center;color:#666;margin-bottom:2.2rem}
+        .steps p{color:#777;font-size:.88rem;max-width:30ch;margin:0 auto}
+        .steps h3{margin:.3rem 0}`;
+      if (!full) return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${title}</title><link href="https://fonts.googleapis.com/css2?family=${s.font.replace(/ /g, "+")}:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"><style>${css}</style></head><body><div class="top">${s.topbar ? `<div class="topbar"><div class="wrap"><span>Sales Resmi Suzuki ${fmt("{area}")} &mdash; Proses 1-3 hari, semua leasing</span><span>Buka Setiap Hari 08.00&ndash;17.00 WIB</span></div></div>` : ""}
+      <nav><div class="wrap nav-in"><a class="brand" href="#"><i class="bx bx-car"></i> ${fmt("{name}")} Suzuki</a><ul><li><a href="#model">Model</a></li><li><a href="#proses">Proses</a></li><li><a class="cta-btn" href="${waLink()}">Hubungi ${fmt("{name}")}</a></li></ul></div></nav>${heroHTML(s)}${bodyHTML(s)}<footer><div class="wrap">&copy; 2026 ${fmt("{name}")} &mdash; Suzuki ${fmt("{area}")}. Halaman informasi promo &amp; reservasi.</div></footer></body></html>`;
+      return `<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${title}</title>
+  <meta name="description" content="${desc}">
+  <meta property="og:title" content="${title}" />
+  <meta property="og:description" content="${desc}" />
+  <meta property="og:type" content="website" />
+  <meta name="keywords" content="suzuki ${fmt("{area}")}, dealer suzuki, sales ${fmt("{name}")}, promo suzuki 2026, kredit dp ringan" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="${el("f-domain").value.trim() || s.domain}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=${s.font.replace(/ /g, "+")}:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <style>${css}</style>
+</head>
+<body>${s.topbar ? `<div class="topbar"><div class="wrap"><span>Sales Resmi Suzuki ${fmt("{area}")} &mdash; Proses 1-3 hari, semua leasing</span><span>Buka Setiap Hari 08.00&ndash;17.00 WIB</span></div></div>` : ""}
+<nav><div class="wrap nav-in"><a class="brand" href="#"><i class="bx bx-car"></i> ${fmt("{name}")} Suzuki</a><ul><li><a href="#model">Model</a></li><li><a href="#proses">Proses</a></li><li><a class="cta-btn" href="${waLink()}">Hubungi ${fmt("{name}")}</a></li></ul></div></nav>${heroHTML(s)}${bodyHTML(s)}
+<footer><div class="wrap">&copy; 2026 ${fmt("{name}")} &mdash; Suzuki ${fmt("{area}")}. Halaman informasi promo &amp; reservasi. Dideploy dengan <a href="https://ianocent.github.io/blog/landing-generator">Landing Page Generator</a> by ianocent.</div></footer>
+</body>
+</html>`;
+    }
+
+    function refresh() {
+      const s = STYLES[activeStyle];
+      el("preview").srcdoc = pageDoc(s, false);
+      el("previewUrl").textContent = "https://" + (el("f-domain").value.trim() || s.domain) + "/";
+      document.querySelectorAll(".style-card").forEach((c) => c.classList.toggle("on", c.dataset.k === activeStyle));
+    }
+
+    // ── EVENTS ──
+    ["f-name", "f-area", "f-tag", "f-wa", "f-domain"].forEach((id) => {
+      el(id).addEventListener("input", () => refresh());
+    });
+    el("btnRefresh").addEventListener("click", refresh);
+    el("btnFull").addEventListener("click", () => {
+      const w = window.open("", "_blank");
+      w.document.write(pageDoc(STYLES[activeStyle], false));
+      w.document.close();
+    });
+    el("btnExport").addEventListener("click", () => {
+      const s = STYLES[activeStyle];
+      const html = pageDoc(s, true);
+      const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "landing-" + fmt("{name}").toLowerCase().replace(/\s+/g, "-") + "-" + s.slug + ".html";
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+    el("btnReset").addEventListener("click", () => {
+      el("f-name").value = "Nama Sales";
+      el("f-area").value = "Gading Serpong Tangerang";
+      el("f-tag").value = "Beli Suzuki tanpa ribet — DP ringan, kredit cepat, semua leasing";
+      el("f-wa").value = "6281234567890";
+      el("f-domain").value = "";
+      refresh();
+    });
+
+    renderStyleGrid();
+    refresh();
+  </script>
+</body>
+</html>
