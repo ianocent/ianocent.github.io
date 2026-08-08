@@ -36,6 +36,11 @@
       --serif: 'Playfair Display', Georgia, serif; --sans: 'Geist', 'Inter', system-ui, sans-serif;
     }
     body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 15px; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: #1e1e24; }
+    ::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--gold) 45%, #1e1e24); border-radius: 100px; border: 2px solid #1e1e24; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+    * { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--gold) 45%, #1e1e24) #1e1e24; }
     .wrap { max-width: 780px; margin: 0 auto; padding: 2rem 1.5rem; }
     header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--line); margin-bottom: 2rem; }
     header a { color: var(--gold); text-decoration: none; font-size: 0.85rem; }
