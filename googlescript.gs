@@ -4,6 +4,7 @@ const CHAT_SHEET_NAME = "ChatHistory";
 const WPM_SHEET_NAME = "WpmLeaderboard"; // Definisikan di atas biar rapi
 const ATTACHMENT_FOLDER_NAME = "ContactImages"; // Folder di Google Drive buat simpen upload image
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024; // 5MB limit
+const MAX_ZIP_BYTES = 10 * 1024 * 1024; // 10MB limit untuk ZIP template
 
 function doPost(e) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -102,12 +103,14 @@ function handleJsonPost(e, ss) {
       }
       
       var bytes = Utilities.base64Decode(fileBase64);
-      if (bytes.length > MAX_IMAGE_BYTES) {
-        return jsonRes({"status": "error", "message": "File kegedean, max 5MB"}, 400);
+      var isZip = fileType === 'application/zip' || fileType === 'application/x-zip-compressed' || /\.zip$/i.test(fileName);
+      var maxBytes = isZip ? MAX_ZIP_BYTES : MAX_IMAGE_BYTES;
+      if (bytes.length > maxBytes) {
+        return jsonRes({"status": "error", "message": "File kegedean, max " + (isZip ? "10MB" : "5MB")}, 400);
       }
       
       // Whitelist tipe file biar ga bisa upload file sembarangan
-      var allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+      var allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif", "application/zip", "application/x-zip-compressed"];
       if (allowedTypes.indexOf(fileType) === -1) {
         return jsonRes({"status": "error", "message": "Tipe file ga didukung"}, 400);
       }
@@ -123,8 +126,8 @@ function handleJsonPost(e, ss) {
       sheet.appendRow([new Date(), nama, email, pesan, fileName, fileUrl]);
       
       var emailTujuan = "riantodwi2002@gmail.com"; 
-      var subjectEmail = "📎 Pesan + Gambar dari Form Contact Web!";
-      var isiEmail = "Ada orang ngirim pesan SEKALIGUS gambar di web lu!\n\n" +
+      var subjectEmail = isZip ? "📦 Pesan + ZIP Template dari Form Contact Web!" : "📎 Pesan + Gambar dari Form Contact Web!";
+      var isiEmail = "Ada orang ngirim pesan SEKALIGUS file di web lu!\n\n" +
                      "Nama   : " + nama + "\n" +
                      "Email  : " + email + "\n" +
                      "Pesan  : " + pesan + "\n" +
