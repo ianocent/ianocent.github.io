@@ -185,4 +185,11 @@
       <image:title>IanPlayer - Playlist Card Generator</image:title>
     </image:image>
   </url>
+  <url>
+    <loc>https://ianocent.github.io/blog/landing-generator</loc>
+    <image:image>
+      <image:loc>https://ianocent.github.io/assets/img/logo.png</image:loc>
+      <image:title>Landing Page Generator - Dwi Rianto (ianocent)</image:title>
+    </image:image>
+  </url>
 </urlset>

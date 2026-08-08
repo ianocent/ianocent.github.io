@@ -26,7 +26,17 @@ I'm **Dwi Rianto**, a Fullstack Developer from Indonesia with ~3 years of experi
 - **Database:** MySQL, PostgreSQL, Prisma ORM, Eloquent
 - **Other:** UI/UX Design (Figma), IT Support, Hardware & Networking
 
-I'm passionate about building systems that are clean, scalable, and well-documented. Currently available for full-time opportunities.
+I'm passionate about building systems that are clean, scalable, and well-documented. Currently open for **part-time & project-based work** (full-time saat ini belum available).
+
+---
+
+## ✨ Portfolio Features
+
+- **📊 Statistics Section** — live area chart (reaviz-style, vanilla SVG) of GitHub commit activity (30 days) pulled from the GitHub Events API, with KPI cards (repos, followers, stars) from the same data as the Live Coding Stats popup (GitHub + WakaTime).
+- **⌨️ Beat My WPM** — live typing game modal with accuracy tracking, plus a leaderboard (top 5) backed by Google Apps Script.
+- **🤖 ıanoBot** — floating chat assistant with session history stored in Google Sheets (via Apps Script), template quick-questions, and typing animations.
+- **🎬 Cinematic UI** — custom cursor glow, scroll-snap slides with frame counter, Drift Wall (ReactBits-style) project gallery, animated pastel background — all transitions GPU-driven (transform/opacity) for 60fps smoothness, `prefers-reduced-motion` respected.
+- **🔍 SEO** — JSON-LD `Person` schema with `hasOccupation`/`areaServed` (Indonesia + worldwide cities), Open Graph/Twitter cards, `sitemap.xml` + `images-sitemap.xml`.
 
 ---
 
@@ -54,6 +64,11 @@ Native Android music player built with **Kotlin + Jetpack Compose (Material 3)**
 A fully customizable dashboard simulator built with vanilla HTML/CSS/JS — 6 working views, drag-and-drop card layouts, SVG charts, 5 accent themes, editable data, an AI prompt studio, and report export to PDF/Excel. Export/import your whole setup as a `.js` config.
 
 - [Try the live demo →](https://ianocent.github.io/blog/dashboard-expert)
+
+### 🛒 Landing Page Generator
+Generate full client landing pages (Suzuki dealer style) right in the browser — multi-section templates, hero/product/gallery media uploads, WhatsApp integration, and one-click export of a deployable HTML/CSS/JS bundle.
+
+- [Read case study →](https://ianocent.github.io/blog/landing-generator)
 
 ### 🎨 Design Projects
 - **Vape Thing App** — Mobile app UI/UX prototype in Figma
