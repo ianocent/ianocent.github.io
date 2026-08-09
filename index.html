@@ -656,7 +656,7 @@
             </div>
 
             <p class="stat-note">
-              Sumber: GitHub Events API (live) + popup
+              Sumber: GitHub contribution graph (live, termasuk repo private) + popup
               <a href="#" onclick="return false" class="stat-pop-link">Live Coding Stats</a>
               — WakaTime &amp; GitHub readme-stats. Cek jam terbang gwa di
               <a href="https://wakatime.com/@018d6394-3140-41c9-8cdb-cbe349d742a3" target="_blank" rel="noopener">WakaTime</a>.
@@ -800,19 +800,19 @@
       <div class="stats-container">
         
         <div class="stats-left">
-          <img src="https://github-readme-stats-ianocent1.vercel.app/api/wakatime?username=ianocent&layout=compact&theme=tokyonight&hide_border=true&bg_color=24242d&title_color=c9a96e&text_color=9ea1ad&icon_color=34d399&cache_seconds=86400"
+          <img src="https://github-readme-stats-ianocent1.vercel.app/api/wakatime?username=ianocent&layout=compact&theme=tokyonight&hide_border=true&bg_color=24242d&title_color=c9a96e&text_color=9ea1ad&icon_color=34d399&cache_seconds=1800"
                alt="WakaTime Stats" loading="lazy"
                style="border-radius: 8px; border: 1px solid var(--line); width: 100%; height: auto; display: block;"
                onerror="this.outerHTML='<div class=\'w-empty\' style=\'padding:1rem;border:1px solid var(--line);border-radius:8px;color:var(--text2);font-size:.85rem;text-align:center;\'><i class=\'bx bx-error-circle\' style=\'font-size:1.5rem;color:var(--gold);\'></i><br>WakaTime Stats preview unavailable</div>'">
         </div>
         
         <div class="stats-right">
-          <img src="https://github-readme-stats-ianocent1.vercel.app/api?username=ianocent&show_icons=true&theme=tokyonight&hide_border=true&bg_color=24242d&title_color=c9a96e&text_color=9ea1ad&icon_color=34d399&cache_seconds=86400"
+          <img src="https://github-readme-stats-ianocent1.vercel.app/api?username=ianocent&show_icons=true&theme=tokyonight&hide_border=true&bg_color=24242d&title_color=c9a96e&text_color=9ea1ad&icon_color=34d399&cache_seconds=1800"
                alt="GitHub Stats" loading="lazy"
                style="border-radius: 8px; border: 1px solid var(--line); width: 100%; height: auto; display: block;"
                onerror="this.outerHTML='<div class=\'w-empty\' style=\'padding:1rem;border:1px solid var(--line);border-radius:8px;color:var(--text2);font-size:.85rem;text-align:center;\'><i class=\'bx bx-error-circle\' style=\'font-size:1.5rem;color:var(--gold);\'></i><br>GitHub Stats preview unavailable</div>'">
         
-          <img src="https://github-readme-stats-ianocent1.vercel.app/api/top-langs/?username=ianocent&layout=compact&theme=tokyonight&hide_border=true&bg_color=24242d&title_color=c9a96e&text_color=9ea1ad&cache_seconds=86400"
+          <img src="https://github-readme-stats-ianocent1.vercel.app/api/top-langs/?username=ianocent&layout=compact&theme=tokyonight&hide_border=true&bg_color=24242d&title_color=c9a96e&text_color=9ea1ad&cache_seconds=1800"
                alt="Top Languages" loading="lazy"
                style="border-radius: 8px; border: 1px solid var(--line); width: 100%; height: auto; display: block; margin-top: 0.75rem;"
                onerror="this.outerHTML='<div class=\'w-empty\' style=\'padding:1rem;border:1px solid var(--line);border-radius:8px;color:var(--text2);font-size:.85rem;text-align:center;\'><i class=\'bx bx-error-circle\' style=\'font-size:1.5rem;color:var(--gold);\'></i><br>Top Languages preview unavailable</div>'">
@@ -970,7 +970,8 @@
     if (!card || !svgEl) return;
 
     var DAYS = 30, W = 600, H = 220, PAD = 8;
-    var FALLBACK = [1,3,5,2,0,4,6,0,8,1,0,3,4,5,2,4,9,1,0,2,3,5,4,10,2,3,5,7,1,0,6];
+    var ZERO = [];
+    for (var i = 0; i < DAYS; i++) ZERO.push(0);
     var data = null;
 
     var now = new Date(), dates = [];
@@ -1046,9 +1047,9 @@
     }
 
     function render(firstTime) {
-      var v = data || FALLBACK;
+      var v = data || ZERO;
       build(v);
-      if (firstTime) countUp(total(v));
+      countUp(total(v));
     }
 
     // Gambar langsung pas script jalan — ga nunggu scroll/observer, biar chart selalu keluar
@@ -1058,7 +1059,7 @@
     if ("ResizeObserver" in window) {
       new ResizeObserver(function () {
         clearTimeout(rts);
-        rts = setTimeout(function () { build(data || FALLBACK); }, 120);
+        rts = setTimeout(function () { build(data || ZERO); }, 120);
       }).observe(svgEl);
     }
 
@@ -1067,7 +1068,7 @@
       var px = ((e.clientX - r.left) / r.width) * W;
       var i = Math.round((px - PAD) / ((W - PAD * 2) / (DAYS - 1)));
       i = Math.max(0, Math.min(DAYS - 1, i));
-      var v = (data || FALLBACK)[i];
+      var v = (data || ZERO)[i];
       if (!v) { tipEl.hidden = true; return; }
       tipEl.hidden = false;
       tipEl.textContent = fmtDate(dates[i]) + " · " + v + (v === 1 ? " commit" : " commits");
@@ -1075,31 +1076,46 @@
     });
     svgEl.addEventListener("mouseleave", function () { tipEl.hidden = true; });
 
-    // Live data: GitHub Events API (commits push ianocent) — same source as popup
-    fetch("https://api.github.com/users/ianocent/events/public?per_page=100", {
-      headers: { Accept: "application/vnd.github+json" }
-    })
-      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
-      .then(function (evs) {
-        var m = {};
-        for (var i = 0; i < evs.length; i++) {
-          var ev = evs[i];
-          if (ev.type === "PushEvent" && ev.created_at) {
-            var k = ev.created_at.slice(0, 10);
-            var n = ev.payload && ev.payload.distinct_size != null ? ev.payload.distinct_size : (ev.payload ? (ev.payload.size || 0) : 0);
-            m[k] = (m[k] || 0) + n;
-          }
-        }
-        var out = [];
-        for (var i = 0; i < DAYS; i++) out.push(m[dates[i].toISOString().slice(0, 10)] || 0);
-        // Kalo jendela 30 hari ternyata kosong (events di luar rentang / update jarang),
-        // fallback ke data statis biar chart tetap ada isi.
-        var hasActivity = false;
-        for (var i = 0; i < out.length; i++) if (out[i] > 0) { hasActivity = true; break; }
-        data = hasActivity ? out : FALLBACK;
-        render(false);
+    // Live data: GitHub contribution graph — termasuk repo private, tanpa token,
+    // tanpa cap 90-event (sama kayak grafik kontribusi di profil GitHub).
+    // Fallback: Events API (public events) kalo service-nya down.
+    function fetchEvents() {
+      return fetch("https://api.github.com/users/ianocent/events/public?per_page=100", {
+        headers: { Accept: "application/vnd.github+json" }
       })
-      .catch(function () { data = FALLBACK; });
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+        .then(function (evs) {
+          var m = {};
+          for (var i = 0; i < evs.length; i++) {
+            var ev = evs[i];
+            if (ev.type === "PushEvent" && ev.created_at) {
+              var k = ev.created_at.slice(0, 10);
+              var n = ev.payload && ev.payload.distinct_size != null ? ev.payload.distinct_size : (ev.payload ? (ev.payload.size || 0) : 0);
+              m[k] = (m[k] || 0) + n;
+            }
+          }
+          return m;
+        });
+    }
+
+    function finalize(m) {
+      var out = [];
+      for (var i = 0; i < DAYS; i++) out.push(m[dates[i].toISOString().slice(0, 10)] || 0);
+      data = out;
+      render(false);
+    }
+
+    fetch("https://github-contributions-api.jogruber.de/v4/ianocent?y=last")
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+      .then(function (j) {
+        var m = {};
+        var cs = j.contributions || [];
+        for (var i = 0; i < cs.length; i++) m[cs[i].date] = cs[i].count;
+        finalize(m);
+      })
+      .catch(function () {
+        fetchEvents().then(finalize).catch(function () { data = ZERO; render(false); });
+      });
 
     // KPI dari GitHub (data yang sama kayak di popup Live Coding Stats)
     Promise.all([
