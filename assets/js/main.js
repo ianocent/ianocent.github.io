@@ -200,7 +200,7 @@ let portFilter = "all";
 let portPage = 1;
 
 function portCards() {
-  return Array.from(document.querySelectorAll(".w-card"));
+  return Array.from(document.querySelectorAll("#portfolio .w-card"));
 }
 
 function portVisible(cards) {
