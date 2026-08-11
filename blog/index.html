@@ -125,6 +125,15 @@
         <p>How I manage the official website of Dealer Suzuki Gading Serpong Tangerang — promo units, WhatsApp sales integration, simulasi kredit, gallery, and local SEO targeting suzuki gading serpong &amp; suzuki tangerang searches.</p>
       </div>
     </a>
+
+    <a class="post" href="wa-blast-case-study/">
+      <img class="post-img" src="../assets/img/homepage-wa-blast.png" alt="WA Blast Sender — WhatsApp blast app dashboard" loading="lazy">
+      <div class="post-body">
+        <h2>WA Blast Sender: WhatsApp Blast App with License Keys</h2>
+        <div class="meta"><i class="bx bx-time"></i> 5 min read · August 2026</div>
+        <p>How I built a paid WhatsApp blast sender — one business number blasting thousands of contacts with delay control, daily limits, and per-account license keys. React + Vite + Tailwind, Express + Prisma + MySQL, HMAC-SHA256 signed API, Meta WhatsApp Business Cloud API.</p>
+      </div>
+    </a>
     </div>
 
     <div class="pager">
@@ -147,6 +156,7 @@
       var pages = Math.ceil(cards.length / PER);
       var page = 0;
       var busy = false;
+      var pending = false;
       var prevBtn = document.getElementById('prevBtn');
       var nextBtn = document.getElementById('nextBtn');
       var pageNum = document.getElementById('pageNum');
@@ -158,8 +168,9 @@
       }
 
       function render() {
-        if (busy) return;
+        if (busy) { pending = true; return; }
         busy = true;
+        pending = false;
         var start = page * PER;
         cards.forEach(function (c, i) {
           c.classList.add('gone');
@@ -175,6 +186,7 @@
           setTimeout(function () {
             cards.forEach(function (c) { c.style.transitionDelay = '0ms'; });
             busy = false;
+            if (pending) render();
           }, 500);
         }, 280);
         sync();
@@ -190,8 +202,8 @@
       prevBtn.addEventListener('click', function () { go(page - 1); });
       nextBtn.addEventListener('click', function () { go(page + 1); });
       document.addEventListener('keydown', function (e) {
-        if (e.key === 'ArrowLeft') go(page - 1);
-        if (e.key === 'ArrowRight') go(page + 1);
+        if (e.key === 'ArrowLeft') { e.preventDefault(); go(page - 1); }
+        if (e.key === 'ArrowRight') { e.preventDefault(); go(page + 1); }
       });
 
       wrap.addEventListener('pointermove', function (e) {

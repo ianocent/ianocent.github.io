@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Case study: WA Blast Sender — a paid WhatsApp blast app. One WhatsApp business number blasts messages to thousands of contacts with delay control, daily limits, and per-account license keys.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="WA Blast Sender: WhatsApp Blast App with License Keys — Dwi Rianto">
+  <meta property="og:description" content="How I built a paid WhatsApp blast sender — one business number blasting thousands of contacts with delay control, daily limits, and per-account license keys. React + Vite + Tailwind, Express + Prisma + MySQL, HMAC-SHA256 signed API, Meta WhatsApp Business Cloud API.">
+  <meta property="og:image" content="https://ianocent.github.io/assets/img/homepage-wa-blast.png">
+  <meta property="og:url" content="https://ianocent.github.io/blog/wa-blast-case-study/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Dwi Rianto (ianocent)">
+  <meta property="og:locale" content="en_US">
+  <meta property="article:published_time" content="2026-08-11">
+  <meta property="article:author" content="https://ianocent.github.io/">
+  <meta property="article:tag" content="WhatsApp">
+  <meta property="article:tag" content="React">
+  <meta property="article:tag" content="Express">
+  <meta property="article:tag" content="Prisma">
+  <meta property="article:tag" content="MySQL">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@sinsproof_">
+  <meta name="twitter:title" content="WA Blast Sender: WhatsApp Blast App with License Keys — Dwi Rianto">
+  <meta name="twitter:description" content="Case study: paid WhatsApp blast sender — delay control, daily limits, per-account license keys, HMAC-signed API, Meta WhatsApp Business Cloud API.">
+  <meta name="twitter:image" content="https://ianocent.github.io/assets/img/homepage-wa-blast.png">
+  <title>WA Blast Sender — WhatsApp Blast App Case Study — Dwi Rianto (ianocent)</title>
+  <link rel="icon" href="../assets/img/logo.png" type="image/x-icon">
+  <link rel="canonical" href="https://ianocent.github.io/blog/wa-blast-case-study/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #1e1e24; --surface: rgba(24,27,36,0.85); --surface2: rgba(17,19,24,0.55);
+      --line: rgba(255,255,255,0.06); --gold: #c9a96e; --text: #f0f1f5; --text2: #9ea1ad; --text3: #646876; --green: #34d399; --blue: #60a5fa;
+      --serif: 'Playfair Display', Georgia, serif; --sans: 'Geist', 'Inter', system-ui, sans-serif;
+    }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 15px; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: #1e1e24; }
+    ::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--gold) 45%, #1e1e24); border-radius: 100px; border: 2px solid #1e1e24; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+    * { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--gold) 45%, #1e1e24) #1e1e24; }
+    .wrap { max-width: 780px; margin: 0 auto; padding: 2rem 1.5rem; }
+    header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--line); margin-bottom: 2rem; }
+    header a { color: var(--gold); text-decoration: none; font-size: 0.85rem; }
+    header a:hover { text-decoration: underline; }
+    h1 { font-family: var(--serif); font-size: 2rem; font-weight: 400; font-style: italic; line-height: 1.3; margin-bottom: 0.75rem; }
+    .meta { font-size: 0.8rem; color: var(--text2); margin-bottom: 2rem; display: flex; gap: 1rem; }
+    .meta span { display: inline-flex; align-items: center; gap: 0.3rem; }
+    .hero-img { width: 100%; border-radius: 10px; border: 1px solid var(--line); margin-bottom: 2rem; }
+    h2 { font-size: 1.3rem; font-weight: 600; margin: 2rem 0 0.75rem; color: var(--gold); }
+    h3 { font-size: 1.05rem; font-weight: 600; margin: 1.5rem 0 0.5rem; }
+    p { margin-bottom: 1rem; color: var(--text2); }
+    p b { color: var(--text); font-weight: 500; }
+    ul { margin: 0.5rem 0 1.5rem 1.5rem; color: var(--text2); }
+    li { margin-bottom: 0.3rem; }
+    .tag { display: inline-block; font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 100px; background: rgba(201,169,110,0.1); color: var(--gold); border: 1px solid rgba(201,169,110,0.15); margin: 0.15rem; }
+    .img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 1rem 0; }
+    .img-grid img { width: 100%; border-radius: 8px; border: 1px solid var(--line); cursor: zoom-in; }
+    blockquote { border-left: 2px solid var(--gold); padding: 0.75rem 1rem; margin: 1.5rem 0; background: rgba(201,169,110,0.04); border-radius: 0 8px 8px 0; font-style: italic; color: var(--text2); }
+    a.inline { color: var(--gold); text-decoration: none; border-bottom: 1px dashed rgba(201,169,110,0.4); }
+    a.inline:hover { text-decoration: underline; }
+    .back { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--gold); text-decoration: none; font-size: 0.85rem; margin-top: 2rem; }
+    .back:hover { text-decoration: underline; }
+    footer { text-align: center; padding: 2rem 0; color: var(--text3); font-size: 0.75rem; border-top: 1px solid var(--line); margin-top: 2rem; }
+    @media (max-width: 600px) { .img-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a href="../index.html"><i class="bx bx-arrow-back"></i> All Posts</a>
+      <a href="../../index.html" onclick="window.close()">ianocent.dev</a>
+    </header>
+
+    <h1>WA Blast Sender: WhatsApp Blast App with License Keys</h1>
+    <div class="meta">
+      <span><i class="bx bx-user"></i> Dwi Rianto</span>
+      <span><i class="bx bx-time"></i> 5 min read</span>
+      <span><i class="bx bx-calendar"></i> August 2026</span>
+    </div>
+
+    <img class="hero-img" src="../../assets/img/homepage-wa-blast.png" alt="WA Blast Sender homepage — WhatsApp blast app" loading="lazy">
+
+    <p><b>WA Blast Sender</b> is a paid WhatsApp blast application. One WhatsApp business number blasts messages to <b>thousands of contacts</b>, with delay control, daily limits, and a per-account license key system. This is the official paid version of my earlier portfolio WhatsApp Sender Bot — rebuilt as a production-grade, multi-account web app.</p>
+
+    <p>This case study covers the stack, the blast architecture, the license enforcement model, and the API signing scheme that keeps the paid product locked down.</p>
+
+    <h2>Tech Stack</h2>
+    <p>
+      <span class="tag">React</span> <span class="tag">Vite</span> <span class="tag">Tailwind</span>
+      <span class="tag">Express</span> <span class="tag">Prisma</span> <span class="tag">MySQL</span>
+      <span class="tag">crypto-js HMAC-SHA256</span> <span class="tag">Meta WhatsApp Business Cloud API</span>
+      <span class="tag">JWT</span> <span class="tag">License Key</span>
+    </p>
+
+    <h2>How It Works</h2>
+
+    <h3>1. Campaigns</h3>
+    <p>An operator creates a campaign, picks a contact list, and sets the blast parameters — <b>message template, per-message delay, and daily send limits</b>. The dashboard shows campaign status and progress in real time.</p>
+
+    <h3>2. Queue Without Redis</h3>
+    <p>Instead of a Redis queue, blasts are driven by a <b>MySQL job table + in-app worker</b> that polls for pending jobs. Fewer moving parts, one database, and the job state is durable by default — a restart never loses a queued blast.</p>
+
+    <h3>3. Signed API</h3>
+    <p>All campaign write routes — create, start, pause — require a <b>crypto-js HMAC-SHA256 signature</b> (timestamp + nonce anti-replay) on top of JWT auth. The frontend signs every mutation via the shared <code>@wa-blast/shared</code> package, so raw API calls can't start or pause a blast out of band.</p>
+
+    <h3>4. License Keys</h3>
+    <p>Each account runs under a <b>per-account license key</b> that gates blast volume and feature access. Daily limits are enforced server-side — the ceiling applies to every account no matter what the client sends.</p>
+
+    <h3>5. WhatsApp Delivery</h3>
+    <p>Sending goes through the <b>Meta WhatsApp Business Cloud API</b> from a single business number — the delay control keeps the send rate safe from rate limits while still moving through thousands of messages.</p>
+
+    <h2>Screenshots</h2>
+
+    <div class="img-grid">
+      <img src="../../assets/img/homepage-wa-blast.png" alt="WA Blast Sender homepage" loading="lazy">
+      <img src="../../assets/img/dashboard-wa-blast.png" alt="WA Blast dashboard" loading="lazy">
+      <img src="../../assets/img/add-new-campaigns-wa-blast.png" alt="Add new campaign form" loading="lazy">
+      <img src="../../assets/img/report-wa-blast.png" alt="Blast report" loading="lazy">
+      <img src="../../assets/img/contact-wa-blast.png" alt="Contact management" loading="lazy">
+    </div>
+
+    <h2>Why This Design</h2>
+    <ul>
+      <li><b>Single database, durable queue</b> — MySQL job table removes the Redis dependency from deployment and ops.</li>
+      <li><b>Anti-replay signing</b> — HMAC + timestamp + nonce means a captured request can't be replayed to pause or start campaigns.</li>
+      <li><b>Server-side limits</b> — daily caps and license gates live in the API, not in the UI, so client tweaking buys nothing.</li>
+      <li><b>Shared signing package</b> — <code>@wa-blast/shared</code> keeps request signing consistent across web and API without drift.</li>
+    </ul>
+
+    <blockquote>Repo: <a class="inline" href="https://github.com/ianocent/wa-blast-app" target="_blank" rel="noopener">github.com/ianocent/wa-blast-app</a> — official paid version of the portfolio WhatsApp Sender Bot.</blockquote>
+
+    <h2>Links</h2>
+    <p>
+      <a href="https://github.com/ianocent/wa-blast-app" style="color:var(--gold);" target="_blank" rel="noopener">GitHub Repo</a> ·
+      <a href="../index.html" style="color:var(--gold);" onclick="window.close()">Blog</a> ·
+      <a href="../../index.html" style="color:var(--gold);" onclick="window.close()">Portfolio</a> ·
+      <a href="https://linkedin.com/in/dwirianto" style="color:var(--gold);">LinkedIn</a> ·
+      <a href="https://github.com/ianocent" style="color:var(--gold);">GitHub</a>
+    </p>
+
+    <a class="back" href="../index.html"><i class="bx bx-arrow-back"></i> Back to all posts</a>
+
+    <footer>
+      <p>© 2026 Dwi Rianto (ianocent). Built with <i class="bx bx-code-alt"></i> and <i class="bx bx-coffee"></i></p>
+    </footer>
+  </div>
+</body>
+</html>
