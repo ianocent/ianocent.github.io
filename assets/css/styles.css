@@ -842,3 +842,23 @@
   .kpi-row { grid-template-columns: repeat(2, 1fr); }
   .chart-wrap { height: 170px; }
 }
+
+.cv-spinner{
+  width:44px;height:44px;margin:0 auto;
+  border:3px solid var(--line2);
+  border-top-color:var(--gold);
+  border-radius:50%;
+  animation:cvspin .8s linear infinite;
+}
+@keyframes cvspin{to{transform:rotate(360deg)}}
+.cv-progress-track{
+  width:100%;height:6px;background:var(--surface2);
+  border-radius:99px;overflow:hidden;margin-top:1rem;
+}
+.cv-progress-fill{
+  height:100%;width:0%;
+  background:linear-gradient(90deg,var(--gold),var(--green));
+  border-radius:99px;transition:width .3s ease;
+}
+.cv-fmt{transition:transform .15s ease}
+.cv-fmt:hover{transform:translateX(3px)}

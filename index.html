@@ -192,7 +192,8 @@
                 <span class="chip">Vue.js</span><span class="chip">Node.js</span><span class="chip">Laravel</span><span class="chip">PHP</span><span class="chip">Python</span>
               </div>
               <div class="hero-act">
-                <a href="./assets/pdf/CV_DWIRIANTO.pdf" download class="btn btn-p magnetic"><i class="bx bx-download"></i> Download CV</a>
+                <!-- <a href="./assets/pdf/CV_DWIRIANTO.pdf" download class="btn btn-p magnetic"><i class="bx bx-download"></i> Download CV</a> -->
+                <button type="button" class="btn btn-p magnetic" id="cvDownloadBtn"><i class="bx bx-download"></i> Download CV</button>
                 <a href="#about" class="btn btn-o magnetic">About Me</a>
               </div>
               <div class="social-row">
@@ -458,6 +459,14 @@
                 <div class="w-header"><h3>Website Development</h3><span class="w-tag t-web">Service</span></div>
                 <p>Website company profile, landing page SEO, dan katalog bisnis untuk UMKM, dealer, dan perusahaan — dengan WhatsApp sales integration. Jasa bikin website cepat, responsive, mobile-friendly.</p>
                 <div class="pill-row"><span class="pill">Next.js</span><span class="pill">Laravel</span><span class="pill">PHP</span><span class="pill">SEO</span></div>
+              </div>
+            </div>
+            <div class="w-card r" style="transition-delay:.1s">
+              <div class="w-empty"><i class="bx bx-bug" style="font-size:2rem;color:var(--gold)"></i></div>
+              <div class="w-body">
+                <div class="w-header"><h3>Mobile Development</h3><span class="w-tag t-web">Service</span></div>
+                <p>Bikin aplikasi Android dari nol pake Jetpack Compose — cepet, ringan, UI modern. Cocok buat startup, UMKM, atau produk internal yang butuh app native tanpa ribet.</p>
+                <div class="pill-row"><span class="pill">Kotlin</span><span class="pill">Jetpack</span><span class="pill">Firebase</span><span class="pill">Material</span></div>
               </div>
             </div>
             <div class="w-card r" style="transition-delay:.15s">
@@ -743,6 +752,41 @@
     </div>
   </div>
 
+  <div class="wpm-modal" id="cvModal">
+    <div class="wpm-content" style="max-width:420px;text-align:center;">
+      <button class="wpm-close" id="cvClose" aria-label="Close"><i class="bx bx-x"></i></button>
+
+      <div id="cvChoose">
+        <h3 style="color:var(--text);font-size:1.1rem;font-weight:600;margin-bottom:.4rem;">
+          <i class="bx bx-file" style="color:var(--gold);"></i> Pilih Format CV
+        </h3>
+        <p style="color:var(--text2);font-size:.85rem;margin-bottom:1.4rem;">Mau di-generate dalam bentuk apa?</p>
+        <div style="display:flex;flex-direction:column;gap:.6rem;">
+          <button class="btn btn-o cv-fmt" data-fmt="pdf" data-file="assets/cv/CV_DWIRIANTO.pdf" style="justify-content:flex-start;gap:.6rem;">
+            <i class="bx bxs-file-pdf" style="color:#e06666;"></i> PDF <span style="margin-left:auto;color:var(--text2);font-size:.75rem;">Ready to send</span>
+          </button>
+          <button class="btn btn-o cv-fmt" data-fmt="docx" data-file="assets/cv/CV_DWIRIANTO.docx" style="justify-content:flex-start;gap:.6rem;">
+            <i class="bx bxs-file-doc" style="color:#4a86e8;"></i> DOCX <span style="margin-left:auto;color:var(--text2);font-size:.75rem;">Editable</span>
+          </button>
+          <button class="btn btn-o cv-fmt" data-fmt="md" data-file="assets/cv/CV_DWIRIANTO.md" style="justify-content:flex-start;gap:.6rem;">
+            <i class="bx bxs-file-md" style="color:#34d399;"></i> Markdown <span style="margin-left:auto;color:var(--text2);font-size:.75rem;">For devs</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="cvGenerating" style="display:none;padding:1.5rem 0;">
+        <div class="cv-spinner"></div>
+        <p id="cvGenText" style="color:var(--text);font-size:.9rem;margin-top:1rem;">Menyiapkan dokumen...</p>
+        <div class="cv-progress-track"><div class="cv-progress-fill" id="cvProgFill"></div></div>
+      </div>
+
+      <div id="cvDone" style="display:none;padding:1rem 0;">
+        <i class="bx bx-check-circle" style="font-size:2.4rem;color:var(--green);"></i>
+        <p style="color:var(--text);font-size:.9rem;margin-top:.6rem;">CV berhasil di-download!</p>
+      </div>
+    </div>
+  </div>
+
   <div class="wpm-modal" id="wpmModal">
     <div class="wpm-content">
       <i class='wpm-trophy bx bx-trophy' id="wpmLeaderboardBtn" role="button" tabindex="0" aria-label="View Leaderboard" style="border-radius: 100px; border: 2px solid var(--line2); position: absolute; top: 25px; font-size: 1.4rem; color: var(--gold); cursor: pointer; transition: transform 0.2s;" title="View Leaderboard!" ></i>
@@ -844,6 +888,68 @@
   </div>
 </div>
   <script>
+  (function () {
+    var btn = document.getElementById("cvDownloadBtn");
+    var modal = document.getElementById("cvModal");
+    var closeBtn = document.getElementById("cvClose");
+    var choose = document.getElementById("cvChoose");
+    var gen = document.getElementById("cvGenerating");
+    var done = document.getElementById("cvDone");
+    var fill = document.getElementById("cvProgFill");
+    var genText = document.getElementById("cvGenText");
+    if (!btn || !modal) return;
+
+    var steps = ["Membaca data profil...", "Menyusun layout...", "Merapikan format...", "Hampir selesai..."];
+
+    btn.addEventListener("click", function () {
+      modal.classList.add("open");
+      choose.style.display = "block";
+      gen.style.display = "none";
+      done.style.display = "none";
+    });
+
+    closeBtn.addEventListener("click", function () {
+      modal.classList.remove("open");
+    });
+
+    document.querySelectorAll(".cv-fmt").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var file = b.dataset.file;
+        choose.style.display = "none";
+        gen.style.display = "block";
+        fill.style.width = "0%";
+
+        var i = 0;
+        var stepTimer = setInterval(function () {
+          if (i < steps.length) { genText.textContent = steps[i]; i++; }
+        }, 380);
+
+        var p = 0;
+        var progTimer = setInterval(function () {
+          p += Math.random() * 18;
+          if (p >= 100) p = 100;
+          fill.style.width = p + "%";
+          if (p >= 100) {
+            clearInterval(progTimer);
+            clearInterval(stepTimer);
+            setTimeout(function () {
+              // trigger real download
+              var a = document.createElement("a");
+              a.href = file;
+              a.download = file.split("/").pop();
+              document.body.appendChild(a);
+              a.click();
+              a.remove();
+
+              gen.style.display = "none";
+              done.style.display = "block";
+              setTimeout(function () { modal.classList.remove("open"); }, 1400);
+            }, 300);
+          }
+        }, 250);
+      });
+    });
+  })();
   // Contact image upload — intercept submit BEFORE main.js FormData handler
   // (registered inline, runs before deferred main.js listener)
   (function () {
