@@ -192,6 +192,16 @@
         <a href="#contact"   onclick="closeDrawer()">Hire Me</a>
       </div>
 
+      <!-- ═══ MOBILE TAB BAR (app-style dock) ═══ -->
+      <nav class="tabbar" id="tabbar" aria-label="Mobile navigation">
+        <span class="tab-pill" aria-hidden="true"></span>
+        <a href="#home" class="tab on" data-label="Home"><i class="bx bx-home-alt" aria-hidden="true"></i></a>
+        <a href="#about" class="tab" data-label="About"><i class="bx bx-user" aria-hidden="true"></i></a>
+        <a href="#gallery" class="tab" data-label="Gallery"><i class="bx bx-images" aria-hidden="true"></i></a>
+        <a href="#portfolio" class="tab" data-label="Work"><i class="bx bx-briefcase-alt-2" aria-hidden="true"></i></a>
+        <button class="tab" id="tabMore" data-label="More" aria-label="Open menu"><i class="bx bx-dots-horizontal-rounded" aria-hidden="true"></i></button>
+      </nav>
+
       <!-- ═══ SLIDE 1: HERO ═══ -->
       <section class="slide" id="home">
         <div class="wrap">
@@ -1266,6 +1276,7 @@
   })();
   </script>
   <script src="assets/js/theme.js" defer></script>
+  <script src="assets/js/tabbar.js" defer></script>
   <script src="assets/js/main.js" defer></script>
 </body>
 </html>
