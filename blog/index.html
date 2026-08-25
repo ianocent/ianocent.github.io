@@ -19,16 +19,14 @@
   <title>Blog — Dwi Rianto (ianocent) Fullstack Developer</title>
   <link rel="icon" href="../assets/img/logo.png" type="image/x-icon">
   <link rel="canonical" href="https://ianocent.github.io/blog/">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
   <style>
+@font-face{font-family:'SF Pro Display';src:url('../fonts/SF-Pro-Display-Medium.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap;}
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
       --bg: #1e1e24; --surface: rgba(24,27,36,0.85); --surface2: rgba(17,19,24,0.55);
       --line: rgba(255,255,255,0.06); --gold: #c9a96e; --text: #f0f1f5; --text2: #9ea1ad; --text3: #646876;
-      --serif: 'Playfair Display', Georgia, serif; --sans: 'Geist', 'Inter', system-ui, sans-serif;
+      --serif: 'SF Pro Display', Georgia, serif; --sans: 'SF Pro Display', system-ui, sans-serif;
     }
     body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 15px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
     ::-webkit-scrollbar { width: 10px; height: 10px; }
@@ -40,7 +38,7 @@
     header { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 0; border-bottom: 1px solid var(--line); margin-bottom: 2.5rem; }
     header a { color: var(--text2); text-decoration: none; font-size: 0.85rem; transition: color .2s; }
     header a:hover { color: var(--gold); }
-    h1 { font-family: var(--serif); font-size: 2.2rem; font-weight: 400; font-style: italic; margin-bottom: 0.5rem; }
+    h1 { font-family: var(--serif); font-size: 2.2rem; font-weight: 400; font-weight: 600;margin-bottom: 0.5rem; }
     .subtitle { color: var(--text2); font-size: 0.95rem; margin-bottom: 2.5rem; }
     .posts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
     .post { position: relative; display: flex; flex-direction: column; text-decoration: none; color: inherit; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; transition: transform .25s, border-color .25s, box-shadow .25s, opacity .28s, translate .28s; }

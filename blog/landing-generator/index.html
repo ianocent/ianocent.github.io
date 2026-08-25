@@ -21,11 +21,9 @@
   <title>Landing Page Generator — Dwi Rianto (ianocent)</title>
   <link rel="icon" href="../assets/img/logo.png" type="image/x-icon">
   <link rel="canonical" href="https://ianocent.github.io/blog/landing-generator/">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Geist:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
-  <style id="genScroll"></style>
+  <style id="genScroll">
+@font-face{font-family:'SF Pro Display';src:url('../../fonts/SF-Pro-Display-Medium.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap;}</style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -33,7 +31,7 @@
       --accent: #c9a96e; --accent-soft: rgba(201,169,110,.12);
       --bg: #0f1115; --bg2: #15181f; --card: #191d26; --card2: #1f242f;
       --line: rgba(255,255,255,.07); --text: #eef0f4; --text2: #9aa1af; --text3: #5b6270;
-      --serif: 'Playfair Display', Georgia, serif; --sans: 'Geist', 'Inter', system-ui, sans-serif;
+      --serif: 'SF Pro Display', Georgia, serif; --sans: 'SF Pro Display', system-ui, sans-serif;
       --r: 14px;
     }
     body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 14px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
@@ -46,7 +44,7 @@
     header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--line); margin-bottom: 1.5rem; }
     header a { color: var(--text2); text-decoration: none; font-size: 0.85rem; transition: color .2s; }
     header a:hover { color: var(--accent); }
-    h1 { font-family: var(--serif); font-size: 2rem; font-weight: 400; font-style: italic; margin-bottom: .4rem; }
+    h1 { font-family: var(--serif); font-size: 2rem; font-weight: 400; font-weight: 600;margin-bottom: .4rem; }
     .subtitle { color: var(--text2); font-size: .92rem; margin-bottom: 1.8rem; max-width: 780px; }
     .subtitle b { color: var(--accent); font-weight: 600; }
     .grid { display: grid; grid-template-columns: 380px 1fr; gap: 1.4rem; align-items: start; }
@@ -1291,9 +1289,6 @@ Konfigurasi umum di generator: topbar (auto/on/off + teks kiri-kanan), footer cu
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="${domain}" />
   <link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=${s.font.replace(/ /g, "+")}:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
   ${split ? `<link rel="stylesheet" href="assets/css/style.css">` : `<style>${buildCSS(s, split)}</style>`}
 </head>`;
