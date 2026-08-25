@@ -337,18 +337,18 @@ function updateImageWithEffect(newSrc) {
 if (photo) {
   // Warm hover-swap images setelah load biar hover pertama ga nunggu download
   window.addEventListener("load", () => {
-    ["assets/img/hehe1.png", "assets/img/hehe.png"].forEach((src) => {
+    ["assets/img/dw/hehe1.webp", "assets/img/dw/hehe.webp"].forEach((src) => {
       const im = new Image();
       im.src = src;
     });
   });
 
   photo.addEventListener("mouseover", () => {
-    updateImageWithEffect("assets/img/hehe1.png");
+    updateImageWithEffect("assets/img/dw/hehe1.webp");
   });
 
   photo.addEventListener("mouseout", () => {
-    updateImageWithEffect("assets/img/hehe.png");
+    updateImageWithEffect("assets/img/dw/hehe.webp");
   });
 }
 // 1. Fungsi untuk Counter Angka (0% -> target%)
