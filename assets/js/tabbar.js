@@ -43,12 +43,29 @@
     if (id) byId[id] = t;
   });
 
+  // Saat klik tab, smooth scroll lewatin section tengah → observer bakal
+  // aktifin tab intermediate & pill keliatan glitch. Lock ke tab yang diklik
+  // sampai section-nya bener-bener keliatan (atau timeout buat jaga-jaga).
+  let lockedTab = null;
+  let lockTimer = null;
+  function lockTo(tab) {
+    lockedTab = tab;
+    clearTimeout(lockTimer);
+    lockTimer = setTimeout(() => (lockedTab = null), 1500);
+  }
+
   const io = new IntersectionObserver(
     (entries) => {
       entries.forEach((e) => {
         if (!e.isIntersecting) return;
         const tab = byId[e.target.id];
-        if (tab) setActive(tab);
+        if (!tab) return;
+        if (lockedTab) {
+          if (tab !== lockedTab) return;
+          lockedTab = null;
+          clearTimeout(lockTimer);
+        }
+        setActive(tab);
       });
     },
     { threshold: 0.15, rootMargin: "0px 0px -10% 0px" }
@@ -60,6 +77,7 @@
     t.addEventListener("click", () => {
       setActive(t);
       showBar();
+      lockTo(t);
     });
   });
 

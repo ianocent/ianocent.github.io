@@ -124,8 +124,8 @@
     @media (hover: none) { .cursor, .cursor-ring { display: none; } }
     * { cursor: none !important; }
 
-    /* ── PROGRESS BAR ── */
-    #bar { position: fixed; top: 0; left: 0; height: 1px; width: 0; background: linear-gradient(90deg, var(--gold), var(--gold2), transparent); z-index: 9998; transition: width .12s linear; }
+    /* ── PROGRESS BAR ── pakai scaleX (compositor-only), bukan width */
+    #bar { position: fixed; top: 0; left: 0; height: 1px; width: 100%; background: linear-gradient(90deg, var(--gold), var(--gold2), transparent); z-index: 9998; transform: scaleX(0); transform-origin: 0 50%; transition: transform .15s linear; }
 
     /* ── NAV ── */
     .nav { position: fixed; top: 20px; left: 20px; right: 20px; height: var(--nh); z-index: 500; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(1.25rem, 5vw, 3.5rem); background: transparent; transition: background .6s, backdrop-filter .6s; border-radius: 16px 16px 0 0; }
@@ -523,6 +523,9 @@
     }
     @media (max-width: 768px) {
       html, body { cursor: none; overflow: visible; height: auto; scroll-behavior: smooth;}
+      /* Grain overlay mati di mobile — layer fullscreen di atas semua konten
+         bikin komposit tiap frame scroll jadi berat */
+      body::after { display: none; }
       .port-header-row { flex-direction: column; align-items: flex-start; gap: .75rem; }
       #page-clip {
         position: static;
@@ -938,7 +941,9 @@
     }
     .tabbar.hidden { transform: translate(-50%, 160%); }
 
-    /* Pill emas yang meluncur ke tab aktif */
+    /* Pill emas yang meluncur ke tab aktif.
+       Width ga ikut transition — cuma transform (compositor-only),
+       width di-set instan dari JS biar ga layout-thrash tiap pindah tab. */
     .tab-pill {
       position: absolute;
       top: 6px; bottom: 6px; left: 0;
@@ -948,8 +953,8 @@
       border: 1px solid var(--gold1);
       opacity: 0;
       transition: transform .55s cubic-bezier(.22, 1, .36, 1),
-                  width .55s cubic-bezier(.22, 1, .36, 1),
                   opacity .3s;
+      will-change: transform;
       pointer-events: none;
     }
 

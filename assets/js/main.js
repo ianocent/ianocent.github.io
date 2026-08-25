@@ -134,12 +134,20 @@ const io = new IntersectionObserver(
 
 document.querySelectorAll(".r, .slide").forEach((el) => io.observe(el));
 
+// rAF-throttled: max 1x style write per frame walau scroll event nge-fire puluhan kali
+let scrollScheduled = false;
 function handleScroll() {
-  // Nav backdrop
-  if (nav) nav.classList.toggle("scrolled", getScrollTop() > 20);
-  // Progress bar
-  const max = getScrollMax();
-  if (bar) bar.style.width = (max > 0 ? (getScrollTop() / max) * 100 : 0) + "%";
+  if (scrollScheduled) return;
+  scrollScheduled = true;
+  requestAnimationFrame(() => {
+    scrollScheduled = false;
+    const y = getScrollTop();
+    // Nav backdrop
+    if (nav) nav.classList.toggle("scrolled", y > 20);
+    // Progress bar — scaleX, bukan width (ga picu layout)
+    const max = getScrollMax();
+    if (bar) bar.style.transform = "scaleX(" + (max > 0 ? Math.min(y / max, 1) : 0) + ")";
+  });
 }
 
 // Desktop: the cinema-frame container scrolls.
@@ -1052,7 +1060,10 @@ if (expModal) {
     gap: vw < 768 ? 10 : 14,
     radius: 12,
     tilt: 16, turn: -14, roll: 0, perspective: 1200, depth: 120,
-    speed: 42, direction: "up", variance: 0.45, parallax: 0.6,
+    speed: 42, direction: "up", variance: 0.45,
+    // Parallax tilt mati di mobile: tiap frame nulis transform 3D di plane
+    // besar = mahal di GPU HP, padahal ga ada pointer/hover di touch device
+    parallax: vw < 768 ? 0 : 0.6,
     lift: 64, fade: 0.45, dim: 0.55, overlay: "#14161d",
   };
 
@@ -1124,7 +1135,7 @@ if (expModal) {
           tile.dataset.col = c;
           tile.innerHTML =
             '<span class="drift-wall__inner"><img src="' + (THUMBS[it[0]] || it[0]) + '" alt="' + it[1] +
-            '" decoding="async" draggable="false"><span class="drift-wall__overlay" aria-hidden="true"></span></span>';
+            '" loading="lazy" decoding="async" draggable="false"><span class="drift-wall__overlay" aria-hidden="true"></span></span>';
           tile.addEventListener("click", () => openLb(it[0]));
           tile.addEventListener("focus", () => activate(id, c));
           tile.addEventListener("blur", release);
@@ -1187,6 +1198,9 @@ if (expModal) {
   }
 
   root.addEventListener("pointermove", (e) => {
+    // Touch: ga ada hover/parallax, dan elementFromPoint tiap frame =
+    // hit-test paksa yang bikin scroll ketarik. Skip total di touch.
+    if (e.pointerType && e.pointerType !== "mouse") return;
     const rect = root.getBoundingClientRect();
     if (!rect.width) return;
     if (CFG.parallax > 0 && !reduced) {
@@ -1228,11 +1242,13 @@ if (expModal) {
     if (lastTs === null) lastTs = ts;
     const dt = Math.min(0.05, Math.max(0, (ts - lastTs) / 1000));
     lastTs = ts;
-    const maxTilt = CFG.parallax * 8;
-    const damp = 1 - Math.exp(-dt / 0.12);
-    damped.x += (pointer.x * maxTilt - damped.x) * damp;
-    damped.y += (-pointer.y * maxTilt - damped.y) * damp;
-    applyPlane(damped.x, damped.y);
+    if (CFG.parallax > 0) {
+      const maxTilt = CFG.parallax * 8;
+      const damp = 1 - Math.exp(-dt / 0.12);
+      damped.x += (pointer.x * maxTilt - damped.x) * damp;
+      damped.y += (-pointer.y * maxTilt - damped.y) * damp;
+      applyPlane(damped.x, damped.y);
+    }
     for (let c = 0; c < colEls.length; c++) {
       const m = meta[c];
       if (!m) continue;
@@ -1248,6 +1264,7 @@ if (expModal) {
     rafId = requestAnimationFrame(frame);
   }
   // Loop cuma jalan saat drift-wall kelihatan di layar; pause pas di-scroll keluar
+  applyPlane(0, 0); // posisi plane dasar (wajib — CSS ga punya default transform)
   let rafId = null;
   const galleryIO = new IntersectionObserver((es) => {
     if (es[0].isIntersecting && !rafId) {
