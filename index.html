@@ -21,16 +21,22 @@
   <meta name="twitter:image" content="https://ianocent.github.io/assets/img/logo.png">
   <title>Dwi Rianto (ianocent) — Fullstack Developer & Jasa Website</title>
   <link rel="shortcut icon" href="assets/img/logo.png" type="image/x-icon">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://vira-suzukigadingserpong.com">
   <link rel="dns-prefetch" href="https://vira-suzukigadingserpong.com">
   <link rel="me" href="https://vira-suzukigadingserpong.com">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://unpkg.com">
   <link rel="preload" as="image" href="assets/img/dw/idx-hehe.webp" fetchpriority="high">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/SF-Pro-Display-Medium.woff2" crossorigin>
+  <script>
+    // Apply saved theme sebelum CSS paint biar ga flash
+    (function () {
+      try {
+        if (localStorage.getItem("iano-theme") === "light") {
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+      } catch (e) {}
+    })();
+  </script>
   <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css">
   <link rel="canonical" href="https://ianocent.github.io/">
@@ -165,6 +171,9 @@
           <li><a href="blog/" target="_blank">Blog</a></li>
           <li><a href="#contact" class="nav-cta">Hire Me</a></li>
         </ul>
+        <button class="theme-tgl" id="themeTgl" aria-label="Toggle light/dark theme">
+          <i class="bx bx-sun" aria-hidden="true"></i>
+        </button>
         <button class="hbg" id="hbg" aria-label="Menu" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
@@ -1256,6 +1265,7 @@
     });
   })();
   </script>
+  <script src="assets/js/theme.js" defer></script>
   <script src="assets/js/main.js" defer></script>
 </body>
 </html>

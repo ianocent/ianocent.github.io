@@ -1,0 +1,5 @@
+
+# Raw font sources (subset woff2 yang di-track saja)
+assets/fonts/*.otf
+assets/fonts/*.ttf
+assets/fonts/SF-Pro-Regular*.woff2

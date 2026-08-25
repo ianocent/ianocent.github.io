@@ -1,5 +1,14 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
+    /* ═══ SELF-HOSTED FONT ═══ */
+    @font-face {
+      font-family: 'SF Pro Display';
+      src: url('../fonts/SF-Pro-Display-Medium.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+
     :root {
       /* Dark pastel colors for animated background */
       /* --color-bg1: #0a0b12;
@@ -29,8 +38,8 @@
       --blue:      #60a5fa;
       --purple:      #e560fa;
       --red:      #fa6060;
-      --serif:     'Playfair Display', Georgia, serif;
-      --sans:      'Geist', 'Inter', system-ui, sans-serif;
+      --serif:     'SF Pro Display', Georgia, serif;
+      --sans:      'SF Pro Display', 'Inter', system-ui, sans-serif;
       --r:         10px;
       --nh:        64px;
     }
@@ -862,3 +871,33 @@
 }
 .cv-fmt{transition:transform .15s ease}
 .cv-fmt:hover{transform:translateX(3px)}
+  /* ═══ THEME TOGGLE ═══ */
+  .theme-tgl {
+    display: flex; align-items: center; justify-content: center;
+    width: 34px; height: 34px; margin-left: .6rem;
+    border: 1px solid var(--line2); border-radius: 50%;
+    background: var(--surface3); color: var(--text2);
+    cursor: pointer; font-size: 1.05rem;
+    transition: color .25s, border-color .25s, transform .25s, background .25s;
+  }
+  .theme-tgl:hover { color: var(--gold); border-color: var(--gold1); transform: rotate(20deg); }
+
+  /* ═══ LIGHT THEME (palet awal — disesuaikan belakangan) ═══ */
+  [data-theme="light"] {
+    --color-bg1: #f2efe9;
+    --color-bg2: #eae7e0;
+    --color-bg3: #ede9e1;
+    --color-bg4: #e8ece5;
+    --surface0:  rgba(255,255,255,0);
+    --surface1:  rgba(0,0,0,0.06);
+    --surface:   rgba(255,255,255,0.55);
+    --surface3:  rgba(255,255,255,0.30);
+    --surface2:  rgba(255,255,255,0.85);
+    --line:      rgba(0,0,0,0.08);
+    --line2:     rgba(0,0,0,0.13);
+    --text:      #23252c;
+    --text2:     #4d5160;
+    --text3:     #8a8e9c;
+    --gold-dim:  rgba(201,169,110,0.14);
+  }
+  [data-theme="light"] .nav.scrolled { background: rgba(242,239,233,0.78); }
