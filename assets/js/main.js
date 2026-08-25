@@ -335,6 +335,14 @@ function updateImageWithEffect(newSrc) {
 }
 
 if (photo) {
+  // Warm hover-swap images setelah load biar hover pertama ga nunggu download
+  window.addEventListener("load", () => {
+    ["assets/img/hehe1.png", "assets/img/hehe.png"].forEach((src) => {
+      const im = new Image();
+      im.src = src;
+    });
+  });
+
   photo.addEventListener("mouseover", () => {
     updateImageWithEffect("assets/img/hehe1.png");
   });
